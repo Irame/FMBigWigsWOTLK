@@ -90,24 +90,24 @@ local function afterTheStorm()
 		mod:Bar(69076, L["bonestorm_cd"], 70, 69076)
 		mod:DelayedMessage(69076, 65, L["bonestorm_warning"], "Attention")
 		if mod:GetInstanceDifficulty() == 1 then
-			self:Bar(69057, L["impale_cd"], 10, 69057)
+			mod:Bar(69057, L["impale_cd"], 10, 69057)
 		end
 	else
 		mod:Bar(69076, L["bonestorm_cd"], 60, 69076)
 		mod:DelayedMessage(69076, 55, L["bonestorm_warning"], "Attention")
 		if mod:GetInstanceDifficulty() == 2 then
-			self:Bar(69057, L["impale_cd"], 15, 69057)
+			mod:Bar(69057, L["impale_cd"], 15, 69057)
 		end
 	end
-	self:Bar(69055, L["cleave_cd"], 10, 69055)
+	mod:Bar(69055, L["cleave_cd"], 10, 69055)
 end
 
 function mod:Bonestorm(_, spellId, _, _, spellName)
 	local time = 20
-	if mod:GetInstanceDifficulty() == 2 or mod:GetInstanceDifficulty() == 4 then
+	if self:GetInstanceDifficulty() == 2 or self:GetInstanceDifficulty() == 4 then
 		time = 30
 	end
-	if mod:GetInstanceDifficulty() < 3 then 
+	if self:GetInstanceDifficulty() < 3 then 
 		self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
 	end
 	self:Bar(69076, spellName, time, spellId)
