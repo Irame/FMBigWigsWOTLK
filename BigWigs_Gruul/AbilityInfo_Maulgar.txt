@@ -1,0 +1,129 @@
+Hochkönig Maulgar:
+	enUS: High King Maulgar
+	ID: 18831
+	Abilitys:
+		Berserkerattacke:						!!!!!!!!
+			enUS: Berserker Charge
+			Event: SPELL_CAST_SUCCESS
+			ID: 26561
+			CD: 20s
+			
+		Bogenzerkracher:
+			enUS: Arcing Smash
+			Event: SPELL_CAST_SUCCESS
+			ID: 39144
+			CD: 10s
+		
+		Einschüchterndes Gebrüll:				!!!!!!!!
+			enUS: Intimidating Roar
+			Event: SPELL_CAST_SUCCESS
+			ID: 16508
+			CD: 40s | 50s
+			
+		Mächtiger Schlag:
+			enUS: Mighty Blow
+			Event: SPELL_CAST_SUCCESS
+			ID: 33230
+			CD: ???
+			
+		Schlaghagel:
+			enUS: Flurry
+			Event: SPELL_AURA_APPLIED
+			ID: 33232
+			CD: ???
+		
+		Wirbelwind:								!!!!!!!!
+			enUS: Whirlwind
+			Event: SPELL_CAST_SUCCESS
+			ID: 33238
+			CD: 55s
+	
+Krosh Feuerhand:
+	enUS: Krosh Firehand
+	ID: 18832
+	Abilitys:
+		Druckwelle:								!!!!!!!!
+			enUS: Blast Wave
+			Event: SPELL_CAST_SUCCESS
+			ID: 33061
+			CD: 60s
+			
+		Großer Feuerball:
+			enUS: Greater Fireball
+			Event: SPELL_CAST_START
+			ID: 33051
+			CD: 3s
+			
+		Zauberschild:							!!!!!!!!
+			enUS: Spell Shield
+			Event: SPELL_CAST_SUCCESS
+			ID: 33054
+			CD: 30s
+	
+Olm der Beschwörer:
+	enUS: Olm the Summoner
+	ID: 18834
+	Abilitys:
+		Dunkler Verfall:
+			enUS: Dark Decay
+			Event: SPELL_CAST_SUCCESS / SPELL_AURA_APPLIED
+			ID: 33129
+			CD: 20s
+		
+		Todesmantel:
+			enUS: Death Coil
+			Event: SPELL_CAST_SUCCESS
+			ID: 33130
+			CD: >12s
+		
+		Wilden Teufelsjäger beschwören:			!!!!!!!!
+			enUS: Summon Wild Felhunter
+			Event: SPELL_CAST_START
+			ID: 33131
+			CD: 30s
+		
+Gicherer der Wahnsinnige:
+	enUS: Kiggler the Crazed
+	ID: 18835
+	Abilitys:
+		Arkane Explosion:						!!!!!!!!
+			enUS: Arcane Explosion
+			Event: SPELL_CAST_SUCCESS
+			ID: 33237
+			CD: 30s
+		
+		Arkaner Schock:
+			enUS: Arcane Shock
+			Event: SPELL_CAST_SUCCESS
+			ID: 33175
+			CD: 20s
+		
+		Große Verwandlung:						!!!!!!!!
+			enUS: Greater Polymorph
+			Event: SPELL_CAST_SUCCESS / SPELL_AURA_APPLIED
+			ID: 33173
+			CD: ???
+		
+Blindauge der Seher:
+	enUS: Blindeye the Seer
+	ID: 18836
+	Abilitys:
+		Gebet der Heilung:						!!!!!!!!
+			enUS: Prayer of Healing
+			Event: SPELL_CAST_START
+			ID: 33152
+			CD: 20s
+		
+		Großes Machtwort: Schild:
+			enUS: Greater Power Word: Shield
+			Event: SPELL_CAST_SUCCESS
+			ID: 33147
+			CD: 40s
+		
+		Heilen:
+			enUS: Heal
+			Event: SPELL_CAST_START
+			ID: 33144
+			CD: ???
+		
+		

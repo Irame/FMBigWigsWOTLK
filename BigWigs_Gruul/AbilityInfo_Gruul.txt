@@ -1,0 +1,35 @@
+Gruul der Drachenschlächter:
+	enUS: Gruul the Dragonkiller
+	ID: 19044
+	Abilitys:
+		Erde erschüttern:						!!!!!!!!
+			enUS: Ground Slam
+			Event: SPELL_CAST_START
+			ID: 33525
+			CD: 85s
+			
+		Zertrümmern:						!!!!!!!!
+			enUS: Shatter
+			Event: SPELL_CAST_START
+			ID: 33654
+			CD: 10s (+ 1s cast time) after Ground Slam
+			
+		Höhleneinsturz:
+			enUS: Cave In
+			Event: SPELL_AURA_APPLIED / SPELL_PERIODIC_DAMAGE
+			ID: 36240
+			CD: ???
+			
+		Nachklingen:
+			enUS: Reverberation
+			Event: SPELL_AURA_APPLIED
+			ID: 36297
+			CD: >20s
+			
+		Wachstum:
+			enUS: Growth
+			Event: SPELL_AURA_APPLIED_DOSE
+			ID: 36300	
+			CD: 30s
+			
+		

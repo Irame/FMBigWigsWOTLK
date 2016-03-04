@@ -1,0 +1,118 @@
+------------------------------------------------------------------------
+r7558 | 7destiny | 2010-10-11 11:06:42 +0000 (Mon, 11 Oct 2010) | 1 line
+Changed paths:
+   M /trunk/Northrend/Halion.lua
+   M /trunk/Northrend/Locales/koKR.lua
+
+Northrend/Halion: Fix Breath
+------------------------------------------------------------------------
+r7557 | ananhaid | 2010-10-05 10:14:09 +0000 (Tue, 05 Oct 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+
+BigWigs:
+- zhCN update.
+------------------------------------------------------------------------
+r7556 | ananhaid | 2010-10-03 04:02:00 +0000 (Sun, 03 Oct 2010) | 2 lines
+Changed paths:
+   M /trunk/Ulduar/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhTW.lua
+
+BigWigs:
+- zhCN/zhTW update.
+------------------------------------------------------------------------
+r7555 | ananhaid | 2010-09-30 07:28:59 +0000 (Thu, 30 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+   M /trunk/Coliseum/Locales/zhTW.lua
+
+BigWigs:
+- zhCN/zhTW update.
+------------------------------------------------------------------------
+r7554 | mojosdojo | 2010-09-28 14:52:40 +0000 (Tue, 28 Sep 2010) | 1 line
+Changed paths:
+   M /trunk/Northrend/Koralon.lua
+   M /trunk/Northrend/Locales/deDE.lua
+
+Northrend/Koralon: Remove trash fist IDs, as it may trigger OnEngage(). Bring back fist duration for healing purposes.
+------------------------------------------------------------------------
+r7553 | ananhaid | 2010-09-28 00:43:26 +0000 (Tue, 28 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Northrend/Locales/zhCN.lua
+   M /trunk/Northrend/Locales/zhTW.lua
+
+BigWigs:
+- zhCN/zhTW update.
+------------------------------------------------------------------------
+r7552 | ananhaid | 2010-09-28 00:38:42 +0000 (Tue, 28 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Ulduar/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhTW.lua
+
+BigWigs:
+- zhCN/zhTW cleanup.
+------------------------------------------------------------------------
+r7551 | 7destiny | 2010-09-25 06:30:09 +0000 (Sat, 25 Sep 2010) | 1 line
+Changed paths:
+   M /trunk/Northrend/Koralon.lua
+   M /trunk/Northrend/Locales/koKR.lua
+
+Northrend/Koralon: Fix Fists timer, breath count. add first bar. 
+------------------------------------------------------------------------
+r7550 | ananhaid | 2010-09-22 08:37:25 +0000 (Wed, 22 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+
+BigWigs:
+- zhCN update.
+------------------------------------------------------------------------
+r7549 | ananhaid | 2010-09-19 20:31:24 +0000 (Sun, 19 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+   M /trunk/Coliseum/Locales/zhTW.lua
+   M /trunk/Naxxramas/Locales/zhCN.lua
+   M /trunk/Northrend/Locales/zhCN.lua
+   M /trunk/OnyxiasLair/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhTW.lua
+
+BigWigs:
+- zhCN/zhTW update.
+------------------------------------------------------------------------
+r7548 | ananhaid | 2010-09-17 19:10:53 +0000 (Fri, 17 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhCN.lua
+
+BigWigs:
+- zhCN update.
+------------------------------------------------------------------------
+r7547 | ananhaid | 2010-09-17 14:00:12 +0000 (Fri, 17 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+
+BigWigs:
+- zhCN update.
+------------------------------------------------------------------------
+r7546 | 7destiny | 2010-09-16 10:22:56 +0000 (Thu, 16 Sep 2010) | 1 line
+Changed paths:
+   M /trunk/Northrend/Locales/koKR.lua
+
+koKR Update
+------------------------------------------------------------------------
+r7545 | ananhaid | 2010-09-15 17:27:54 +0000 (Wed, 15 Sep 2010) | 2 lines
+Changed paths:
+   M /trunk/Coliseum/Locales/zhCN.lua
+   M /trunk/Coliseum/Locales/zhTW.lua
+   M /trunk/Northrend/Locales/zhCN.lua
+   M /trunk/Ulduar/Locales/zhCN.lua
+
+BigWigs:
+- zhCN/zhTW update.
+------------------------------------------------------------------------
+r7544 | pettigrow | 2010-08-17 20:10:21 +0000 (Tue, 17 Aug 2010) | 1 line
+Changed paths:
+   M /trunk/Citadel/Locales/frFR.lua
+
+frFR Update
+------------------------------------------------------------------------

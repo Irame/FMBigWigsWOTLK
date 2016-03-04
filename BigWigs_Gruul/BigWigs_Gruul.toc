@@ -1,0 +1,20 @@
+## Interface: 30300
+## X-Curse-Packaged-Version: r7558
+## X-Curse-Project-Name: BigWigs Bossmods
+## X-Curse-Project-ID: big-wigs
+## X-Curse-Repository-ID: wow/big-wigs/mainline
+
+## Title: Big Wigs [|cffeda55fGruuls Lair (80)|r]
+## Title-deDE: Big Wigs [|cffeda55fGruuls Unterschlupf|r]
+## Notes: Big Wigs Modules for Gruuls Lair for level 80 on Frostmourne.
+## Notes-deDE: Big Wigs Module für Gruuls Unterschlupf für Level 80 auf Frostmourne.
+
+## LoadOnDemand: 1
+## Dependencies: BigWigs
+
+## X-Category: Raid
+## X-BigWigs-LoadOn-Zone: Gruul's Lair
+
+locales.xml
+modules.xml
+
