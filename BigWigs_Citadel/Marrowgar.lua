@@ -48,10 +48,10 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Bar(69076, L["bonestorm_cd"], 48, 69076)
+	self:Bar(69076, L["bonestorm_cd"], 45, 69076)
 	self:Bar(69055, L["cleave_cd"], 10, 69055)
 	self:Bar(69057, L["impale_cd"], 15, 69057)
-	self:DelayedMessage(69076, 43, L["bonestorm_warning"], "Attention")
+	self:DelayedMessage(69076, 40, L["bonestorm_warning"], "Attention")
 end
 
 --------------------------------------------------------------------------------
