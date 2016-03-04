@@ -79,7 +79,7 @@ function mod:OnEngage(diff)
 	if diff > 2 then time = 45 end
 	self:Bar("adds", L["adds_bar"], 5, 70768)
 	if diff > 1 then
-		self:Bar(71289, L["dominate_bar"], 30, 71289)
+		self:Bar(71289, L["dominate_bar"], 20, 71289)
 	end
 	handle_Adds = self:ScheduleTimer(adds, 5, time)
 	self:HealthBar(70842, 36855, 0, 70842)
@@ -102,8 +102,14 @@ function mod:Barrier(_, spellId)
 		self:SendMessage("BigWigs_StopBar", self, L["adds_bar"])
 		self:CancelDelayedMessage(L["adds_warning"])
 	end
+	if self:GetInstanceDifficulty() > 2 then
+		self:DelayedMessage("adds", 40, L["adds_warning"], "Attention")
+		self:Bar("adds", L["adds_bar"], 45, 70768)
+		handle_Adds = self:ScheduleTimer(adds, 45, 45)
+	end
 	self:Message(70842, L["phase2_message"], "Positive", spellId, "Info")
-	self:Bar(71426, L["spirit_bar"], 30, 71426)
+	self:Bar(71426, L["spirit_bar"], 12, 71426)
+	self:Bar(71204, L["touch_bar"], 6, spellId)
 	self:HealthBarStop(70842, 36855, 0)
 end
 
@@ -127,7 +133,7 @@ function mod:Touch(player, spellId, _, _, _, stack)
 	if stack and stack > 1 then
 		self:TargetMessage(71204, L["touch_message"], player, "Urgent", spellId, nil, stack)
 	end
-	self:Bar(71204, L["touch_bar"], 7, spellId)
+	self:Bar(71204, L["touch_bar"], 9, spellId)
 end
 
 function mod:Deformed()
@@ -141,7 +147,7 @@ do
 		if (time - t) > 5 then
 			t = time
 			self:Message(71426, L["spirit_message"], "Attention", spellId)
-			self:Bar(71426, L["spirit_bar"], 13, spellId)
+			self:Bar(71426, L["spirit_bar"], 18, spellId)
 		end
 	end
 end
