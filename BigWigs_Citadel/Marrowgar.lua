@@ -19,6 +19,8 @@ local impaleTargets = mod:NewTargetList()
 
 local L = mod:NewLocale("enUS", true)
 if L then
+	L.cleave_cd = "~Cleave Start"
+
 	L.impale_cd = "~Next Impale"
 
 	L.bonestorm_cd = "~Next Bone Storm"
@@ -46,8 +48,9 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Bar(69076, L["bonestorm_cd"], 45, 69076)
-	self:DelayedMessage(69076, 40, L["bonestorm_warning"], "Attention")
+	self:Bar(69076, L["bonestorm_cd"], 48, 69076)
+	self:Bar(69055, L["cleave_cd"], 10, 69055)
+	self:DelayedMessage(69076, 43, L["bonestorm_warning"], "Attention")
 end
 
 --------------------------------------------------------------------------------
@@ -82,21 +85,29 @@ function mod:Coldflame(player, spellId)
 end
 
 local function afterTheStorm()
-	if mod:GetInstanceDifficulty() > 2 then
-		mod:Bar(69076, L["bonestorm_cd"], 55, 69076)
-		mod:DelayedMessage(69076, 50, L["bonestorm_warning"], "Attention")
+	if mod:GetInstanceDifficulty() == 1 or mod:GetInstanceDifficulty() == 3 then
+		mod:Bar(69076, L["bonestorm_cd"], 73, 69076)
+		mod:DelayedMessage(69076, 68, L["bonestorm_warning"], "Attention")
+		if mod:GetInstanceDifficulty() == 3 then
+			self:Bar(69057, L["impale_cd"], 10, 69057)
+		end
 	else
-		mod:Bar(69076, L["bonestorm_cd"], 40, 69076)
-		mod:DelayedMessage(69076, 65, L["bonestorm_warning"], "Attention")
-		mod:Bar(69057, L["impale_cd"], 18, 69057)
+		mod:Bar(69076, L["bonestorm_cd"], 63, 69076)
+		mod:DelayedMessage(69076, 58, L["bonestorm_warning"], "Attention")
+		if mod:GetInstanceDifficulty() == 4 then
+			self:Bar(69057, L["impale_cd"], 15, 69057)
+		end
 	end
+	
+	self:Bar(69055, L["cleave_cd"], 10, 69055)
 end
 
 function mod:Bonestorm(_, spellId, _, _, spellName)
 	local time = 20
-	if self:GetInstanceDifficulty() > 2 then
-		time = 34
-	else
+	if mod:GetInstanceDifficulty() == 2 or mod:GetInstanceDifficulty() == 4 then
+		time = 30
+	end
+	if mod:GetInstanceDifficulty() < 3 then 
 		self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
 	end
 	self:Bar(69076, spellName, time, spellId)
