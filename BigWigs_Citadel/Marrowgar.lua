@@ -86,16 +86,16 @@ function mod:Coldflame(player, spellId)
 end
 
 local function afterTheStorm()
-	if mod:GetInstanceDifficulty() == 1 or mod:GetInstanceDifficulty() == 3 then
+	if mod:IsDifficulty("10") then
 		mod:Bar(69076, L["bonestorm_cd"], 70, 69076)
 		mod:DelayedMessage(69076, 65, L["bonestorm_warning"], "Attention")
-		if mod:GetInstanceDifficulty() == 1 then
+		if mod:IsDifficulty("10nh") then
 			mod:Bar(69057, L["impale_cd"], 10, 69057)
 		end
 	else
 		mod:Bar(69076, L["bonestorm_cd"], 60, 69076)
 		mod:DelayedMessage(69076, 55, L["bonestorm_warning"], "Attention")
-		if mod:GetInstanceDifficulty() == 2 then
+		if mod:IsDifficulty("25nh") then
 			mod:Bar(69057, L["impale_cd"], 15, 69057)
 		end
 	end
@@ -104,10 +104,10 @@ end
 
 function mod:Bonestorm(_, spellId, _, _, spellName)
 	local time = 20
-	if self:GetInstanceDifficulty() == 2 or self:GetInstanceDifficulty() == 4 then
+	if self:IsDifficulty("25") then
 		time = 30
 	end
-	if self:GetInstanceDifficulty() < 3 then 
+	if self:IsDifficulty("nh") then 
 		self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
 	end
 	self:Bar(69076, spellName, time, spellId)
@@ -116,7 +116,7 @@ end
 
 function mod:BonestormCast(_, spellId, _, _, spellName)
 	self:Message(69076, spellName, "Attention", spellId)
-	if self:GetInstanceDifficulty() > 2 then 
+	if self:IsDifficulty("hc") then 
 		self:SendMessage("BigWigs_ReadjustBar", self, L["impale_cd"], 18)
 	end
 end
