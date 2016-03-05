@@ -88,6 +88,7 @@ local function onUpdate(self)
 		self:Stop()
 	else
 		local time = self.exp - t
+		self.remaining = time
 		self.candyBarBar:SetValue(time)
 		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
 		if self.funcs then
@@ -164,12 +165,16 @@ function barPrototype:SetTimeVisibility(bool) self.showTime = bool; restyleBar(s
 -- @param duration Duration of the bar in seconds
 function barPrototype:SetDuration(duration)
 	self.duration = duration
-	self.exp = self.begin + duration
 	if self.running then
+		local ct = GetTime()
+		self.exp = self.begin + duration
+		self.remaining = self.exp - ct
 		self.candyBarBar:SetMinMaxValues(0, self.duration)
-		if GetTime() >= self.exp then
+		if ct >= self.exp then
 			self:Stop()
 		end
+	else
+		self.remaining = duration
 	end
 end
 --- Sets the remaining time.
@@ -178,6 +183,7 @@ function barPrototype:SetRemaining(remaining)
 		self:Stop()
 	else
 		self.exp = GetTime() + remaining
+		self.begin = self.exp - self.duration
 		self.candyBarBar:SetValue(remaining)
 		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(remaining))
 	end
@@ -185,7 +191,11 @@ end
 --- Shows the bar and starts it off
 function barPrototype:Start()
 	local ct = GetTime();
-	self.running = true
+	if self.running then
+		self.duration = self.remaining
+	else
+		self.running = true
+	end
 	restyleBar(self)
 	self.candyBarBar:SetMinMaxValues(0, self.duration)
 	self.begin = ct
