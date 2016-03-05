@@ -79,7 +79,7 @@ function mod:OnEngage(diff)
 	if diff > 2 then time = 45 end
 	self:Bar("adds", L["adds_bar"], 5, 70768)
 	if diff > 1 then
-		self:Bar(71289, L["dominate_bar"], 20, 71289)
+		self:Bar(71289, L["dominate_bar"], 27, 71289)
 	end
 	handle_Adds = self:ScheduleTimer(adds, 5, time)
 	self:HealthBar(70842, 36855, 0, 70842)
@@ -109,7 +109,7 @@ function mod:Barrier(_, spellId)
 	end
 	self:Message(70842, L["phase2_message"], "Positive", spellId, "Info")
 	self:Bar(71426, L["spirit_bar"], 12, 71426)
-	self:Bar(71204, L["touch_bar"], 6, spellId)
+	self:Bar(71204, L["touch_bar"], 6, 71204)
 	self:HealthBarStop(70842, 36855, 0)
 end
 
