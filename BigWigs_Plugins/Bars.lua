@@ -401,6 +401,7 @@ function plugin:OnPluginEnable()
 	if not media:Fetch("statusbar", db.texture, true) then db.texture = "BantoBar" end
 	self:RegisterMessage("BigWigs_StartBar")
 	self:RegisterMessage("BigWigs_StopBar")
+	self:RegisterMessage("BigWigs_ReadjustBar")
 	self:RegisterMessage("BigWigs_StopBars", "BigWigs_OnBossDisable")
 	self:RegisterMessage("BigWigs_OnBossDisable")
 	self:RegisterMessage("BigWigs_OnPluginDisable", "BigWigs_OnBossDisable")
@@ -651,6 +652,25 @@ end
 --------------------------------------------------------------------------------
 -- Event Handlers
 --
+
+local function readjustBars(bars, module, text, duration, remaining)
+	for k in pairs(bars) do
+		if k:Get("bigwigs:module") == module and (not text or k.candyBarLabel:GetText() == text) then
+			if duration then
+				k:SetDuration(duration)
+			end
+			if remaining then
+				k:SetRemaining(remaining)
+			end
+		end
+	end
+end
+
+function plugin:BigWigs_ReadjustBar(message, module, text, duration, remaining)
+	if not normalAnchor then return end
+	readjustBars(normalAnchor.bars, module, text, duration, remaining)
+	readjustBars(emphasizeAnchor.bars, module, text, duration, remaining)
+end
 
 local function stopBars(bars, module, text)
 	local dirty = nil
