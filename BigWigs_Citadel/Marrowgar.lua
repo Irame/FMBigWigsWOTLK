@@ -48,9 +48,9 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Bar(69076, L["bonestorm_cd"], 45, 69076)
+	self:Bar(69076, L["bonestorm_cd"], 45, 69076, 5)
 	self:Bar(69055, L["cleave_cd"], 10, 69055)
-	self:Bar(69057, L["impale_cd"], 15, 69057)
+	self:Bar(69057, L["impale_cd"], 15, 69057, 5)
 	self:DelayedMessage(69076, 40, L["bonestorm_warning"], "Attention")
 end
 
@@ -73,7 +73,8 @@ do
 			scheduled = true
 			self:ScheduleTimer(impaleWarn, 0.3, spellName)
 			self:Bar(69057, achievName, 8, "achievement_boss_lordmarrowgar")
-			self:Bar(69057, L["impale_cd"], 15, 69057)
+			self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
+			self:Bar(69057, L["impale_cd"], 15, 69057, 5)
 		end
 	end
 end
@@ -87,16 +88,16 @@ end
 
 local function afterTheStorm()
 	if mod:IsDifficulty("10") then
-		mod:Bar(69076, L["bonestorm_cd"], 70, 69076)
+		mod:Bar(69076, L["bonestorm_cd"], 70, 69076, 5)
 		mod:DelayedMessage(69076, 65, L["bonestorm_warning"], "Attention")
 		if mod:IsDifficulty("10nh") then
-			mod:Bar(69057, L["impale_cd"], 10, 69057)
+			mod:Bar(69057, L["impale_cd"], 10, 69057, 5)
 		end
 	else
-		mod:Bar(69076, L["bonestorm_cd"], 60, 69076)
+		mod:Bar(69076, L["bonestorm_cd"], 60, 69076, 5)
 		mod:DelayedMessage(69076, 55, L["bonestorm_warning"], "Attention")
 		if mod:IsDifficulty("25nh") then
-			mod:Bar(69057, L["impale_cd"], 15, 69057)
+			mod:Bar(69057, L["impale_cd"], 15, 69057, 5)
 		end
 	end
 	mod:Bar(69055, L["cleave_cd"], 10, 69055)
@@ -107,17 +108,17 @@ function mod:Bonestorm(_, spellId, _, _, spellName)
 	if self:IsDifficulty("25") then
 		time = 30
 	end
-	if self:IsDifficulty("nh") then 
-		self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
-	end
 	self:Bar(69076, spellName, time, spellId)
 	self:ScheduleTimer(afterTheStorm, time)
 end
 
 function mod:BonestormCast(_, spellId, _, _, spellName)
 	self:Message(69076, spellName, "Attention", spellId)
+	self:SendMessage("BigWigs_StopBar", self, L["bonestorm_cd"])
 	if self:IsDifficulty("hc") then 
 		self:SendMessage("BigWigs_ReadjustBar", self, L["impale_cd"], 18)
+	else
+		self:SendMessage("BigWigs_StopBar", self, L["impale_cd"])
 	end
 end
 
