@@ -503,9 +503,9 @@ do
 		end
 	})
 
-	function boss:Bar(key, text, length, icon, barColor, barEmphasized, barText, barBackground, ...)
+	function boss:Bar(key, text, length, icon, expTime, barColor, barEmphasized, barText, barBackground, ...)
 		if checkFlag(self, key, C.BAR) then
-			self:SendMessage("BigWigs_StartBar", self, key, text, length, icons[icon], ...)
+			self:SendMessage("BigWigs_StartBar", self, key, text, length, icons[icon], expTime, ...)
 		end
 	end
 	
