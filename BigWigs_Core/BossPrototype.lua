@@ -2,7 +2,7 @@
 -- Prototype
 --
 
-local debug = nil -- Set to true to get (very spammy) debug messages.
+local debug = true -- Set to true to get (very spammy) debug messages.
 local dbgStr = "[DBG:%s] %s"
 local function dbg(self, msg) print(dbgStr:format(self.displayName, msg)) end
 
@@ -14,6 +14,7 @@ local combatLogMap = setmetatable({}, metaMap)
 local yellMap = setmetatable({}, metaMap)
 local emoteMap = setmetatable({}, metaMap)
 local deathMap = setmetatable({}, metaMap)
+local difficultyMap
 
 local boss = {}
 core.bossCore:SetDefaultModulePrototype(boss)
@@ -23,6 +24,7 @@ function boss:OnEnable()
 	if debug then dbg(self, "OnEnable()") end
 	if type(self.OnBossEnable) == "function" then self:OnBossEnable() end
 	self:SendMessage("BigWigs_OnBossEnable", self)
+	difficultyMap.diff = self:GetInstanceDifficulty()
 end
 function boss:OnDisable()
 	if debug then dbg(self, "OnDisable()") end
@@ -32,6 +34,7 @@ function boss:OnDisable()
 	wipe(yellMap[self])
 	wipe(emoteMap[self])
 	wipe(deathMap[self])
+	wipe(difficultyMap)
 
 	self:SendMessage("BigWigs_OnBossDisable", self)
 end
@@ -271,10 +274,42 @@ do
 		end
 		return type(diff) == "number" and diff or 1
 	end
+	
+	
+	local diffStringTable = {
+		["10nh"] = {[1] = true},
+		["10hc"] = {[2] = true},
+		["25nh"] = {[3] = true},
+		["25hc"] = {[4] = true},
+		["10"] = {[1] = true, [3] = true},
+		["25"] = {[2] = true, [4] = true},
+		["nh"] = {[1] = true, [2] = true},
+		["hc"] = {[3] = true, [4] = true}
+	}
+	local diffTable_mt = {
+		__index = function(self, key)
+			local value = false
+			if type(key) == "string" then
+				value = diffStringTable[key][self.diff]
+			else
+				value = self.diff == key
+			end
+			rawset(self, key, value)
+			return value
+		end
+	}
+	difficultyMap = setmetatable({}, diffTable_mt)
 
+	function boss:IsDifficulty(diff)
+		print("diff:", difficultyMap.diff, "(", diff, "=>", difficultyMap[diff], ")")
+		return difficultyMap[diff]
+	end
+	
 	function boss:Engage()
 		if debug then dbg(self, ":Engage") end
 		CombatLogClearEntries()
+		wipe(difficultyMap)
+		difficultyMap.diff = self:GetInstanceDifficulty()
 		if self.OnEngage then
 			self:OnEngage(self:GetInstanceDifficulty())
 		end
