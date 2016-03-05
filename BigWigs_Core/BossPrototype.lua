@@ -301,7 +301,6 @@ do
 	difficultyMap = setmetatable({}, diffTable_mt)
 
 	function boss:IsDifficulty(diff)
-		print("diff:", difficultyMap.diff, "(", diff, "=>", difficultyMap[diff], ")")
 		return difficultyMap[diff]
 	end
 	
