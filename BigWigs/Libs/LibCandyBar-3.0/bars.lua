@@ -166,28 +166,20 @@ function barPrototype:SetTimeVisibility(bool) self.showTime = bool; restyleBar(s
 function barPrototype:SetDuration(duration)
 	self.duration = duration
 	if self.running then
-		local ct = GetTime()
 		self.exp = self.begin + duration
-		self.remaining = self.exp - ct
-		self.candyBarBar:SetMinMaxValues(0, self.duration)
-		if ct >= self.exp then
-			self:Stop()
-		end
+		self.remaining = self.exp - GetTime()
+		self.candyBarBar:SetMinMaxValues(0, duration)
 	else
 		self.remaining = duration
 	end
 end
 --- Sets the remaining time.
 function barPrototype:SetRemaining(remaining)
-	if remaining >= self.duration then
-		self:Stop()
-	else
-		self.exp = GetTime() + remaining
-		self.begin = self.exp - self.duration
-		self.candyBarBar:SetValue(remaining)
-		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(remaining))
-	end
+	self.remaining = remaining
+	self.exp = GetTime() + remaining
+	self.begin = self.exp - self.duration
 end
+
 --- Shows the bar and starts it off
 function barPrototype:Start()
 	local ct = GetTime();
