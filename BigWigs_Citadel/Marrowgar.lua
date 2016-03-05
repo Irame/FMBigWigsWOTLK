@@ -116,5 +116,8 @@ end
 
 function mod:BonestormCast(_, spellId, _, _, spellName)
 	self:Message(69076, spellName, "Attention", spellId)
+	if self:GetInstanceDifficulty() > 2 then 
+		self:SendMessage("BigWigs_ReadjustBar", self, L["impale_cd"], 18)
+	end
 end
 
