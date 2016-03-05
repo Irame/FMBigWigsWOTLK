@@ -97,11 +97,9 @@ function mod:DnD(player, spellId)
 end
 
 function mod:Barrier(_, spellId)
-	if self:GetInstanceDifficulty() < 3 then
-		self:CancelTimer(handle_Adds, true)
-		self:SendMessage("BigWigs_StopBar", self, L["adds_bar"])
-		self:CancelDelayedMessage(L["adds_warning"])
-	end
+	self:CancelTimer(handle_Adds, true)
+	self:SendMessage("BigWigs_StopBar", self, L["adds_bar"])
+	self:CancelDelayedMessage(L["adds_warning"])
 	if self:GetInstanceDifficulty() > 2 then
 		self:DelayedMessage("adds", 40, L["adds_warning"], "Attention")
 		self:Bar("adds", L["adds_bar"], 45, 70768)
