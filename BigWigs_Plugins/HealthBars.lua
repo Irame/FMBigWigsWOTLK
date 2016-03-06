@@ -27,7 +27,7 @@ local AceGUI = nil
 
 local colors = nil
 local superemp = nil
-local candy = LibStub("LibCandyBar-3.0")
+local staticCandy = LibStub("LibStaticCandyBar-1.0")
 local media = LibStub("LibSharedMedia-3.0")
 local powerColor = PowerBarColor
 local db = nil
@@ -337,7 +337,7 @@ function plugin:OnRegister()
 	media:Register("statusbar", "Glaze", "Interface\\AddOns\\BigWigs\\Textures\\glaze")
 	media:Register("statusbar", "Charcoal", "Interface\\AddOns\\BigWigs\\Textures\\Charcoal")
 	media:Register("statusbar", "BantoBar", "Interface\\AddOns\\BigWigs\\Textures\\default")
-	candy.RegisterCallback(self, "LibCandyBar_Stop", barStopped)
+	staticCandy.RegisterCallback(self, "LibStaticCandyBar_Stop", barStopped)
 
 	db = self.db.profile
 	self:RegisterMessage("BigWigs_ProfileUpdate", updateProfile)
@@ -507,7 +507,45 @@ function plugin:BigWigs_StartConfigureMode()
 	plugin:BigWigs_AddPowerBar("BigWigs_AddPowerBar", "test", "config", "player", nil, nil, nil, nil, nil, (UnitPowerType("player")))
 end
 
+local function barClicked(bar, button)
+	for action, enabled in pairs(plugin.db.profile[button]) do
+		if enabled then clickHandlers[action](bar) end
+	end
+end
+
+local function barOnEnter(bar)
+	bar.candyBarLabel:SetJustifyH("CENTER")
+	bar.candyBarBackground:SetVertexColor(1, 1, 1, 0.8)
+end
+local function barOnLeave(bar)
+	bar.candyBarLabel:SetJustifyH(db.align)
+	bar.candyBarBackground:SetVertexColor(0.5, 0.5, 0.5, 0.3)
+end
+
 do
+	local function updateBars()
+		for bar in pairs(normalAnchor.bars) do
+			bar:SetTexture(media:Fetch("statusbar", db.texture))
+			bar.candyBarLabel:SetJustifyH(db.align)
+			bar.candyBarLabel:SetFont(media:Fetch("font", db.font), 10)
+			bar.candyBarProgress:SetFont(media:Fetch("font", db.font), 10)
+			bar:SetProgressVisibility(db.value, db.maxValue, db.percent)
+			bar:SetScale(db.scale)
+			if db.interceptMouse then
+				bar:EnableMouse(true)
+				bar:SetScript("OnMouseDown", barClicked)
+				bar:SetScript("OnEnter", barOnEnter)
+				bar:SetScript("OnLeave", barOnLeave)
+			else
+				bar:EnableMouse(false)
+				bar:SetScript("OnMouseDown", nil)
+				bar:SetScript("OnEnter", nil)
+				bar:SetScript("OnLeave", nil)
+			end
+		end
+		rearrangeBars(normalAnchor)
+	end
+
 	local function onControlEnter(widget, event, value)
 		GameTooltip:ClearLines()
 		GameTooltip:SetOwner(widget.frame, "ANCHOR_CURSOR")
@@ -520,11 +558,13 @@ do
 	local function standardCallback(widget, event, value)
 		local key = widget:GetUserData("key")
 		db[key] = value
+		updateBars()
 	end
 
 	local function dropdownCallback(widget, event, value)
 		local list = media:List(widget:GetUserData("type"))
 		db[widget:GetUserData("key")] = list[value]
+		updateBars()
 	end
 
 	function plugin:GetPluginConfig()
@@ -582,6 +622,7 @@ do
 				left:SetValue(db.align == "LEFT")
 				center:SetValue(db.align == "CENTER")
 				right:SetValue(db.align == "RIGHT")
+				updateBars()
 			end
 
 			left:SetValue(db.align == "LEFT")
@@ -760,25 +801,10 @@ clickHandlers.disable = function(bar)
 	end
 end
 
-local function barClicked(bar, button)
-	for action, enabled in pairs(plugin.db.profile[button]) do
-		if enabled then clickHandlers[action](bar) end
-	end
-end
-
-local function barOnEnter(bar)
-	bar.candyBarLabel:SetJustifyH("CENTER")
-	bar.candyBarBackground:SetVertexColor(1, 1, 1, 0.8)
-end
-local function barOnLeave(bar)
-	bar.candyBarLabel:SetJustifyH(db.align)
-	bar.candyBarBackground:SetVertexColor(0.5, 0.5, 0.5, 0.3)
-end
-
 local function createBar(module, key, ID, text, minValue, maxValue, Value, icon, power, r, g, b, a, func)
 	if not normalAnchor then createAnchors() end
 	stop(module, ID, power)
-	local bar = candy:New(media:Fetch("statusbar", db.texture), 200, 14)
+	local bar = staticCandy:New(media:Fetch("statusbar", db.texture), 200, 14)
 	normalAnchor.bars[bar] = true
 	bar.candyBarBackground:SetVertexColor(0.5, 0.5, 0.5, 0.3)
 	bar:Set("bigwigs:module", module)
@@ -790,14 +816,12 @@ local function createBar(module, key, ID, text, minValue, maxValue, Value, icon,
 	bar.candyBarLabel:SetTextColor(1, 1, 1, 1)
 	bar.candyBarLabel:SetJustifyH(db.align)
 	bar.candyBarLabel:SetFont(media:Fetch("font", db.font), 10)
-	bar.candyBarDuration:SetFont(media:Fetch("font", db.font), 10)
+	bar.candyBarProgress:SetFont(media:Fetch("font", db.font), 10)
 	bar:SetLabel(text)
 	bar:SetClampedToScreen(true)
 	bar:SetMinMaxValues(minValue,maxValue)
 	bar:SetValue(Value)
-	bar:SetValueVisibility(db.value)
-	bar:SetMaxValueVisibility(db.maxValue)
-	bar:SetPercentVisibility(db.percent)
+	bar:SetProgressVisibility(db.value, db.maxValue, db.percent)
 	bar:SetIcon(db.icon and icon or nil)
 	bar:SetScale(db.scale)
 	bar:AddUpdateFunction(func)
@@ -807,7 +831,7 @@ local function createBar(module, key, ID, text, minValue, maxValue, Value, icon,
 		bar:SetScript("OnEnter", barOnEnter)
 		bar:SetScript("OnLeave", barOnLeave)
 	end
-	bar:StartOnlyFunction()
+	bar:Start()
 	rearrangeBars(normalAnchor)
 end
 

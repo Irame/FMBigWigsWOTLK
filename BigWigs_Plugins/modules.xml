@@ -12,6 +12,7 @@
 <Script file="Flash.lua"/>
 <Script file="Tips.lua"/>
 <Script file="Emphasize.lua"/>
+<Script file="HealthBars.lua"/>
 
 
 </Ui>
