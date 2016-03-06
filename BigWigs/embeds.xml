@@ -13,6 +13,7 @@
 <Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
 <Include file="Libs\LibSink-2.0\lib.xml"/>
 <Include file="Libs\LibCandyBar-3.0\lib.xml"/>
+<Include file="Libs\LibStaticCandyBar-1.0\lib.xml"/>
 <!--@end-no-lib-strip@-->
 
 <Script file="Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
