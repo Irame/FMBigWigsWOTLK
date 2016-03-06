@@ -233,7 +233,7 @@ function lib:New(texture, width, height)
 		local icon = bar:CreateTexture(nil, "BACKGROUND")
 		icon:SetPoint("TOPLEFT", bar)
 		icon:SetPoint("BOTTOMLEFT", bar)
-		--icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+		icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 		bar.candyBarIconFrame = icon
 		local statusbar = CreateFrame("StatusBar", nil, bar)
 		statusbar:SetPoint("TOPRIGHT", bar)
