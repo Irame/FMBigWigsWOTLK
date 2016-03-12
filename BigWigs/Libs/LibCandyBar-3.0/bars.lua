@@ -84,8 +84,11 @@ end
 
 local function onUpdate(self)
 	local t = GetTime()
-	if t >= self.exp then
+	if t >= self.exp + (self.expiredDuration or 0) then
 		self:Stop()
+	elseif t >= self.exp then
+		local time = self.exp - t
+		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
 	else
 		local time = self.exp - t
 		self.remaining = time
@@ -180,6 +183,9 @@ function barPrototype:SetRemaining(remaining)
 	self.begin = self.exp - self.duration
 end
 
+function barPrototype:SetExpiredDuration(expiredDuration)
+	self.expiredDuration = expiredDuration
+end
 --- Shows the bar and starts it off
 function barPrototype:Start()
 	local ct = GetTime();

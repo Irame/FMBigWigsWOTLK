@@ -862,7 +862,7 @@ function plugin:BigWigs_SuperEmphasizeStart(event, module, key, time)
 	actuallyEmphasize(bar, time)
 end
 
-function plugin:BigWigs_StartBar(message, module, key, text, time, icon)
+function plugin:BigWigs_StartBar(message, module, key, text, time, icon, expTime)
 	if not normalAnchor then createAnchors() end
 	stop(module, text)
 	local bar = candy:New(media:Fetch("statusbar", db.texture), 200, TukuiCF and 18 or 14)
@@ -890,6 +890,7 @@ function plugin:BigWigs_StartBar(message, module, key, text, time, icon)
 	bar:SetLabel(text)
 	bar:SetClampedToScreen(true)
 	bar:SetDuration(time)
+	bar:SetExpiredDuration(expTime)
 	bar:SetTimeVisibility(db.time)
 	bar:SetIcon(db.icon and icon or nil)
 	bar:SetScale(db.scale)
