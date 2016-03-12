@@ -110,7 +110,7 @@ end
 
 function mod:BloodNova(_, spellId)
 	self:Message(72378, L["nova_message"], "Attention", spellId, "Alarm")
-	self:Bar(72378, L["nova_bar"], 20, spellId) -- 5sec rnd
+	self:Bar(72378, L["nova_bar"], 20, spellId, 5)
 end
 
 function mod:Adds(_, spellId)
@@ -121,7 +121,7 @@ end
 
 function mod:RuneofBlood(player, spellId, _, _, spellName)
 	self:TargetMessage(72410, spellName, player, "Attention", spellId)
-	self:Bar(72410, L["rune_bar"], 20, spellId) -- 5sec rnd
+	self:Bar(72410, L["rune_bar"], 20, spellId, 5)
 end
 
 function mod:Mark(player, spellId, _, _, spellName)
