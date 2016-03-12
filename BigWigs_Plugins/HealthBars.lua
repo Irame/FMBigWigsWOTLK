@@ -769,7 +769,7 @@ do
 		end
 		local curValue = bar:GetValue()
 		local minValue,maxValue = bar:GetMinMaxValues()
-		local text = string.format("%s: %s",bar.candyBarLabel:GetText(),bar.candyBarDuration:GetText())
+		local text = string.format("%s: %s",bar.candyBarLabel:GetText(),bar.candyBarProgress:GetText())
 		text = string.gsub(text,"|","\||")
 		SendChatMessage(text, channel)
 	end
