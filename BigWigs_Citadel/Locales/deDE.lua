@@ -41,11 +41,11 @@ if L then
 	L.adds_desc = "Zeigt Timer und Nachrichten für das Auftauchen der Blutbestien."
 	L.adds_warning = "Blutbestien in 5 sek!"
 	L.adds_message = "Blutbestien!"
-	L.adds_bar = "~Blutbestien"
+	L.adds_bar = "Blutbestien"
 	
 	L.nova_warning = "Blutnova in 5 sek!"
 	L.nova_message = "Blutnova!"
-	L.nova_bar = "Nächste Blutnova"
+	L.nova_bar = "~Nächste Blutnova"
 	
 	L.rune_bar = "~Nächste Rune"
 

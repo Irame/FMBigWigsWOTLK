@@ -30,7 +30,7 @@ if L then
 	
 	L.nova_warning = "Blood Nova in 5 sec!"
 	L.nova_message = "Blood Nova!"
-	L.nova_bar = "Next Blood Nova"
+	L.nova_bar = "~Next Blood Nova"
 
 	L.rune_bar = "~Next Rune"
 
