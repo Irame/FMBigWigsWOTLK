@@ -60,23 +60,25 @@ function mod:OnBossEnable()
 	self:Yell("Warmup", L["warmup_alliance"], L["warmup_horde"])
 end
 
-function mod:OnEngage(diff)
+function mod:OnEngage()
 	self:OpenProximity(11,72378)
-	if diff > 2 then
+	if self:IsDifficulty("hc") then
 		self:Berserk(360)
 	else
 		self:Berserk(480)
 	end
 	self:DelayedMessage("adds", 25, L["adds_warning"], "Urgent")
-	self:Bar("adds", L["adds_bar"], 30, 72173)
+	self:Bar("adds", L["adds_bar"], 40, 72173)
 	self:HealthBar(72293, 37813, 3, "achievement_boss_saurfang")
+	self:Bar(72378, L["nova_bar"], 17, 72378)
+	self:Bar(72410, L["rune_bar"], 20, 72410)
 	count = 1
 end
 
 function mod:Warmup(msg)
 	self:OpenProximity(11,72378)
 	if msg == L["warmup_alliance"] then
-		self:Bar("adds", self.displayName, 45, "achievement_boss_saurfang")
+		self:Bar("adds", self.displayName, 44, "achievement_boss_saurfang")
 	else
 		self:Bar("adds", self.displayName, 99, "achievement_boss_saurfang")
 	end
@@ -108,7 +110,7 @@ end
 
 function mod:BloodNova(_, spellId)
 	self:Message(72378, L["nova_message"], "Attention", spellId, "Alarm")
-	self:Bar(72378, L["nova_bar"], 20, spellId)
+	self:Bar(72378, L["nova_bar"], 20, spellId) -- 5sec rnd
 end
 
 function mod:Adds(_, spellId)
@@ -119,7 +121,7 @@ end
 
 function mod:RuneofBlood(player, spellId, _, _, spellName)
 	self:TargetMessage(72410, spellName, player, "Attention", spellId)
-	self:Bar(72410, L["rune_bar"], 20, spellId)
+	self:Bar(72410, L["rune_bar"], 20, spellId) -- 5sec rnd
 end
 
 function mod:Mark(player, spellId, _, _, spellName)
