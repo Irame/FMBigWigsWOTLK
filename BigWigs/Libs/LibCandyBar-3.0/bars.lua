@@ -84,19 +84,29 @@ end
 
 local function onUpdate(self)
 	local t = GetTime()
-	if t >= self.exp + (self.expiredDuration or 0) then
-		self:Stop()
-	elseif t >= self.exp then
-		local time = self.exp - t
-		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
-	else
-		local time = self.exp - t
-		self.remaining = time
-		self.candyBarBar:SetValue(time)
-		self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
-		if self.funcs then
-			for i, v in next, self.funcs do v(self) end
+	if t >= self.exp + (self.expired and self.expiredDuration or 0) then
+		if self.expired or not self.expiredDuration then
+			self:Stop()
+			return
+		else
+			self.expired = true
+			self.candyBarBar:SetMinMaxValues(0, self.expiredDuration)
+			local time = self.exp - t
+			self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
 		end
+	end
+	
+	local time = self.exp - t
+	self.remaining = time
+	if self.expired then
+		time = -time
+	end
+
+	self.candyBarBar:SetValue(time)
+	self.candyBarDuration:SetFormattedText(SecondsToTimeDetail(time))
+
+	if self.funcs then
+		for i, v in next, self.funcs do v(self) end
 	end
 end
 
@@ -167,6 +177,7 @@ function barPrototype:SetTimeVisibility(bool) self.showTime = bool; restyleBar(s
 --- Sets the duration of the bar
 -- @param duration Duration of the bar in seconds
 function barPrototype:SetDuration(duration)
+	if self.expired then return end
 	self.duration = duration
 	if self.running then
 		self.exp = self.begin + duration
@@ -178,6 +189,7 @@ function barPrototype:SetDuration(duration)
 end
 --- Sets the remaining time.
 function barPrototype:SetRemaining(remaining)
+	if self.expired then return end
 	self.remaining = remaining
 	self.exp = GetTime() + remaining
 	self.begin = self.exp - self.duration
@@ -189,7 +201,7 @@ end
 --- Shows the bar and starts it off
 function barPrototype:Start()
 	local ct = GetTime();
-	if self.running then
+	if self.running and not self.expired then
 		self.duration = self.remaining
 	else
 		self.running = true
@@ -198,6 +210,7 @@ function barPrototype:Start()
 	self.candyBarBar:SetMinMaxValues(0, self.duration)
 	self.begin = ct
 	self.exp = ct + self.duration
+	self.expired = false
 	self:SetScript("OnUpdate", onUpdate)
 	self:Show()
 end
