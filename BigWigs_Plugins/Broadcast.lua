@@ -17,15 +17,15 @@ local L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Plugins")
 --
 
 function plugin:OnPluginEnable()
-	self:RegisterMessage("BigWigs_Message")
+	self:RegisterMessage("BigWigs_Broadcast")
 end
 
 -------------------------------------------------------------------------------
 -- Event Handlers
 --
 
-function plugin:BigWigs_Message(event, module, key, msg, color, nobroadcast)
-	if not msg or nobroadcast or not BigWigs.db.profile.broadcast then return end
+function plugin:BigWigs_Broadcast(event, self, key, msg)
+	if not msg or not broadcast or not BigWigs.db.profile.broadcast then return end
 
 	-- only allowed to broadcast if we're in a party or raidleader/assistant
 	local inRaid = GetRealNumRaidMembers() > 0

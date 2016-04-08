@@ -964,7 +964,11 @@ end
 
 local function sendCustomMessage(msg)
 	if not messages[msg] then return end
-	plugin:SendMessage("BigWigs_Message", nil, nil, unpack(messages[msg]))
+	local msg, color, broadcast = unpack(messages[msg])
+	plugin:SendMessage("BigWigs_Message", nil, nil, msg, color)
+	if broadcast then
+		plugin:SendMessage("BigWigs_Broadcast", nil, nil, msg)
+	end
 	wipe(messages[msg])
 	messages[msg] = nil
 end

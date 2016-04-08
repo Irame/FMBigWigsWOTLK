@@ -412,15 +412,38 @@ function boss:CloseProximity()
 	self:SendMessage("BigWigs_HideProximity")
 end
 
-function boss:Message(key, text, color, icon, sound, noraidsay, broadcastonly)
+local hasVoice = nil
+function HasVoice()
+	if hasVoice ~= nil then return hasVoice end
+	hasVoice = core:GetPlugin("Voice") ~= nil
+end
+
+function boss:Message(key, text, color, icon, sound)
 	if not checkFlag(self, key, C.MESSAGE) then return end
-	self:SendMessage("BigWigs_Message", self, key, text, color, noraidsay, sound, broadcastonly, icon)
+	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+	self:SendMessage("BigWigs_Broadcast", self, key, text)
+	
+	if sound then
+		if HasVoice() and checkFlag(self, key, C.VOICE) then
+			self:SendMessage("BigWigs_Voice", self, key, sound)
+		else
+			self:SendMessage("BigWigs_Sound", sound)
+		end
+	end
 end
 
 -- Outputs a local message only, no raid warning.
 function boss:LocalMessage(key, text, color, icon, sound)
 	if not checkFlag(self, key, C.MESSAGE) then return end
-	self:SendMessage("BigWigs_Message", self, key, text, color, true, sound, nil, icon)
+	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+	
+	if sound then
+		if HasVoice() and checkFlag(self, key, C.VOICE) then
+			self:SendMessage("BigWigs_Voice", self, key, sound)
+		else
+			self:SendMessage("BigWigs_Sound", sound)
+		end
+	end
 end
 
 do
@@ -453,18 +476,39 @@ do
 	function boss:TargetMessage(key, spellName, player, color, icon, sound, ...)
 		if not checkFlag(self, key, C.MESSAGE) then return end
 		if type(player) == "table" then
-			local text = fmt(L["other"], spellName, table.concat(player, ", "))
+			local list = table.concat(player, ", ")
+			local onMe = string:find(list, pName, nil, true)
+			if onMe and #player == 1 then
+				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), "Personal", icon)
+			else
+				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], spellName, list), color, icon)
+			end
+			self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, list))
+			if sound then
+				if HasVoice() and checkFlag(self, key, C.VOICE) then
+					self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
+				else
+					self:SendMessage("BigWigs_Sound", sound)
+				end
+			end
 			wipe(player)
-			self:SendMessage("BigWigs_Message", self, key, text, color, nil, sound, nil, icon)
 		else
 			if UnitIsUnit(player, "player") then
 				if ... then
 					local text = fmt(spellName, coloredNames[player], ...)
-					self:SendMessage("BigWigs_Message", self, key, text, color, true, sound, nil, icon)
-					self:SendMessage("BigWigs_Message", self, key, text, nil, nil, nil, true)
+					self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+					self:SendMessage("BigWigs_Broadcast", self, key, text)
 				else
-					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), color, true, sound, nil, icon)
-					self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], spellName, player), nil, nil, nil, true)
+					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), color, icon)
+					self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, player))
+				end
+				
+				if sound then
+					if HasVoice() and checkFlag(self, key, C.VOICE) then
+						self:SendMessage("BigWigs_Voice", self, key, sound, true)
+					else
+						self:SendMessage("BigWigs_Sound", sound)
+					end
 				end
 			else
 				-- Change color and remove sound when warning about effects on other players
@@ -475,7 +519,16 @@ do
 				else
 					text = fmt(L["other"], spellName, coloredNames[player])
 				end
-				self:SendMessage("BigWigs_Message", self, key, text, color, nil, nil, nil, icon)
+				self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+				self:SendMessage("BigWigs_Broadcast", self, key, text)
+				
+				if sound then
+					if HasVoice() and checkFlag(self, key, C.VOICE) then
+						self:SendMessage("BigWigs_Voice", self, key, sound)
+					else
+						self:SendMessage("BigWigs_Sound", sound)
+					end
+				end
 			end
 		end
 	end

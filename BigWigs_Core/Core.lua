@@ -122,7 +122,9 @@ do
 	local messages = {}
 	local colors = {"Important", "Personal", "Urgent", "Attention", "Positive"}
 	local sounds = {"Long", "Info", "Alert", "Alarm", "Victory", false, false, false, false, false, false}
+	local voices = {"testVoice1", "testVoice2", "testVoice3", "testVoice4", false, false, false, false, false}
 	local messageFormat = "%s: %s %s"
+	local hasVoice = nil
 
 	local function barStopped(event, bar)
 		local a = bar:Get("bigwigs:anchor")
@@ -130,14 +132,21 @@ do
 		if a and messages[key] then
 			local color = colors[math.random(1, #colors)]
 			local sound = sounds[math.random(1, #sounds)]
+			local voice = voices[math.random(1, #voices)]
 			local formatted = messageFormat:format(color, key, sound and "("..sound..")" or "")
-			addon:SendMessage("BigWigs_Message", addon, key, formatted, color, true, sound, nil, messages[key])
+			addon:SendMessage("BigWigs_Message", addon, key, formatted, color, messages[key])
+			if hasVoice then
+				addon:SendMessage("BigWigs_Voice", addon, voice, sound)
+			else
+				addon:SendMessage("BigWigs_Sound", sound)
+			end
 			if math.random(1, 4) == 2 then addon:SendMessage("BigWigs_FlashShake") end
 			messages[key] = nil
 		end
 	end
 
 	function addon:Test()
+		if hasVoice == nil then hasVoice = addon:GetPlugin("Voice", true) ~= nil end
 		if not spells then
 			spells = {}
 			for i = 2, MAX_SKILLLINE_TABS do
@@ -262,6 +271,7 @@ function addon:OnInitialize()
 	local defaults = {
 		profile = {
 			sound = true,
+			voice = true,
 			raidicon = true,
 			flash = true,
 			shake = true,

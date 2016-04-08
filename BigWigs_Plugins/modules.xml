@@ -3,6 +3,7 @@
 
 <Script file="Colors.lua"/>
 <Script file="Sound.lua"/>
+<Script file="Voice.lua"/>
 <Script file="Messages.lua"/>
 <Script file="Bars.lua"/>
 <Script file="Broadcast.lua"/>
