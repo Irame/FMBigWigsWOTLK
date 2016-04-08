@@ -233,7 +233,7 @@ L = BigWigs:NewBossLocale("Patchwerk", "deDE")
 if L then
 	L.enragewarn = "5% - Raserei!"
 	L.starttrigger1 = "Flickwerk spielen möchte!"
-	L.starttrigger2 = "Kel’Thuzad macht Flickwerk zu seinem Abgesandten von Krieg!"  Yes, that's really a ´ instead of a '
+	L.starttrigger2 = "Kel’Thuzad macht Flickwerk zu seinem Abgesandten von Krieg!"  --Yes, that's really a ´ instead of a '
 end
 
 L = BigWigs:NewBossLocale("Maexxna", "deDE")
@@ -253,7 +253,7 @@ end
 
 L = BigWigs:NewBossLocale("Sapphiron", "deDE")
 if L then
-	L.airphase_trigger = "Saphiron erhebt sich in die Lüfte!"  No %s in deDE, we need the translated name!
+	L.airphase_trigger = "Saphiron erhebt sich in die Lüfte!"  --No %s in deDE, we need the translated name!
 	L.deepbreath_incoming_message = "Frostatem in ~23 sek!"
 	L.deepbreath_incoming_soon_message = "Frostatem in ~5 sek!"
 	L.deepbreath_incoming_bar = "Wirkt Frostatem..."
