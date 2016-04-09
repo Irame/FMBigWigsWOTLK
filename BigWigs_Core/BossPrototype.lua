@@ -423,12 +423,10 @@ function boss:Message(key, text, color, icon, sound)
 	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
 	self:SendMessage("BigWigs_Broadcast", self, key, text)
 	
-	if sound then
-		if HasVoice() and checkFlag(self, key, C.VOICE) then
-			self:SendMessage("BigWigs_Voice", self, key, sound)
-		else
-			self:SendMessage("BigWigs_Sound", sound)
-		end
+	if HasVoice() and checkFlag(self, key, C.VOICE) then
+		self:SendMessage("BigWigs_Voice", self, key, sound)
+	else
+		self:SendMessage("BigWigs_Sound", sound)
 	end
 end
 
@@ -437,12 +435,10 @@ function boss:LocalMessage(key, text, color, icon, sound)
 	if not checkFlag(self, key, C.MESSAGE) then return end
 	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
 	
-	if sound then
-		if HasVoice() and checkFlag(self, key, C.VOICE) then
-			self:SendMessage("BigWigs_Voice", self, key, sound)
-		else
-			self:SendMessage("BigWigs_Sound", sound)
-		end
+	if HasVoice() and checkFlag(self, key, C.VOICE) then
+		self:SendMessage("BigWigs_Voice", self, key, sound)
+	else
+		self:SendMessage("BigWigs_Sound", sound)
 	end
 end
 
@@ -484,12 +480,10 @@ do
 				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], spellName, list), color, icon)
 			end
 			self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, list))
-			if sound then
-				if HasVoice() and checkFlag(self, key, C.VOICE) then
-					self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
-				else
-					self:SendMessage("BigWigs_Sound", sound)
-				end
+			if HasVoice() and checkFlag(self, key, C.VOICE) then
+				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
+			else
+				self:SendMessage("BigWigs_Sound", sound)
 			end
 			wipe(player)
 		else
@@ -502,13 +496,11 @@ do
 					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), color, icon)
 					self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, player))
 				end
-				
-				if sound then
-					if HasVoice() and checkFlag(self, key, C.VOICE) then
-						self:SendMessage("BigWigs_Voice", self, key, sound, true)
-					else
-						self:SendMessage("BigWigs_Sound", sound)
-					end
+			
+				if HasVoice() and checkFlag(self, key, C.VOICE) then
+					self:SendMessage("BigWigs_Voice", self, key, sound, true)
+				else
+					self:SendMessage("BigWigs_Sound", sound)
 				end
 			else
 				-- Change color and remove sound when warning about effects on other players
@@ -521,13 +513,11 @@ do
 				end
 				self:SendMessage("BigWigs_Message", self, key, text, color, icon)
 				self:SendMessage("BigWigs_Broadcast", self, key, text)
-				
-				if sound then
-					if HasVoice() and checkFlag(self, key, C.VOICE) then
-						self:SendMessage("BigWigs_Voice", self, key, sound)
-					else
-						self:SendMessage("BigWigs_Sound", sound)
-					end
+			
+				if HasVoice() and checkFlag(self, key, C.VOICE) then
+					self:SendMessage("BigWigs_Voice", self, key, sound)
+				else
+					self:SendMessage("BigWigs_Sound", sound)
 				end
 			end
 		end
