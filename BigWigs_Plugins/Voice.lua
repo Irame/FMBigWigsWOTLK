@@ -37,7 +37,15 @@ function plugin:BigWigs_Voice(event, module, key, sound, isOnMe)
 	end
 end
 
+-- variables for better readablility
+local personal = true
+local general = false
 
-plugin.fileTable = {
-	
+plugin.fileTable = {	-- on you            on other
+	----------------------------------------
+	--- Testing
+	["testVoice1"] = 	{ [personal] = false,	[general] = true },
+	["testVoice2"] = 	{ [personal] = false,	[general] = true },
+	["testVoice3"] = 	{ [personal] = false,	[general] = true },
+	["testVoice4"] = 	{ [personal] = false,	[general] = true },
 }
