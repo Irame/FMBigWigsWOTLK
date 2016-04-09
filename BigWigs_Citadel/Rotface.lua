@@ -12,6 +12,7 @@ mod.optionHeaders = {
 	berserk = "general",
 	proximity = "general",
 }
+mod.order = 22
 
 --------------------------------------------------------------------------------
 -- Locals

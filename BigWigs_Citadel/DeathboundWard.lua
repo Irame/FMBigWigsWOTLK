@@ -6,6 +6,7 @@ local mod = BigWigs:NewBoss("Deathbound Ward", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(37007)
 mod.toggleOptions = {{71022, "FLASHSHAKE"}}
+mod.order = 10
 
 --------------------------------------------------------------------------------
 -- Initialization

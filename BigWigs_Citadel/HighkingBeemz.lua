@@ -24,6 +24,7 @@ mod.toggleOptions = {
 mod.optionHeaders = {
 	proximity = "general",
 }
+mod.order = 42
 
 --------------------------------------------------------------------------------
 -- Locals

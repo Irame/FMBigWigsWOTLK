@@ -13,6 +13,7 @@ mod.optionHeaders = {
 	phase2 = CL.phase:format(2),
 	[69762] = "general",
 }
+mod.order = 43
 
 --------------------------------------------------------------------------------
 -- Locals

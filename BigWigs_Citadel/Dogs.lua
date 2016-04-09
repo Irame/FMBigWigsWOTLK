@@ -6,6 +6,7 @@ local mod = BigWigs:NewBoss("Putricide Dogs", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(37217, 37025)
 mod.toggleOptions = {71127, 71123}
+mod.order = 20
 
 --------------------------------------------------------------------------------
 -- Localization

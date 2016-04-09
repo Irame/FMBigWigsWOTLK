@@ -6,6 +6,7 @@ local mod = BigWigs:NewBoss("Deathspeaker High Priest", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(36805, 36807, 36808, 36811, 36829)
 mod.toggleOptions = {{69483, "WHISPER", "ICON", "FLASHSHAKE"}, "proximity"}
+mod.order = 12
 
 --------------------------------------------------------------------------------
 -- Initialization

@@ -11,6 +11,7 @@ mod.optionHeaders = {
 	[72295] = "heroic",
 	proximity = "general",
 }
+mod.order = 21
 
 --------------------------------------------------------------------------------
 -- Locals

@@ -11,6 +11,7 @@ mod.optionHeaders = {
 	berserk = "heroic",
 	bosskill = "general",
 }
+mod.order = 41
 
 --------------------------------------------------------------------------------
 -- Locals
