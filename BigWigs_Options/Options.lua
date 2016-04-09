@@ -692,7 +692,6 @@ end
 
 function showToggleOptions(widget, event, group)
 	if widget:GetUserData("zone") then
-		local modules = zoneModules[widget:GetUserData("zone")]
 		local module = BigWigs:GetBossModule(group)
 		widget:SetUserData("bossIndex", group)
 		populateToggleOptions(widget, module)
@@ -703,8 +702,8 @@ end
 
 local onZoneShow
 do
-	local sorted = {}
 	function onZoneShow(frame)
+		local sorted = {}
 		local zone = frame.name
 
 		-- Make sure all the bosses for this zone are loaded.
@@ -734,9 +733,16 @@ do
 			group:SetTitle(L["Select encounter"])
 			group:SetLayout("Flow")
 			group:SetCallback("OnGroupSelected", showToggleOptions)
-			table.sort(zoneModules[zone])
 			group:SetUserData("zone", zone)
-			group:SetGroupList(zoneModules[zone])
+			
+			for k, v in pairs(zoneModules[zone]) do
+				sorted[#sorted + 1] = {value = k, text = v.displayName, order = v.order}
+			end
+			table.sort(sorted, function(a,b) return a.order == b.order and a.value < b.value or a.order < b.order end)
+			group:SetGroupList({})
+			for i, v in pairs(sorted) do
+				group.dropdown:AddItem(v.value, v.text)
+			end
 		else
 			group = AceGUI:Create("SimpleGroup")
 			group:SetLayout("Fill")
@@ -762,12 +768,7 @@ do
 				group:SetGroup(enabledModule)
 			else
 				-- select first one
-				wipe(sorted)
-				for k, v in pairs(zoneModules[zone]) do
-					sorted[#sorted + 1] = k
-				end
-				table.sort(sorted)
-				group:SetGroup(sorted[1])
+				group:SetGroup(sorted[1].value)
 			end
 		else
 			populateToggleOptions(group, frame.module)
@@ -824,7 +825,8 @@ do
 				local zone = module.otherMenu or module.zoneName
 				if not zone then error(module.name .. " doesn't have any valid zone set!") end
 				if not zoneModules[zone] then zoneModules[zone] = {} end
-				zoneModules[zone][module.moduleName] = module.displayName
+				
+				zoneModules[zone][module.moduleName] = {displayName = module.displayName, order = module.order}
 			else
 				local panel, created = self:GetPanel(moduleName, "Big Wigs")
 				if created then

@@ -461,6 +461,7 @@ do
 
 	function addon:RegisterBossModule(module)
 		if not module.displayName then module.displayName = module.moduleName end
+		if not module.order then module.order = 0 end
 		if LOCALE ~= "enUS" and BB and BZ then
 			module.zoneName = BZ[module.zoneName] or module.zoneName
 			if module.otherMenu then
