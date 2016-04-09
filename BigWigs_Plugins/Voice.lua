@@ -48,4 +48,12 @@ plugin.fileTable = {	-- on you            on other
 	["testVoice2"] = 	{ [personal] = false,	[general] = true },
 	["testVoice3"] = 	{ [personal] = false,	[general] = true },
 	["testVoice4"] = 	{ [personal] = false,	[general] = true },
+	
+	----------------------------------------
+	----- Icecrown Citadel
+	----------------------------------------
+	-- Lord Marrowgar
+	[69057] = 			{ [personal] = true,	[general] = true },		-- Impale
+	[69138] = 			{ [personal] = false,	[general] = true },		-- Coldflame
+	
 }

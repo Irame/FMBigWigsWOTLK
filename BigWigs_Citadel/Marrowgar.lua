@@ -5,7 +5,7 @@
 local mod = BigWigs:NewBoss("Lord Marrowgar", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(36612)
-mod.toggleOptions = {69076, 69057, 69055, {69138, "FLASHSHAKE"}, "bosskill"}
+mod.toggleOptions = {69076, {69057, "VOICE"}, 69055, {69138, "FLASHSHAKE", "VOICE"}, "bosskill"}
 mod.order = 11
 
 --------------------------------------------------------------------------------
