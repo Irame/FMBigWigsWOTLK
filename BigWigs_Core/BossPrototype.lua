@@ -14,11 +14,12 @@ local combatLogMap = setmetatable({}, metaMap)
 local yellMap = setmetatable({}, metaMap)
 local emoteMap = setmetatable({}, metaMap)
 local deathMap = setmetatable({}, metaMap)
-local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty
+local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty, UpdateDispelStatus
 local updateData = function()
 	UpdateZoneData()
 	UpdateRoleData()
 	UpdateInstanceDifficulty()
+	UpdateDispelStatus()
 end
 
 local boss = {}
@@ -408,6 +409,7 @@ end
 
 
 local function checkFlag(self, key, flag)
+	if not key then return false end
 	if silencedOptions[key] then
 		return
 	end
@@ -734,7 +736,54 @@ do
 		return myDamagerRole
 	end
 end
-	
+
+-------------------------------------------------------------------------------
+-- Despell stuff
+--
+do
+	local offDispel, defDispel = "", ""
+	function UpdateDispelStatus()
+		offDispel, defDispel = "", ""
+		if IsSpellKnown(19801) then
+			-- Tranq (Hunter)
+			offDispel = offDispel .. "enrage,"
+		end
+		if IsSpellKnown(19801) or IsSpellKnown(32375) or IsSpellKnown(988) or IsSpellKnown(370) or IsSpellKnown(30449) then
+			-- Tranq (Hunter), Mass Dispel (Priest), Dispel Magic (Priest), Purge (Shaman), Spellsteal (Mage)
+			offDispel = offDispel .. "magic,"
+		end
+		if IsSpellKnown(988) or IsSpellKnown(4987) then
+			-- Dispel Magic (Priest), Cleanse (Paladin)
+			defDispel = defDispel .. "magic,"
+		end
+		if IsSpellKnown(528) or IsSpellKnown(552) or IsSpellKnown(4987) or IsSpellKnown(526) or IsSpellKnown(51886) then
+			-- Cure Disease (Priest), Abolish Disease (Priest), Cleanse (Paladin), Cure Toxins (Schaman), Cleanse Spirit (Restro Schaman)
+			defDispel = defDispel .. "disease,"
+		end
+		if IsSpellKnown(8946) or IsSpellKnown(2893) or IsSpellKnown(4987) or IsSpellKnown(526) or IsSpellKnown(51886) then
+			-- Cure Poison (Druid) Abolish Poison (Druid), Cleanse (Paladin), Cure Toxins (Schaman), Cleanse Spirit (Restro Schaman)
+			defDispel = defDispel .. "poison,"
+		end
+		if IsSpellKnown(2782) or IsSpellKnown(475) or IsSpellKnown(51886) then
+			-- Remove Curse (Druid), Remove Curse (Mage), Cleanse Spirit (Restro Schaman)
+			defDispel = defDispel .. "curse,"
+		end
+	end
+	function boss:Dispeller(dispelType, isOffensive, key)
+		if key and not checkFlag(self, key, C.DISPEL) then return end
+		if isOffensive then
+			if find(offDispel, dispelType, nil, true) then
+				return true
+			end
+		else
+			if find(defDispel, dispelType, nil, true) then
+				return true
+			end
+		end
+		return false
+	end
+end
+
 ------------------------------
 --- Map stuff
 
