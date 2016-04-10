@@ -32,6 +32,12 @@ function boss:OnEnable()
 	self:RegisterEvent("ZONE_CHANGED",			"UpdateZoneData")
 	self:RegisterEvent("ZONE_CHANGED_NEW_AREA",	"UpdateZoneData")
 	self:RegisterEvent("ZONE_CHANGED_INDOORS",	"UpdateZoneData")
+	
+	self:UpdateRoleData()
+	self:RegisterEvent("CONFIRM_TALENT_WIPE",			"UpdateRoleData")
+	self:RegisterEvent("CHARACTER_POINTS_CHANGED",		"UpdateRoleData")
+	self:RegisterEvent("PLAYER_TALENT_UPDATE",			"UpdateRoleData")
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED",	"UpdateRoleData")
 end
 function boss:OnDisable()
 	if debug then dbg(self, "OnDisable()") end
@@ -48,6 +54,13 @@ function boss:OnDisable()
 	self:UnregisterEvent("ZONE_CHANGED")
 	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
 	self:UnregisterEvent("ZONE_CHANGED_INDOORS")
+	
+	self.myRole = nil
+	self.myDamagerRole = nil
+	self:RegisterEvent("CONFIRM_TALENT_WIPE")
+	self:RegisterEvent("CHARACTER_POINTS_CHANGED")
+	self:RegisterEvent("PLAYER_TALENT_UPDATE")
+	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 
 	self:SendMessage("BigWigs_OnBossDisable", self)
 end
@@ -647,6 +660,84 @@ function boss:Berserk(seconds, noEngageMessage, customBoss)
 	-- Brutallus is da bomb.
 	local berserk = GetSpellInfo(26662)
 	self:Bar("berserk", berserk, seconds, 26662)
+end
+
+-------------------------------------------------------------------------------
+-- Role checking
+--
+
+local classRoleMap = {
+	["WARRIOR"] = {{"DAMAGER", "MELEE"}, {"DAMAGER", "MELEE"}, {"TANK"}},
+	["PALADIN"] = {{"HEALER"}, {"TANK"}, {"DAMAGER", "MELEE"}},
+	["HUNTER"] = {{"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}},
+	["ROGUE"] = {{"DAMAGER", "MELEE"}, {"DAMAGER", "MELEE"}, {"DAMAGER", "MELEE"}},
+	["PRIEST"] = {{"HEALER"}, {"HEALER"}, {"DAMAGER", "RANGED"}},
+	["DEATHKNIGHT"] = {{"DAMAGER", "MELEE"}, {--[[not sure]]}, {"DAMAGER", "MELEE"}},
+	["SHAMAN"] = {{"DAMAGER", "RANGED"}, {"DAMAGER", "MELEE"}, {"HEALER"}},
+	["MAGE"] = {{"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}},
+	["WARLOCK"] = {{"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}, {"DAMAGER", "RANGED"}},
+	["DRUID"] = {{"DAMAGER", "RANGED"}, {--[[not sure]]}, {"HEALER"}},
+}
+
+local function GetPrimaryTalentTree()
+	local numTabs = GetNumTalentTabs()
+	local primarySpec = {points = 0, index = 0}
+	for i = 1, MAX_TALENT_TABS do
+		if ( i <= numTabs ) then
+			_,_,pointsSpent = GetTalentTabInfo(i)
+			if pointsSpent > primarySpec.points then
+				primarySpec.index = i
+				primarySpec.points = pointsSpent
+			end
+		end
+	end
+	return primarySpec.index
+end
+
+function boss:UpdateRoleData()
+	local _, class = UnitClass("player")
+	local talentTree = GetPrimaryTalentTree()
+	if class == "DEATHKNIGHT" and talentTree == 2 then
+		if select(5, GetTalentInfo(2,13)) > 0 then		-- Protector of the Pack skilled
+			self.myRole = "TANK"
+			self.myDamagerRole = nil
+		else
+			self.myRole = "DAMAGER"
+			self.myDamagerRole = "MELEE"
+		end
+	elseif class == "DRUID" and talentTree == 2 then
+		if select(5, GetTalentInfo(2,22)) > 0 then		-- Frigid Dreadplate skilled
+			self.myRole = "TANK"
+			self.myDamagerRole = nil
+		else
+			self.myRole = "DAMAGER"
+			self.myDamagerRole = "MELEE"
+		end
+	else
+		local classRoleInfo = classRoleMap[class][talentTree]
+		self.myRole = classRoleInfo[1]
+		self.myDamagerRole = classRoleInfo[2]
+	end
+end
+
+function boss:Melee()
+	return self.myRole == "TANK" or self.myDamagerRole == "MELEE"
+end
+
+function boss:Ranged()
+	return self.myRole == "HEALER" or self.myDamagerRole == "RANGED"
+end
+
+function boss:Tank()
+	return self.myRole == "TANK"
+end
+
+function boss:Healer()
+	return self.myRole == "HEALER"
+end
+
+function boss:Damager()
+	return self.myDamagerRole
 end
 
 ------------------------------
