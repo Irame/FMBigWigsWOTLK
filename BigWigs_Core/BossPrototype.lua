@@ -14,12 +14,13 @@ local combatLogMap = setmetatable({}, metaMap)
 local yellMap = setmetatable({}, metaMap)
 local emoteMap = setmetatable({}, metaMap)
 local deathMap = setmetatable({}, metaMap)
-local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty, UpdateDispelStatus
+local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty, UpdateDispelStatus, UpdateInterruptStatus
 local updateData = function()
 	UpdateZoneData()
 	UpdateRoleData()
 	UpdateInstanceDifficulty()
 	UpdateDispelStatus()
+	UpdateInterruptStatus()
 end
 
 local boss = {}
@@ -783,6 +784,43 @@ do
 		return false
 	end
 end
+
+-------------------------------------------------------------------------------
+-- Interrupt stuff
+--
+do
+	local canInterrupt = false
+	local spellList = {
+		57994, -- Wind Shear (Shaman)
+		47528, -- Mind Freeze (Death Knight)
+		15487, -- Silence (Priest)
+		2139, -- Counterspell (Mage)
+		1766, -- Kick (Rogue)
+		6552, -- Pummel (Warrior)
+	}
+	function UpdateInterruptStatus()
+		canInterrupt = false
+		for i = 1, #spellList do
+			local spell = spellList[i]
+			if IsSpellKnown(spell) then
+				canInterrupt = spell -- XXX check for cooldown also?
+			end
+		end
+	end
+	function boss:Interrupter(guid, checkCooldown)
+		local result = canInterrupt
+		if canInterrupt then
+			if checkCooldown then
+				result = GetSpellCooldown(canInterrupt) ~= 0 and result
+			end
+			if guid then
+				result = (UnitGUID("target") == guid or UnitGUID("focus") == guid) and result
+			end
+		end
+		return result		
+	end
+end
+
 
 ------------------------------
 --- Map stuff
