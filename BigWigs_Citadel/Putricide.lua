@@ -180,7 +180,7 @@ local scheduled = nil
 			mod:FlashShake(72295)
 			mod:TargetMessage(72295, spellName, target, "Attention", 72295)
 		end
-		if GetInstanceDifficulty() > 2 then
+		if mod:IsDifficulty("hc") then
 			mod:Bar(72295, L["ball_bar"], 30, 72295)
 		else
 			mod:Bar(72295, L["ball_bar"], 30, 72295)
@@ -284,7 +284,7 @@ do
 		if not scheduled then
 			scheduled = true
 			self:ScheduleTimer(scanTarget, 0.2, spellName)
-			if self:GetInstanceDifficulty() > 2 then
+			if self:IsDifficulty("hc") then
 				self:Bar(72295, L["ball_bar"], 20, spellId)
 			else
 				self:Bar(72295, L["ball_bar"], 25, spellId)

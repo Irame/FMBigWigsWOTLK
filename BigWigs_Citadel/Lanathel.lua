@@ -112,7 +112,7 @@ end
 function mod:AirPhase(player, spellId)
 	self:Message(71772, L["phase_message"], "Important", spellId, "Alarm")
 	self:Bar(71772, L["phase1_bar"], 12, spellId)
-	self:Bar(71772, L["phase2_bar"], airPhaseTimers[self:GetInstanceDifficulty()][2], 71772)
+	self:Bar(71772, L["phase2_bar"], airPhaseTimers[self:GetDifficulty()][2], 71772)
 end
 
 function mod:Slash(player, spellId, _, _, spellName)

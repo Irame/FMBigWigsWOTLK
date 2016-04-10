@@ -144,7 +144,7 @@ do
 end
 
 function mod:MeteorInc()
-	if self:GetInstanceDifficulty() == 4 then
+	if mod:IsDifficulty("25hc") then
 		addsDeaths = 0
 		self:Bar("add_enrage", L["add_enrage_bar"], 26, 26662)
 	end
@@ -154,7 +154,7 @@ function mod:MeteorInc()
 end
 
 function mod:MeteorStrike(_, spellId, _, _, spellName)
-	if self:GetInstanceDifficulty() == 4 then
+	if mod:IsDifficulty("25hc") then
 		addsDeaths = 0
 		self:Bar("add_enrage", L["add_enrage_bar"], 18, 26662)
 	end

@@ -147,7 +147,7 @@ end
 --
 
 function mod:PlagueTick(horrorName, _, _, tickDamage, _, _, _, _, _, dGUID)
-	if self:GetInstanceDifficulty() < 3 then return end -- Doesn't apply on normal diff.
+	if self:IsDifficulty("nh") < 3 then return end -- Doesn't apply on normal diff.
 	-- Not ticking on a Shambling Horror, so bail early
 	if self.GetMobIdByGUID[dGUID] ~= 37698 then return end
 
@@ -298,7 +298,7 @@ do
 end
 
 function mod:HarvestSoul(player, spellId, _, _, spellName)
-	if self:GetInstanceDifficulty() > 2 then
+	if self:IsDifficulty("hc") then
 		self:SendMessage("BigWigs_StopBar", self, L["defile_bar"])
 		self:SendMessage("BigWigs_StopBar", self, L["reaper_bar"])
 		self:SendMessage("BigWigs_StopBar", self, L["ragingspirit_bar"])

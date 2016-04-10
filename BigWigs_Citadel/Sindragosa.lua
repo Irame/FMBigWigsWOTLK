@@ -103,8 +103,7 @@ end
 do
 	local scheduled = nil
 	local function baconWarn(spellName)
-		local diff = mod:GetInstanceDifficulty()
-		if phase == 1 and ((#beaconTargets < 2 and (diff == 1 or diff == 3)) or (#beaconTargets < 5 and diff == 2) or (#beaconTargets < 6 and diff == 4)) then
+		if phase == 1 and ((#beaconTargets < 2 and mod:IsDifficulty("10")) or (#beaconTargets < 5 and mod:IsDifficulty("25nh")) or (#beaconTargets < 6 and mod:IsDifficulty("25hc"))) then
 			mod:Message(70126, L["mage_bug_message"]:format(spellName), "Important", 70126, "Alarm")
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
@@ -161,7 +160,7 @@ end
 function mod:Instability(player, spellId, _, _, _, stack)
 	if stack > 4 and UnitIsUnit(player, "player") then
 		self:LocalMessage(69766, L["instability_message"]:format(stack), "Personal", spellId)
-		if (stack % 2 == 0) and self:GetInstanceDifficulty() > 2 then
+		if (stack % 2 == 0) and mod:IsDifficulty("hc") then
 			self:Say(69766, L["instability_message"]:format(stack))
 		end
 	end
@@ -176,8 +175,7 @@ end
 do
 	local scheduledUnchained = nil
 	local function unchainedTargetWarning(spellName)
-		local diff = mod:GetInstanceDifficulty()
-		if ((#unchainedTargets < 6 and (diff == 2 or diff == 4)) or (#unchainedTargets < 2 and (diff == 1 or diff == 3))) then
+		if ((#unchainedTargets < 6 and mod:IsDifficulty("25")) or (#unchainedTargets < 2 and mod:IsDifficulty("10"))) then
 			mod:Message(69762, L["mage_bug_message"]:format(spellName), "Important", 69762, "Alarm")
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
@@ -192,7 +190,7 @@ do
 		unchainedTargets[#unchainedTargets + 1] = player
 		if UnitIsUnit(player, "player") then
 			self:FlashShake(69762)
-			if self:GetInstanceDifficulty() > 2 then
+			if mod:IsDifficulty("hc") then
 				self:OpenProximity(20,69762)
 			end
 		end

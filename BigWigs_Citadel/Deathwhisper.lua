@@ -101,7 +101,7 @@ function mod:Barrier(_, spellId)
 	self:CancelTimer(handle_Adds, true)
 	self:SendMessage("BigWigs_StopBar", self, L["adds_bar"])
 	self:CancelDelayedMessage(L["adds_warning"])
-	if self:GetInstanceDifficulty() > 2 then
+	if self:IsDifficulty("hc") then
 		self:DelayedMessage("adds", 40, L["adds_warning"], "Attention")
 		self:Bar("adds", L["adds_bar"], 45, 70768)
 		handle_Adds = self:ScheduleTimer(adds, 45, 45)
