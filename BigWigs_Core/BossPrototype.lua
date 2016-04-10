@@ -15,7 +15,14 @@ local yellMap = setmetatable({}, metaMap)
 local emoteMap = setmetatable({}, metaMap)
 local deathMap = setmetatable({}, metaMap)
 local difficultyMap
-local zoneScalingData, zoneOverrides
+local zoneScale, zoneScalingData, zoneOverrides
+local myRole, myDamagerRole
+local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty
+local updateData = function()
+	UpdateZoneData()
+	UpdateRoleData()
+	UpdateInstanceDifficulty()
+end
 
 local boss = {}
 core.bossCore:SetDefaultModulePrototype(boss)
@@ -25,19 +32,7 @@ function boss:OnEnable()
 	if debug then dbg(self, "OnEnable()") end
 	if type(self.OnBossEnable) == "function" then self:OnBossEnable() end
 	self:SendMessage("BigWigs_OnBossEnable", self)
-	difficultyMap.diff = self:GetInstanceDifficulty()
-	
-	self:UpdateZoneData()
-	self:RegisterEvent("PLAYER_ENTERING_WORLD",	"UpdateZoneData")
-	self:RegisterEvent("ZONE_CHANGED",			"UpdateZoneData")
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA",	"UpdateZoneData")
-	self:RegisterEvent("ZONE_CHANGED_INDOORS",	"UpdateZoneData")
-	
-	self:UpdateRoleData()
-	self:RegisterEvent("CONFIRM_TALENT_WIPE",			"UpdateRoleData")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED",		"UpdateRoleData")
-	self:RegisterEvent("PLAYER_TALENT_UPDATE",			"UpdateRoleData")
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED",	"UpdateRoleData")
+	updateData()
 end
 function boss:OnDisable()
 	if debug then dbg(self, "OnDisable()") end
@@ -47,20 +42,6 @@ function boss:OnDisable()
 	wipe(yellMap[self])
 	wipe(emoteMap[self])
 	wipe(deathMap[self])
-	wipe(difficultyMap)
-	
-	self.zoneScale = nil
-	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
-	self:UnregisterEvent("ZONE_CHANGED")
-	self:UnregisterEvent("ZONE_CHANGED_NEW_AREA")
-	self:UnregisterEvent("ZONE_CHANGED_INDOORS")
-	
-	self.myRole = nil
-	self.myDamagerRole = nil
-	self:RegisterEvent("CONFIRM_TALENT_WIPE")
-	self:RegisterEvent("CHARACTER_POINTS_CHANGED")
-	self:RegisterEvent("PLAYER_TALENT_UPDATE")
-	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
 
 	self:SendMessage("BigWigs_OnBossDisable", self)
 end
@@ -301,6 +282,10 @@ do
 		return type(diff) == "number" and diff or 1
 	end
 	
+	function UpdateInstanceDifficulty()
+		wipe(difficultyMap)
+		difficultyMap.diff = boss:GetInstanceDifficulty()
+	end
 	
 	local diffStringTable = {
 		["10nh"] = {[1] = true},
@@ -333,10 +318,9 @@ do
 	function boss:Engage()
 		if debug then dbg(self, ":Engage") end
 		CombatLogClearEntries()
-		wipe(difficultyMap)
-		difficultyMap.diff = self:GetInstanceDifficulty()
+		updateData()
 		if self.OnEngage then
-			self:OnEngage(self:GetInstanceDifficulty())
+			self:OnEngage(difficultyMap.diff)
 		end
 	end
 
@@ -694,77 +678,77 @@ local function GetPrimaryTalentTree()
 	return primarySpec.index
 end
 
-function boss:UpdateRoleData()
+function UpdateRoleData()
 	local _, class = UnitClass("player")
 	local talentTree = GetPrimaryTalentTree()
 	if class == "DEATHKNIGHT" and talentTree == 2 then
 		if select(5, GetTalentInfo(2,13)) > 0 then		-- Protector of the Pack skilled
-			self.myRole = "TANK"
-			self.myDamagerRole = nil
+			myRole = "TANK"
+			myDamagerRole = nil
 		else
-			self.myRole = "DAMAGER"
-			self.myDamagerRole = "MELEE"
+			myRole = "DAMAGER"
+			myDamagerRole = "MELEE"
 		end
 	elseif class == "DRUID" and talentTree == 2 then
 		if select(5, GetTalentInfo(2,22)) > 0 then		-- Frigid Dreadplate skilled
-			self.myRole = "TANK"
-			self.myDamagerRole = nil
+			myRole = "TANK"
+			myDamagerRole = nil
 		else
-			self.myRole = "DAMAGER"
-			self.myDamagerRole = "MELEE"
+			myRole = "DAMAGER"
+			myDamagerRole = "MELEE"
 		end
 	else
 		local classRoleInfo = classRoleMap[class][talentTree]
-		self.myRole = classRoleInfo[1]
-		self.myDamagerRole = classRoleInfo[2]
+		myRole = classRoleInfo[1]
+		myDamagerRole = classRoleInfo[2]
 	end
 end
 
 function boss:Melee()
-	return self.myRole == "TANK" or self.myDamagerRole == "MELEE"
+	return myRole == "TANK" or myDamagerRole == "MELEE"
 end
 
 function boss:Ranged()
-	return self.myRole == "HEALER" or self.myDamagerRole == "RANGED"
+	return myRole == "HEALER" or myDamagerRole == "RANGED"
 end
 
 function boss:Tank()
-	return self.myRole == "TANK"
+	return myRole == "TANK"
 end
 
 function boss:Healer()
-	return self.myRole == "HEALER"
+	return myRole == "HEALER"
 end
 
 function boss:Damager()
-	return self.myDamagerRole
+	return myDamagerRole
 end
 
 ------------------------------
 --- Map stuff
 
 
-function boss:CoordsToPosition(x, y)
+local function CoordsToPosition(x, y)
 	if not x or not y or (x == 0 and y == 0) then return x, y end
-	if not self.zoneScale then
+	if not zoneScale then
 		return x * 1500, (1 - y) * 1000
 	end
-	return x * self.zoneScale[1], (1 - y) * self.zoneScale[2]
+	return x * zoneScale[1], (1 - y) * zoneScale[2]
 end
 
-function boss:GetUnitPosition(unit, forceZone)
+local function GetUnitPosition(unit, forceZone)
 	if not unit then return nil, nil end
 	if forceZone then SetMapToCurrentZone()	end
 	local x, y = GetPlayerMapPosition(unit)
-	return self:CoordsToPosition(x, y)
+	return CoordsToPosition(x, y)
 end
 
 function boss:Range(player, otherPlayer)
-	if not self.zoneScale then return end
+	if not zoneScale then return end
 	if not otherPlayer then otherPlayer = "player" end
-	local ty, tx = self:GetUnitPosition(player)
+	local ty, tx = GetUnitPosition(player)
 	if not ty or not tx then return end
-	local py, px = self:GetUnitPosition(otherPlayer)
+	local py, px = GetUnitPosition(otherPlayer)
 	if not py or not px then return end
 	local dx = tx - px
 	local dy = ty - py
@@ -772,14 +756,14 @@ function boss:Range(player, otherPlayer)
 	return distance
 end
 
-function boss:UpdateZoneData()
+function UpdateZoneData()
 	if WorldMapFrame:IsVisible() then return end
 	
 	SetMapToCurrentZone()
 	
 	local cx, cy = GetPlayerMapPosition("player")
 	if cx == 0 and cy == 0 then 
-		self.zoneScale = nil
+		zoneScale = nil
 		return 
 	end
 	
@@ -793,7 +777,7 @@ function boss:UpdateZoneData()
 	end
 	key = level > 0 and (area .. level) or area
 	currentZone = zoneOverrides[GetSubZoneText()] or key
-	self.zoneScale = zoneScalingData[currentZone]
+	zoneScale = zoneScalingData[currentZone]
 end
 
 
