@@ -118,12 +118,15 @@ function plugin:OnPluginEnable()
 end
 
 local function play(sound)
-	if type(sound) == "string" and not plugin.db.profile.defaultonly then
+	local t = type(sound)
+	if t == "string" and not plugin.db.profile.defaultonly then
 		local s = plugin.db.profile.media[sound] and media:Fetch(mType, plugin.db.profile.media[sound]) or media:Fetch(mType, sound)
 		if type(s) == "string" then
 			PlaySoundFile(s)
 			return
 		end
+	elseif t == "number" then
+		PlaySoundFile(("Interface\\AddOns\\BigWigs\\Sounds\\%d.mp3"):format(sound))
 	end
 	PlaySound("RaidWarning")
 end
