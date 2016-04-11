@@ -85,7 +85,7 @@ function mod:FlashCast(_, spellId, _, _, spellName)
 	self:Message(61968, "Attention", nil, L["flash_warning"])
 	self:Bar(61968, spellName, 9, spellId)
 	self:Bar(61968, spellName, 35, spellId)
-	self:DelayedMessage(61968, 30, L["flash_soon"], "Attention")
+	self:DelayedMessage(61968, 30, "Attention", L["flash_soon"])
 end
 
 do

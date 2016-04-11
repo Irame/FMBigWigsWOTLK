@@ -44,7 +44,7 @@ function mod:OnEngage(diff)
 	enrageTime = diff == 1 and 480 or 420
 	self:Message(54426, "Attention", nil, L["startwarn"])
 	self:Bar(54426, L["decimatebartext"], 105, 54426)
-	self:DelayedMessage(54426, 100, L["decimatesoonwarn"], "Urgent")
+	self:DelayedMessage(54426, 100, "Urgent", L["decimatesoonwarn"])
 	self:Berserk(enrageTime)
 end
 
@@ -63,7 +63,7 @@ function mod:Decimate(_, spellId, _, _, spellName)
 		last = time
 		self:Message(54426, "Attention", "Alert")
 		self:Bar(54426, L["decimatebartext"], 105, spellId)
-		self:DelayedMessage(54426, 100, L["decimatesoonwarn"], "Urgent")
+		self:DelayedMessage(54426, 100, "Urgent", L["decimatesoonwarn"])
 	end
 end
 

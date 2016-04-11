@@ -60,7 +60,7 @@ end
 function mod:OnEngage()
 	if not started then
 		self:Message(28798, "Urgent", nil, L["startwarn"])
-		self:DelayedMessage(28798, 45, L["enragewarn2"], "Important")
+		self:DelayedMessage(28798, 45, "Important", L["enragewarn2"])
 		local frenzyName = GetSpellInfo(28798)
 		self:Bar(28798, frenzyName, 60, 28798)
 		started = true --If I remember right, we need this as she sometimes uses an engage trigger mid-fight
@@ -78,16 +78,16 @@ function mod:Silence(unit, spellId)
 		-- preemptive, 30s silence
 		self:Message(28732, "Positive", nil, L["silencewarn"])
 		self:Bar(28732, L["silencebar"], 30, spellId)
-		self:DelayedMessage(28732, 25, L["silencewarn5sec"], "Urgent")
+		self:DelayedMessage(28732, 25, "Urgent", L["silencewarn5sec"])
 	else
 		-- Reactive enrage removed
 		self:Message(28798, "Positive", nil, L["enrageremovewarn"])
-		self:DelayedMessage(28798, 45, L["enragewarn2"], "Important")
+		self:DelayedMessage(28798, 45, "Important", L["enragewarn2"])
 		local frenzyName = GetSpellInfo(28798)
 		self:Bar(28798, frenzyName, 60, 28798)
 
 		self:Bar(28732, L["silencebar"], 30, spellId)
-		self:DelayedMessage(28732, 25, L["silencewarn5sec"], "Urgent")
+		self:DelayedMessage(28732, 25, "Urgent", L["silencewarn5sec"])
 		frenzied = nil
 	end
 end

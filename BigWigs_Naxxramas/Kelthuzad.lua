@@ -96,7 +96,7 @@ do
 	local handle = nil
 	local function fbWarn()
 		mod:TargetMessage(27808, fbTargets, "Important", "Alert")
-		mod:DelayedMessage(27808, 32, L["frostblast_soon_message"], "Attention")
+		mod:DelayedMessage(27808, 32, "Attention", L["frostblast_soon_message"])
 		mod:Bar(27808, L["frostblast_bar"], 37, spell)
 		handle = nil
 	end
@@ -117,7 +117,7 @@ function mod:Detonate(player, spellId, _, _, spellName)
 	self:PrimaryIcon(27819, player)
 	self:Bar(27819, L["detonate_other"]:format(player), 5, spellId)
 	self:Bar(27819, L["detonate_possible_bar"], 20, spellId)
-	self:DelayedMessage(27819, 15, L["detonate_warning"], "Attention")
+	self:DelayedMessage(27819, 15, "Attention", L["detonate_warning"])
 end
 
 do
@@ -127,7 +127,7 @@ do
 		local spellName = GetSpellInfo(605) -- Mind Control
 		mod:TargetMessage(28410, mcTargets, "Important", "Alert")
 		mod:Bar(28410, spellName, 20, 28410)
-		mod:DelayedMessage(28410, 68, L["mc_warning"], "Urgent")
+		mod:DelayedMessage(28410, 68, "Urgent", L["mc_warning"])
 		mod:Bar(28410, L["mc_nextbar"], 68, spell)
 		handle = nil
 	end

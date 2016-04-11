@@ -187,7 +187,7 @@ end
 function mod:Roar(_, spellId, _, _, spellName)
 	self:Message(64189, "Attention")
 	self:Bar(64189, L["roar_bar"], 60, spellId)
-	self:DelayedMessage(64189, 55, L["roar_warning"], "Attention")
+	self:DelayedMessage(64189, 55, "Attention", L["roar_warning"])
 end
 
 function mod:Malady(player)
@@ -219,7 +219,7 @@ end
 
 function mod:Madness(_, spellId, _, _, spellName)
 	self:Bar(64059, spellName, 60, 64059)
-	self:DelayedMessage(64059, 55, L["madness_warning"], "Urgent")
+	self:DelayedMessage(64059, 55, "Urgent", L["madness_warning"])
 end
 
 function mod:Empower(_, spellId, _, _, spellName)

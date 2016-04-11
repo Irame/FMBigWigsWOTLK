@@ -73,7 +73,7 @@ end
 local function scheduleStrike()
 	unscheduleStrike()
 	mod:Bar(66134, ssName, 30.5, 66134)
-	mod:DelayedMessage(66134, 25.5, L["shadow_soon"], "Attention")
+	mod:DelayedMessage(66134, 25.5, "Attention", L["shadow_soon"])
 	handle_NextStrike = mod:ScheduleTimer(scheduleStrike, 30.5)
 end
 
@@ -107,7 +107,7 @@ function mod:OnEngage(diff)
 	difficulty = diff
 	self:Message("burrow", "Attention", nil, L["engage_message"], 65919)
 	self:Bar("burrow", L["burrow_cooldown"], 80, 65919)
-	self:DelayedMessage("burrow", 65, L["burrow_soon"], "Attention")
+	self:DelayedMessage("burrow", 65, "Attention", L["burrow_soon"])
 
 	self:Bar("burrow", L["nerubian_burrower"], 10, 66333)
 	handle_NextWave = self:ScheduleTimer(scheduleWave, 10)

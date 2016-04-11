@@ -61,7 +61,7 @@ function mod:Whiteout(_, spellId, _, _, spellName)
 	self:Message(72034, "Positive")
 	count = count + 1
 	self:Bar(72034, L["whiteout_bar"]:format(count), 38, spellId)
-	self:DelayedMessage(72034, 33, L["whiteout_message"]:format(count), "Attention")
+	self:DelayedMessage(72034, 33, "Attention", L["whiteout_message"]:format(count))
 end
 
 function mod:Orbs(_, spellId, _, _, spellName)

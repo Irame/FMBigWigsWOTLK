@@ -102,7 +102,7 @@ function mod:InhaleCD(_, spellId, _, _, spellName)
 	self:Message(69165, "Attention", nil, L["inhale_message"]:format(count))
 	count = count + 1
 	if count == 4 then
-		self:DelayedMessage(71219, 28.5, L["blight_warning"], "Attention")
+		self:DelayedMessage(71219, 28.5, "Attention", L["blight_warning"])
 		self:Bar(71219, L["blight_bar"], 33.5, 71219)
 	else
 		self:Bar(69165, L["inhale_bar"]:format(count), 33.5, spellId)

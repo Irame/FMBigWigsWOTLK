@@ -49,19 +49,19 @@ function mod:Shout(_, spellId, _, _, spellName)
 		self:Message(29107, "Important")
 	end
 	self:Bar(29107, L["shout_next"], 15, 55543)
-	self:DelayedMessage(29107, 12, L["shout_warning"], "Attention")
+	self:DelayedMessage(29107, 12, "Attention", L["shout_warning"])
 end
 
 function mod:ShieldWall(_, spellId, _, _, spellName)
 	self:Message(29061, "Positive")
 	self:Bar(29061, spellName, 20, spellId)
-	self:DelayedMessage(29061, 15, L["taunt_warning"], "Attention")
+	self:DelayedMessage(29061, 15, "Attention", L["taunt_warning"])
 end
 
 function mod:Taunt(_, spellId, _, _, spellName)
 	self:Message(29060, "Positive")
 	self:Bar(29060, spellName, 20, spellId)
-	self:DelayedMessage(29060, 15, L["shieldwall_warning"], "Attention")
+	self:DelayedMessage(29060, 15, "Attention", L["shieldwall_warning"])
 end
 
 function mod:Knife(player, spellId, _, _, spellName)

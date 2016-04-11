@@ -175,7 +175,7 @@ do
 
 			mod:Bar(63631, L["shock_next"], 44, 63631)
 			mod:Bar(62997, L["plasma_bar"], 35, 62997)
-			mod:DelayedMessage(62997, 32, L["plasma_soon"], "Attention")
+			mod:DelayedMessage(62997, 32, "Attention", L["plasma_soon"])
 		else
 			mod:Berserk(900, true)
 			
@@ -184,7 +184,7 @@ do
 
 			mod:Bar(63631, L["shock_next"], 27, 63631)
 			mod:Bar(62997, L["plasma_bar"], 18, 62997)
-			mod:DelayedMessage(62997, 15, L["plasma_soon"], "Attention")
+			mod:DelayedMessage(62997, 15, "Attention", L["plasma_soon"])
 		end
 		self:Engage()
 	end

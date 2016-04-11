@@ -70,7 +70,7 @@ function mod:Airphase()
 	--43810 Frost Wyrm, looks like a dragon breathing 'deep breath' :)
 	self:Message(28524, "Attention", nil, L["deepbreath_incoming_message"])
 	self:Bar(28524, L["deepbreath_incoming_bar"], 14, 43810)
-	self:DelayedMessage(28524, 9, L["deepbreath_incoming_soon_message"], "Attention")
+	self:DelayedMessage(28524, 9, "Attention", L["deepbreath_incoming_soon_message"])
 end
 
 function mod:Deepbreath()
@@ -88,7 +88,7 @@ end
 function mod:Drain(_, spellId)
 	self:Message(28542, "Urgent", nil, L["lifedrain_message"])
 	self:Bar(28542, L["lifedrain_bar"], 23, spellId)
-	self:DelayedMessage(28542, 18, L["lifedrain_warn1"], "Important")
+	self:DelayedMessage(28542, 18, "Important", L["lifedrain_warn1"])
 end
 
 function mod:Icebolt(player, spellId, _, _, spellName)

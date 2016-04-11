@@ -158,7 +158,7 @@ function mod:PhaseTwo()
 	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 	self:Bar("phase", CL["berserk"], 375, 20484)
 	self:Bar("hardmode", L["hardmode"], 173, 6673)
-	self:DelayedMessage("hardmode", 173, L["hardmode_warning"], "Attention")
+	self:DelayedMessage("hardmode", 173, "Attention", L["hardmode_warning"])
 end
 
 function mod:PhaseThree()

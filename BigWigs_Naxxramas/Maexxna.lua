@@ -73,10 +73,10 @@ end
 
 function mod:Spray()
 	self:Message(29484, "Important", nil, L["webspraywarn"], 54125)
-	self:DelayedMessage(29484, 10, L["webspraywarn30sec"], "Attention")
-	self:DelayedMessage(29484, 20, L["webspraywarn20sec"], "Attention")
-	self:DelayedMessage(29484, 30, L["webspraywarn10sec"], "Attention")
-	self:DelayedMessage(29484, 35, L["webspraywarn5sec"], "Attention")
+	self:DelayedMessage(29484, 10, "Attention", L["webspraywarn30sec"])
+	self:DelayedMessage(29484, 20, "Attention", L["webspraywarn20sec"])
+	self:DelayedMessage(29484, 30, "Attention", L["webspraywarn10sec"])
+	self:DelayedMessage(29484, 35, "Attention", L["webspraywarn5sec"])
 	self:Bar(29484, L["webspraybar"], 40, 54125)
 
 	self:Bar(28622, L["cocoonbar"], 20, 745)

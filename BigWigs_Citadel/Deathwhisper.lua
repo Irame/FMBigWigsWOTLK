@@ -69,7 +69,7 @@ function mod:OnBossEnable()
 end
 
 local function adds(time)
-	mod:DelayedMessage("adds", time-5, L["adds_warning"], "Attention")
+	mod:DelayedMessage("adds", time-5, "Attention", L["adds_warning"])
 	mod:Bar("adds", L["adds_bar"], time, 70768)
 	handle_Adds = mod:ScheduleTimer(adds, time, time)
 end
@@ -102,7 +102,7 @@ function mod:Barrier(_, spellId)
 	self:SendMessage("BigWigs_StopBar", self, L["adds_bar"])
 	self:CancelDelayedMessage(L["adds_warning"])
 	if self:IsDifficulty("hc") then
-		self:DelayedMessage("adds", 40, L["adds_warning"], "Attention")
+		self:DelayedMessage("adds", 40, "Attention", L["adds_warning"])
 		self:Bar("adds", L["adds_bar"], 45, 70768)
 		handle_Adds = self:ScheduleTimer(adds, 45, 45)
 	end

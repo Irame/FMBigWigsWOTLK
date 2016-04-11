@@ -52,7 +52,7 @@ function mod:OnEngage()
 	self:Bar(69076, L["bonestorm_cd"], 45, 69076, 5)
 	self:Bar(69055, L["cleave_cd"], 10, 69055)
 	self:Bar(69057, L["impale_cd"], 15, 69057, 5)
-	self:DelayedMessage(69076, 40, L["bonestorm_warning"], "Attention")
+	self:DelayedMessage(69076, 40, "Attention", L["bonestorm_warning"])
 end
 
 --------------------------------------------------------------------------------
@@ -90,13 +90,13 @@ end
 local function afterTheStorm()
 	if mod:IsDifficulty("10") then
 		mod:Bar(69076, L["bonestorm_cd"], 70, 69076, 5)
-		mod:DelayedMessage(69076, 65, L["bonestorm_warning"], "Attention")
+		mod:DelayedMessage(69076, 65, "Attention", L["bonestorm_warning"])
 		if mod:IsDifficulty("10nh") then
 			mod:Bar(69057, L["impale_cd"], 10, 69057, 5)
 		end
 	else
 		mod:Bar(69076, L["bonestorm_cd"], 60, 69076, 5)
-		mod:DelayedMessage(69076, 55, L["bonestorm_warning"], "Attention")
+		mod:DelayedMessage(69076, 55, "Attention", L["bonestorm_warning"])
 		if mod:IsDifficulty("25nh") then
 			mod:Bar(69057, L["impale_cd"], 15, 69057, 5)
 		end

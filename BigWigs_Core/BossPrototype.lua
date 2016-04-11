@@ -371,42 +371,11 @@ do
 end
 
 -------------------------------------------------------------------------------
--- Delayed message handling
---
-
-do
-	local scheduledMessages = {}
-	local function wrapper(module, _, ...) module:Message(...) end
-	-- This should've been a local function, but if we do it this way then AceTimer passes in the correct module for us.
-	function boss:ProcessDelayedMessage(text)
-		wrapper(self, unpack(scheduledMessages[text]))
-		scheduledMessages[text] = nil
-	end
-
-	function boss:CancelDelayedMessage(text)
-		if scheduledMessages[text] then
-			self:CancelTimer(scheduledMessages[text][1], true)
-			scheduledMessages[text] = nil
-			return true
-		end
-	end
-
-	-- ... = color, icon, sound, noraidsay, broadcastonly
-	function boss:DelayedMessage(key, delay, text, ...)
-		if type(delay) ~= "number" then error(string.format("Module %s tried to schedule a delayed message with delay as type %q, but it must be a number.", module.name, type(delay))) end
-		self:CancelDelayedMessage(text)
-
-		local id = self:ScheduleTimer("ProcessDelayedMessage", delay, text)
-		scheduledMessages[text] = {id, key, text, ...}
-		return id
-	end
-end
-
--------------------------------------------------------------------------------
 -- Boss module APIs for messages, bars, icons, etc.
 --
-local silencedOptions = {}
+local checkFlag
 do
+local silencedOptions = {}
 	local bwOptionSilencer = CreateFrame("Frame")
 	bwOptionSilencer:Hide()
 	LibStub("AceEvent-3.0"):Embed(bwOptionSilencer)
@@ -434,32 +403,52 @@ do
 			total = 0
 		end
 	end)
-end
-
-
-local function checkFlag(self, key, flag)
-	if not key then return false end
-	if silencedOptions[key] then
-		return
-	end
-	if type(key) == "number" then key = GetSpellInfo(key) end
-	if type(self.db.profile[key]) ~= "number" then
-		if debug then
-			dbg(self, ("Tried to access %q, but in the database it's a %s."):format(key, type(self.db.profile[key])))
-		else
-			self.db.profile[key] = self.toggleDefaults[key]
+	
+	function checkFlag(self, key, flag)
+		if not key then return false end
+		if silencedOptions[key] then
+			return
 		end
+		if type(key) == "number" then key = GetSpellInfo(key) end
+		if type(self.db.profile[key]) ~= "number" then
+			if debug then
+				dbg(self, ("Tried to access %q, but in the database it's a %s."):format(key, type(self.db.profile[key])))
+			else
+				self.db.profile[key] = self.toggleDefaults[key]
+			end
+		end
+		return bit.band(self.db.profile[key], flag) == flag
 	end
-	return bit.band(self.db.profile[key], flag) == flag
 end
 
+-- PROXIMITY
 function boss:OpenProximity(range, key)
 	if not checkFlag(self, "proximity", C.PROXIMITY) then return end
 	self:SendMessage("BigWigs_ShowProximity", self, range, key or "proximity")
 end
+
 function boss:CloseProximity()
 	if not checkFlag(self, "proximity", C.PROXIMITY) then return end
 	self:SendMessage("BigWigs_HideProximity")
+end
+
+-- MESSAGES
+function boss:CancelDelayedMessage(text)
+	if self.scheduledMessages and self.scheduledMessages[text] then
+		self:CancelTimer(self.scheduledMessages[text])
+		self.scheduledMessages[text] = nil
+	end
+end
+
+function boss:DelayedMessage(key, delay, color, text, icon, sound)
+	if checkFlag(self, key, C.MESSAGE) then
+		if type(delay) ~= "number" then error(string.format("Module %s tried to schedule a delayed message with delay as type %q, but it must be a number.", module.name, type(delay))) end
+		self:CancelDelayedMessage(text or key)
+		if not self.scheduledMessages then self.scheduledMessages = {} end
+		local id = self:ScheduleTimer("Message", delay, key, color, sound, text, icon or false)
+		scheduledMessages[text or key] = id
+		return id
+	end
 end
 
 local hasVoice = nil
@@ -680,13 +669,13 @@ function boss:Berserk(seconds, noEngageMessage, customBoss)
 	local half = seconds / 2
 	local m = half % 60
 	local halfMin = (half - m) / 60
-	self:DelayedMessage("berserk", half + m, fmt(L["berserk_min"], halfMin), "Positive")
+	self:DelayedMessage("berserk", half + m, "Positive", fmt(L["berserk_min"], halfMin))
 
-	self:DelayedMessage("berserk", seconds - 60, L["berserk_min"]:format(1), "Positive")
-	self:DelayedMessage("berserk", seconds - 30, L["berserk_sec"]:format(30), "Urgent")
-	self:DelayedMessage("berserk", seconds - 10, L["berserk_sec"]:format(10), "Urgent")
-	self:DelayedMessage("berserk", seconds - 5, L["berserk_sec"]:format(5), "Important")
-	self:DelayedMessage("berserk", seconds, L["berserk_end"]:format(boss), "Important", nil, "Alarm")
+	self:DelayedMessage("berserk", seconds - 60, "Positive", L["berserk_min"]:format(1))
+	self:DelayedMessage("berserk", seconds - 30, "Urgent", L["berserk_sec"]:format(30))
+	self:DelayedMessage("berserk", seconds - 10, "Urgent", L["berserk_sec"]:format(10))
+	self:DelayedMessage("berserk", seconds - 5, "Important", L["berserk_sec"]:format(5))
+	self:DelayedMessage("berserk", seconds, "Important", L["berserk_end"]:format(boss), nil, "Alarm")
 
 	-- There are many Berserks, but we use 26662 because Brutallus uses this one.
 	-- Brutallus is da bomb.

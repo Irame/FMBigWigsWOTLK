@@ -83,9 +83,9 @@ end
 function mod:OnEngage()
 	phase = 1
 	self:Bar("vortex", L["vortex_next"], 29, 56105)
-	self:DelayedMessage("vortex", 24, L["vortex_warning"], "Attention")
+	self:DelayedMessage("vortex", 24, "Attention", L["vortex_warning"])
 	self:Bar("sparks", L["sparks"], 25, 56152)
-	self:DelayedMessage("sparks", 20, L["sparks_warning"], "Attention")
+	self:DelayedMessage("sparks", 20, "Attention", L["sparks_warning"])
 	self:Berserk(600)
 end
 
@@ -109,10 +109,10 @@ function mod:Vortex(_, spellId)
 	self:Bar("vortex", L["vortex"], 10, 56105)
 	self:Message("vortex", "Attention", nil, L["vortex_message"], spellId)
 	self:Bar("vortex", L["vortex_next"], 59, 56105)
-	self:DelayedMessage("vortex", 54, L["vortex_warning"], "Attention")
+	self:DelayedMessage("vortex", 54, "Attention", L["vortex_warning"])
 
 	self:Bar("sparks", L["sparks"], 17, 56152)
-	self:DelayedMessage("sparks", 12, L["sparks_warning"], "Attention")
+	self:DelayedMessage("sparks", 12, "Attention", L["sparks_warning"])
 end
 
 function mod:CHAT_MSG_RAID_BOSS_WHISPER(event, msg, mob)
@@ -126,13 +126,13 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(event, msg)
 	if phase == 1 then
 		self:Message("sparks", "Important", "Alert", L["sparks_message"], 56152)
 		self:Bar("sparks", L["sparks"], 30, 56152)
-		self:DelayedMessage("sparks", 25, L["sparks_warning"], "Attention")
+		self:DelayedMessage("sparks", 25, "Attention", L["sparks_warning"])
 	elseif phase == 2 then
 		-- 43810 Frost Wyrm, looks like a dragon breathing 'deep breath' :)
 		-- Correct spellId for 'breath" in phase 2 is 56505
 		self:Message("breath", "Important", "Alert", L["breath_message"], 43810)
 		self:Bar("breath", L["breath"], 59, 43810)
-		self:DelayedMessage("breath", 54, L["breath_warning"], "Attention")
+		self:DelayedMessage("breath", 54, "Attention", L["breath_warning"])
 	end
 end
 
@@ -144,7 +144,7 @@ function mod:Phase2()
 	self:SendMessage("BigWigs_StopBar", self, L["vortex_next"])
 	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 	self:Bar("breath", L["breath"], 92, 43810)
-	self:DelayedMessage("breath", 87, L["breath_warning"], "Attention")
+	self:DelayedMessage("breath", 87, "Attention", L["breath_warning"])
 end
 
 function mod:P2End()

@@ -58,7 +58,7 @@ function mod:OnEngage()
 	count = 9
 	self:Bar("defender", L["defender_message"]:format(count), 60, 64455)
 	self:Bar(64386, L["fear_bar"], 32, 64386)
-	self:DelayedMessage(64386, 32, L["fear_warning"], "Attention")
+	self:DelayedMessage(64386, 32, "Attention", L["fear_warning"])
 	self:Berserk(600)
 end
 
@@ -88,7 +88,7 @@ end
 function mod:Fear(_, spellId)
 	self:Message(64386, "Urgent", nil, L["fear_message"])
 	self:Bar(64386, L["fear_bar"], 35, spellId)
-	self:DelayedMessage(64386, 32, L["fear_warning"], "Attention")
+	self:DelayedMessage(64386, 32, "Attention", L["fear_warning"])
 end
 
 function mod:Sentinel(_, spellId, _, _, spellName)

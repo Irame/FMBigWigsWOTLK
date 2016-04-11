@@ -68,7 +68,7 @@ function mod:OnEngage()
 	else
 		self:Berserk(480)
 	end
-	self:DelayedMessage("adds", 25, L["adds_warning"], "Urgent")
+	self:DelayedMessage("adds", 25, "Urgent", L["adds_warning"])
 	self:Bar("adds", L["adds_bar"], 40, 72173)
 	self:HealthBar(72293, 37813, 3, "achievement_boss_saurfang")
 	self:Bar(72378, L["nova_bar"], 17, 72378)
@@ -116,7 +116,7 @@ end
 
 function mod:Adds(_, spellId)
 	self:Message("adds", "Positive", "Alarm", L["adds_message"], spellId)
-	self:DelayedMessage("adds", 35, L["adds_warning"], "Urgent")
+	self:DelayedMessage("adds", 35, "Urgent", L["adds_warning"])
 	self:Bar("adds", L["adds_bar"], 40, spellId)
 end
 

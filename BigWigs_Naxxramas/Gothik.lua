@@ -135,11 +135,11 @@ end
 function mod:OnEngage()
 	self:Message("room", "Important", nil, L["startwarn"], false)
 	self:Bar("room", L["inroombartext"], 270, "Spell_Magic_LesserInvisibilty")
-	self:DelayedMessage("room", 90, L["warn1"], "Attention")
-	self:DelayedMessage("room", 180, L["warn2"], "Attention")
-	self:DelayedMessage("room", 210, L["warn3"], "Urgent")
-	self:DelayedMessage("room", 240, L["warn4"], "Important")
-	self:DelayedMessage("room", 260, L["warn5"], "Important")
+	self:DelayedMessage("room", 90, "Attention", L["warn1"])
+	self:DelayedMessage("room", 180, "Attention", L["warn2"])
+	self:DelayedMessage("room", 210, "Urgent", L["warn3"])
+	self:DelayedMessage("room", 240, "Important", L["warn4"])
+	self:DelayedMessage("room", 260, "Important", L["warn5"])
 	numTrainer = 1
 	numDK = 1
 	numRider = 1

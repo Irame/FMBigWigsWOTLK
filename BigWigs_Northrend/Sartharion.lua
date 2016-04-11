@@ -81,7 +81,7 @@ end
 
 function mod:OnEngage()
 	self:Bar("tsunami", L["tsunami_cooldown"], 30, 57491)
-	self:DelayedMessage("tsunami", 25, L["tsunami_warning"], "Attention")
+	self:DelayedMessage("tsunami", 25, "Attention", L["tsunami_warning"])
 	self:Berserk(900)
 end
 
@@ -96,15 +96,15 @@ function mod:DrakeCheck(_, spellId)
 	-- Each drake takes around 12 seconds to land
 	if spellId == 58105 and not shadronStarted then
 		self:Bar("drakes", shadron, 80, 58105)
-		self:DelayedMessage("drakes", 75, L["drakes_incomingsoon"]:format(shadron), "Attention")
+		self:DelayedMessage("drakes", 75, "Attention", L["drakes_incomingsoon"]:format(shadron))
 		shadronStarted = true
 	elseif spellId == 61248 and not tenebronStarted then
 		self:Bar("drakes", tenebron, 30, 61248)
-		self:DelayedMessage("drakes", 25, L["drakes_incomingsoon"]:format(tenebron), "Attention")
+		self:DelayedMessage("drakes", 25, "Attention", L["drakes_incomingsoon"]:format(tenebron))
 		tenebronStarted = true
 	elseif spellId == 61251 and not vesperonStarted then
 		self:Bar("drakes", vesperon, 120, 61251)
-		self:DelayedMessage("drakes", 115, L["drakes_incomingsoon"]:format(vesperon), "Attention")
+		self:DelayedMessage("drakes", 115, "Attention", L["drakes_incomingsoon"]:format(vesperon))
 		vesperonStarted = true
 	end
 end
@@ -116,7 +116,7 @@ end
 function mod:Tsunami()
 	self:Message("tsunami", "Important", "Alert", L["tsunami_message"], 57491)
 	self:Bar("tsunami", L["tsunami_cooldown"], 30, 57491)
-	self:DelayedMessage("tsunami", 25, L["tsunami_warning"], "Attention")
+	self:DelayedMessage("tsunami", 25, "Attention", L["tsunami_warning"])
 end
 
 function mod:Tenebron(msg, mob)

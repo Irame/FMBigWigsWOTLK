@@ -82,7 +82,7 @@ do
 		if not blazingTimers[blazingCount] then return end
 		mod:Bar("blazing", L["blazing"], blazingTimers[blazingCount], 71730)
 		mod:ScheduleTimer(blazingSpawn, blazingTimers[blazingCount])
-		mod:DelayedMessage("blazing", blazingTimers[blazingCount] - 5, L["blazing_warning"], "Positive")
+		mod:DelayedMessage("blazing", blazingTimers[blazingCount] - 5, "Positive", L["blazing_warning"])
 		blazingCount = blazingCount + 1
 		if blazingRepeater or (not IsRaidLeader() and not IsRaidOfficer()) then return end
 		if bit.band(mod.db.profile.blazing, BigWigs.C.ICON) == BigWigs.C.ICON then
@@ -103,7 +103,7 @@ do
 		end
 		self:ScheduleTimer(blazingSpawn, 50)
 		self:Bar("blazing", L["blazing"], 50, 71730)
-		self:DelayedMessage("blazing", 45, L["blazing_warning"], "Positive")
+		self:DelayedMessage("blazing", 45, "Positive", L["blazing_warning"])
 		blazingCount = 1
 	end
 end
@@ -125,7 +125,7 @@ function mod:Portal()
 	-- 46 sec cd until initial positioning, +14 sec until 'real' spawn.
 	self:Message("portal", "Important", nil, L["portalcd_message"]:format(portalCount), 72482)
 	self:Bar("portal", L["portal_bar"], 14, 72482)
-	self:DelayedMessage("portal", 14, L["portal_message"], "Important")
+	self:DelayedMessage("portal", 14, "Important", L["portal_message"])
 	portalCount = portalCount + 1
 	self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, 72482)
 end

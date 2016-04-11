@@ -138,11 +138,11 @@ do
 		if phase == 1 then
 			self:Bar(62437, spellName, 2, spellId)
 			self:Bar(62437, L["tremor_bar"], 30, spellId)
-			self:DelayedMessage(62437, 26, L["tremor_warning"], "Attention")
+			self:DelayedMessage(62437, 26, "Attention", L["tremor_warning"])
 		elseif phase == 2 then
 			self:Bar(62437, spellName, 2, spellId)
 			self:Bar(62437, L["tremor_bar"], 23, spellId)
-			self:DelayedMessage(62437, 20, L["tremor_warning"], "Attention")
+			self:DelayedMessage(62437, 20, "Attention", L["tremor_warning"])
 		end
 	end
 end

@@ -63,16 +63,16 @@ function mod:OnEngage()
 	doomCount = 1
 	sporeTime = GetRaidDifficulty() == 1 and 36 or 16
 	self:Bar(29204, L["doomtimerbar"], 300, 29204)
-	self:DelayedMessage(29204, 240, L["doomtimerwarn"]:format(60), "Attention")
-	self:DelayedMessage(29204, 270, L["doomtimerwarn"]:format(30), "Attention")
-	self:DelayedMessage(29204, 290, L["doomtimerwarn"]:format(10), "Urgent")
-	self:DelayedMessage(29204, 295, L["doomtimerwarn"]:format(5), "Important")
-	self:DelayedMessage(29204, 300, L["doomtimerwarnnow"], "Important")
+	self:DelayedMessage(29204, 240, "Attention", L["doomtimerwarn"]:format(60))
+	self:DelayedMessage(29204, 270, "Attention", L["doomtimerwarn"]:format(30))
+	self:DelayedMessage(29204, 290, "Urgent", L["doomtimerwarn"]:format(10))
+	self:DelayedMessage(29204, 295, "Important", L["doomtimerwarn"]:format(5))
+	self:DelayedMessage(29204, 300, "Important", L["doomtimerwarnnow"])
 
 	self:ScheduleTimer(swapTime, 300)
 	self:Message(29204, "Attention", nil, L["startwarn"])
 	self:Bar(29204, L["doombar"]:format(doomCount), 120, 29204)
-	self:DelayedMessage(29204, 115, L["doomwarn5sec"]:format(doomCount), "Urgent")
+	self:DelayedMessage(29204, 115, "Urgent", L["doomwarn5sec"]:format(doomCount))
 end
 
 --------------------------------------------------------------------------------
@@ -82,20 +82,20 @@ end
 function mod:Aura(_, spellId, _, _, spellName)
 	self:Message(55593, "Important", nil, L["aura_message"])
 	self:Bar(55593, spellName, 17, spellId)
-	self:DelayedMessage(55593, 14, L["aura_warning"], "Attention")
+	self:DelayedMessage(55593, 14, "Attention", L["aura_warning"])
 end
 
 function mod:Deathbloom(_, spellId, _, _, spellName)
 	self:Message(29865, "Important")
 	self:Bar(29865, spellName, 30, spellId)
-	self:DelayedMessage(29865, 15, L["deathbloom_warning"], "Attention")
+	self:DelayedMessage(29865, 15, "Attention", L["deathbloom_warning"])
 end
 
 function mod:Doom(_, spellId)
 	self:Message(29204, "Urgent", nil, L["doomwarn"]:format(doomCount, doomTime))
 	doomCount = doomCount + 1
 	self:Bar(29204, L["doombar"]:format(doomCount), doomTime, spellId)
-	self:DelayedMessage(29204, doomTime - 5, L["doomwarn5sec"]:format(doomCount), "Urgent")
+	self:DelayedMessage(29204, doomTime - 5, "Urgent", L["doomwarn5sec"]:format(doomCount))
 end
 
 function mod:Spore()

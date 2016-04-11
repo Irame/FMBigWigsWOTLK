@@ -44,7 +44,7 @@ end
 
 function mod:OnEngage()
 	self:Bar(58663, L["stomp_bar"], 47, 60880)
-	self:DelayedMessage(58663, 42, L["stomp_warning"], "Attention")
+	self:DelayedMessage(58663, 42, "Attention", L["stomp_warning"])
 	self:Berserk(300)
 end
 
@@ -55,7 +55,7 @@ end
 function mod:Stomp(_, spellId)
 	self:Message(58663, "Positive", nil, L["stomp_message"])
 	self:Bar(58663, L["stomp_bar"], 47, spellId)
-	self:DelayedMessage(58663, 42, L["stomp_warning"], "Attention")
+	self:DelayedMessage(58663, 42, "Attention", L["stomp_warning"])
 end
 
 function mod:Cloud(player, spellId)

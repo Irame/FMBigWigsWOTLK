@@ -130,13 +130,13 @@ end
 
 local function throw()
 	mod:Bar("throw", L["throw_bar"], 20, "Ability_Druid_Maul")
-	mod:DelayedMessage("throw", 15, L["throw_warning"], "Urgent")
+	mod:DelayedMessage("throw", 15, "Urgent", L["throw_warning"])
 	throwHandle = mod:ScheduleTimer(throw, 21)
 end
 
 function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 	if msg:find(L["polarity_trigger"]) then
-		self:DelayedMessage(28089, 25, L["polarity_warning"], "Important")
+		self:DelayedMessage(28089, 25, "Important", L["polarity_warning"])
 		self:Bar(28089, L["polarity_bar"], 28, "Spell_Nature_Lightning")
 	elseif msg == L["trigger_phase1_1"] or msg == L["trigger_phase1_2"] then
 		if not stage1warn then
