@@ -37,7 +37,7 @@ local paths = {
 function plugin:BigWigs_Voice(event, module, key, sound, onMe, near)
 	local success = false;
 	local modifier = (onMe and personal) or (near and nearby) or general
-	local fileExists = key and plugin.fileTable[key] and plugin.fileTable[key][isOnMe];
+	local fileExists = key and plugin.fileTable[key] and plugin.fileTable[key][modifier];
 	if BigWigs.db.profile.voice and fileExists then
 		success = PlaySoundFile(format(paths[modifier], tostring(key)))
 	end
