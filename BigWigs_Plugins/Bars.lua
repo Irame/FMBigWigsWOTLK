@@ -373,6 +373,9 @@ local function updateProfile()
 		updateAnchor(normalAnchor)
 		updateAnchor(emphasizeAnchor)
 	end
+	if plugin:IsEnabled() then
+		plugin:RegisterMessage("DBM_AddonMessage", "OnDBMSync")
+	end
 end
 
 --------------------------------------------------------------------------------
@@ -414,6 +417,9 @@ function plugin:OnPluginEnable()
 
 	--  custom bars
 	BigWigs:AddSyncListener(self, "BWCustomBar")
+	BigWigs:AddSyncListener(self, "BWPull")
+	BigWigs:AddSyncListener(self, "BWPullNA")
+	self:RegisterMessage("DBM_AddonMessage", "OnDBMSync")
 end
 
 function plugin:BigWigs_SetConfigureTarget(event, module)
@@ -962,15 +968,15 @@ local function parseTime(input)
 	end
 end
 
-local function sendCustomMessage(msg)
-	if not messages[msg] then return end
-	local msg, color, broadcast = unpack(messages[msg])
+local function sendCustomMessage(id)
+	if not messages[id] then return end
+	local msg, color, broadcast = unpack(messages[id])
 	plugin:SendMessage("BigWigs_Message", nil, nil, msg, color)
 	if broadcast then
 		plugin:SendMessage("BigWigs_Broadcast", nil, nil, msg)
 	end
-	wipe(messages[msg])
-	messages[msg] = nil
+	wipe(messages[id])
+	messages[id] = nil
 end
 
 local function startCustomBar(bar, nick, localOnly)
@@ -997,10 +1003,73 @@ local function startCustomBar(bar, nick, localOnly)
 	end
 end
 
+local startPull
+do
+	local timer, timeLeft = nil, 0
+	local function printPull(broadcast, forcePrint)
+		if timeLeft == 0 then
+			plugin:CancelTimer(timer)
+			timer = nil
+			plugin:SendMessage("BigWigs_Message", nil, nil, L.pulling, "Attention", "Interface\\Icons\\ability_warrior_charge")
+			plugin:SendMessage("BigWigs_Sound", "Alarm")
+			if broadcast then
+				plugin:SendMessage("BigWigs_Broadcast", nil, nil, L.pulling)
+			end
+		elseif (timeLeft < 6 or (timeLeft < 11 and timeLeft%2 == 1)) or forcePrint then
+			plugin:SendMessage("BigWigs_Message", nil, nil, L.pullIn:format(timeLeft), "Attention")
+			if broadcast then
+				plugin:SendMessage("BigWigs_Broadcast", nil, nil, L.pullIn:format(timeLeft))
+			end
+			if timeLeft < 6 then
+				plugin:SendMessage("BigWigs_Sound", timeLeft)
+			end
+		end
+		timeLeft = timeLeft - 1
+	end
+	function startPull(time, nick, isDBM, announce)
+		if not plugin:UnitIsGroupOfficer(nick) then return end
+		time = tonumber(time)
+		if not time or time < 0 or time > 60 then return end
+		time = floor(time)
+		if timeLeft == time then return end -- Throttle
+		timeLeft = time
+		local broadcast = (UnitIsUnit(nick, "player") and announce)
+		if timer then
+			plugin:CancelTimer(timer)
+			if time == 0 then
+				timeLeft = 0
+				BigWigs:Print(L.pullStopped:format(nick))
+				plugin:SendMessage("BigWigs_StopBar", plugin, L.pull)
+				return
+			end
+		end
+		BigWigs:Print(L.pullStarted:format(isDBM and "DBM" or "Big Wigs", nick))
+		timer = plugin:ScheduleRepeatingTimer(printPull, 1, broadcast)
+		printPull(broadcast, true)
+		plugin:SendMessage("BigWigs_StartBar", plugin, nil, L.pull, time, "Interface\\Icons\\ability_warrior_charge")
+	end
+end
+
+function plugin:OnDBMSync(_, sender, prefix, time, text)
+	if prefix == "Pizza" then
+		if text:find(L.pull) then
+			startPull(time, sender, true)
+		else
+			startCustomBar(time.." "..text, sender, nil, true)
+		end
+	end
+end
+
 function plugin:OnSync(sync, rest, nick)
-	if sync ~= "BWCustomBar" or not rest or not nick then return end
-	if not UnitIsRaidOfficer(nick) then return end
-	startCustomBar(rest, nick, false)
+	if rest and nick then
+		if sync == "BWCustomBar" then
+			startCustomBar(rest, nick)
+		elseif sync == "BWPull" then
+			startPull(rest, nick, false, true)
+		elseif sync == "BWPullNA" then
+			startPull(rest, nick, false)
+		end
+	end
 end
 
 -------------------------------------------------------------------------------
@@ -1021,6 +1090,43 @@ _G["SlashCmdList"]["BWLCB_SHORTHAND"] = function(input)
 	startCustomBar(input, nil, true)
 end
 _G["SLASH_BWLCB_SHORTHAND1"] = "/bwlcb"
+
+
+SlashCmdList.BIGWIGSPULL = function(input)
+	if not plugin:IsEnabled() then BigWigs:Enable() end
+	if plugin:UnitIsGroupOfficer("player") then
+		local time = tonumber(input)
+		if not time or time < 0 or time > 60 then BigWigs:Print(L.wrongPullFormat) return end
+
+		if time ~= 0 then
+			BigWigs:Print(L.sendPull)
+		end
+		BigWigs:Transmit("BWPull", input)
+
+		SendAddonMessage("D4", ("U\t%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
+	else
+		BigWigs:Print(L.requiresLeadOrAssist)
+	end
+end
+SLASH_BIGWIGSPULL1 = "/pull"
+
+SlashCmdList.BIGWIGSPULLNA = function(input)
+	if not plugin:IsEnabled() then BigWigs:Enable() end
+	if plugin:UnitIsGroupOfficer("player") then
+		local time = tonumber(input)
+		if not time or time < 0 or time > 60 then BigWigs:Print(L.wrongPullFormat) return end
+
+		if time ~= 0 then
+			BigWigs:Print(L.sendPull)
+		end
+		BigWigs:Transmit("BWPullNA", input)
+
+		SendAddonMessage("D4", ("U\t%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
+	else
+		BigWigs:Print(L.requiresLeadOrAssist)
+	end
+end
+SLASH_BIGWIGSPULLNA1 = "/pullna"
 
 -------------------------------------------------------------------------------
 -- Interactive bars

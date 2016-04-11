@@ -46,6 +46,18 @@ L["Local"] = true
 L["%s: Timer [%s] finished."] = true
 L["Invalid time (|cffff0000%q|r) or missing bar text in a custom bar started by |cffd9d919%s|r. <time> can be either a number in seconds, a M:S pair, or Mm. For example 5, 1:20 or 2m."] = true
 
+L["pull"] = "Pull"
+L["pulling"] = "Pulling!"
+L["pullStarted"] = "Pull timer started by %s user %s."
+L["pullStopped"] = "Pull timer cancelled by %s."
+L["pullIn"] = "Pull in %d sec"
+L["sendPull"] = "Sending a pull timer to Big Wigs and DBM users."
+L["wrongPullFormat"] = "Must be between 1 and 60. A correct example is: /pull 5"
+L["sendCustomBar"] = "Sending custom bar '%s' to Big Wigs and DBM users."
+L["requiresLeadOrAssist"] = "This function requires raid leader or raid assist."
+L["wrongCustomBarFormat"] = "Incorrect format. A correct example is: /raidbar 20 text"
+L["wrongTime"] = "Invalid time specified. <time> can be either a number in seconds, a M:S pair, or Mm. For example 5, 1:20 or 2m."
+
 -----------------------------------------------------------------------
 -- Colors.lua
 --
