@@ -14,6 +14,7 @@ mod.optionHeaders = {
 	[62274] = "Runemaster Molgeim",
 	berserk = "general",
 }
+mod.order = 5
 
 --------------------------------------------------------------------------------
 -- Locals

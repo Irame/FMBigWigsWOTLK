@@ -15,6 +15,7 @@ mod.optionHeaders = {
 	hardmode = "hard",
 	phase = "general",
 }
+mod.order = 10
 
 mod.proximityCheck = function(unit) return CheckInteractDistance(unit, 3) end
 mod.proximitySilent = true

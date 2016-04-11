@@ -12,6 +12,7 @@ if not mod then return end
 --]]
 mod:RegisterEnableMob(33186, 33210, 33816, 33287)
 mod.toggleOptions = {"phase", 64021, {64704, "FLASHSHAKE"}, "harpoon", "berserk", "bosskill"}
+mod.order = 3
 
 --------------------------------------------------------------------------------
 -- Locals

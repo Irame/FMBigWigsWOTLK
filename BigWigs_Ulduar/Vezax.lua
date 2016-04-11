@@ -6,6 +6,7 @@ local mod = BigWigs:NewBoss("General Vezax", "Ulduar")
 if not mod then return end
 mod:RegisterEnableMob(33271)
 mod.toggleOptions = {"vapor", {"vaporstack", "FLASHSHAKE"}, {62660, "WHISPER", "ICON", "SAY", "FLASHSHAKE"}, {63276, "WHISPER", "ICON", "FLASHSHAKE"}, 62661, 62662, "animus", "berserk", "bosskill"}
+mod.order = 13
 
 --------------------------------------------------------------------------------
 -- Locals

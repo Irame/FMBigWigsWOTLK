@@ -12,6 +12,7 @@ mod.optionHeaders = {
 	hardmode = "hard",
 	berserk = "general",
 }
+mod.order = 9
 
 --------------------------------------------------------------------------------
 -- Locals
