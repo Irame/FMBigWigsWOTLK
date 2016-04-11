@@ -471,7 +471,7 @@ end
 function boss:Message(key, text, color, icon, sound)
 	if not checkFlag(self, key, C.MESSAGE) then return end
 	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
-	self:SendMessage("BigWigs_Broadcast", self, key, text)
+	self:SendMessage("BigWigs_Broadcast", text)
 	
 	if HasVoice() and checkFlag(self, key, C.VOICE) then
 		self:SendMessage("BigWigs_Voice", self, key, sound)
@@ -529,7 +529,7 @@ do
 			else
 				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], spellName, list), color, icon)
 			end
-			self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, list))
+			self:SendMessage("BigWigs_Broadcast", fmt(L["other"], spellName, list))
 			if HasVoice() and checkFlag(self, key, C.VOICE) then
 				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
 			else
@@ -541,10 +541,10 @@ do
 				if ... then
 					local text = fmt(spellName, coloredNames[player], ...)
 					self:SendMessage("BigWigs_Message", self, key, text, color, icon)
-					self:SendMessage("BigWigs_Broadcast", self, key, text)
+					self:SendMessage("BigWigs_Broadcast", text)
 				else
 					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), color, icon)
-					self:SendMessage("BigWigs_Broadcast", self, key, fmt(L["other"], spellName, player))
+					self:SendMessage("BigWigs_Broadcast", fmt(L["other"], spellName, player))
 				end
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
@@ -562,7 +562,7 @@ do
 					text = fmt(L["other"], spellName, coloredNames[player])
 				end
 				self:SendMessage("BigWigs_Message", self, key, text, color, icon)
-				self:SendMessage("BigWigs_Broadcast", self, key, text)
+				self:SendMessage("BigWigs_Broadcast", text)
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
 					self:SendMessage("BigWigs_Voice", self, key, sound)

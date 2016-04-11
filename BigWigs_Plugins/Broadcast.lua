@@ -24,7 +24,7 @@ end
 -- Event Handlers
 --
 
-function plugin:BigWigs_Broadcast(event, self, key, msg)
+function plugin:BigWigs_Broadcast(event, msg)
 	if not msg or not BigWigs.db.profile.broadcast then return end
 
 	-- only allowed to broadcast if we're in a party or raidleader/assistant

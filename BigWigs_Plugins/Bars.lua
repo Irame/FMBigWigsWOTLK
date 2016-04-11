@@ -973,7 +973,7 @@ local function sendCustomMessage(id)
 	local msg, color, broadcast = unpack(messages[id])
 	plugin:SendMessage("BigWigs_Message", nil, nil, msg, color)
 	if broadcast then
-		plugin:SendMessage("BigWigs_Broadcast", nil, nil, msg)
+		plugin:SendMessage("BigWigs_Broadcast", msg)
 	end
 	wipe(messages[id])
 	messages[id] = nil
@@ -1013,12 +1013,12 @@ do
 			plugin:SendMessage("BigWigs_Message", nil, nil, L.pulling, "Attention", "Interface\\Icons\\ability_warrior_charge")
 			plugin:SendMessage("BigWigs_Sound", "Alarm")
 			if broadcast then
-				plugin:SendMessage("BigWigs_Broadcast", nil, nil, L.pulling)
+				plugin:SendMessage("BigWigs_Broadcast", L.pulling)
 			end
 		elseif (timeLeft < 6 or (timeLeft < 11 and timeLeft%2 == 1)) or forcePrint then
 			plugin:SendMessage("BigWigs_Message", nil, nil, L.pullIn:format(timeLeft), "Attention")
 			if broadcast then
-				plugin:SendMessage("BigWigs_Broadcast", nil, nil, L.pullIn:format(timeLeft))
+				plugin:SendMessage("BigWigs_Broadcast", L.pullIn:format(timeLeft))
 			end
 			if timeLeft < 6 then
 				plugin:SendMessage("BigWigs_Sound", timeLeft)
