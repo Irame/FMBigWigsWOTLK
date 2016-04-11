@@ -74,53 +74,53 @@ end
 --
 
 function mod:Whirlwind(_, spellId, _, _, spellName)
-	self:Message(33238, spellName, "Important", spellId, "Alert")
+	self:Message(33238, "Important", "Alert")
 	self:Bar(33238, L["cooldown_bars"]:format(spellName), 55, spellId)
 end
 
 function mod:WhirlwindHit(player, spellId, _, _, spellName)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(33239, L["whirlwind_hit_message"], "Personal", spellId, "Alert")
+		self:LocalMessage(33239, "Personal", "Alert", L["whirlwind_hit_message"])
 		self:FlashShake(33239)
 	end
 end
 
 function mod:BerserkerCharge(player , spellId, _, _, spellName)
-	self:TargetMessage(26561, L["berserker_charge_message"], player, "Attention", spellId)
+	self:TargetMessage(26561, player, "Attention", nil, L["berserker_charge_message"])
 	self:Bar(26561, L["cooldown_bars"]:format(L["berserker_charge_message"]), 20, spellId)
 end
 
 function mod:IntimidatingRoar(_, spellId, _, _, spellName)
-	self:Message(16508, L["intimidating_roar_message"], "Attention", spellId)
+	self:Message(16508, "Attention", nil, L["intimidating_roar_message"])
 	self:Bar(16508, L["cooldown_bars"]:format(L["intimidating_roar_message"]), 45, spellId)
 end
 
 function mod:BlastWave(_, spellId, _, _, spellName)
-	self:Message(33061, spellName, "Attention", spellId)
+	self:Message(33061, "Attention")
 	self:Bar(33061, L["cooldown_bars"]:format(spellName), 60, spellId)
 end
 
 function mod:SpellShield(_, spellId, _, _, spellName)
-	self:Message(33054, spellName, "Attention", spellId, "Info")
+	self:Message(33054, "Attention", "Info")
 	self:Bar(33054, L["cooldown_bars"]:format(spellName), 30, spellId)
 end
 
 function mod:SummonWildFelhunter(_, spellId, _, _, spellName)
-	self:Message(33131, L["summon_message"], "Attention", spellId, "Info")
+	self:Message(33131, "Attention", "Info", L["summon_message"])
 	self:Bar(33131, L["cooldown_bars"]:format(L["summon_message"]), 30, spellId)
 end
 
 function mod:ArcaneExplosion(_, spellId, _, _, spellName)
-	self:Message(33237, spellName, "Attention", spellId)
+	self:Message(33237, "Attention")
 	self:Bar(33237, L["cooldown_bars"]:format(spellName), 30, spellId)
 end
 
 function mod:GreaterPolymorph(player, spellId, _, _, spellName)
-	self:TargetMessage(33173, L["greater_polymorph_message"], player, "Attention", spellId, "Info")
+	self:TargetMessage(33173, player, "Attention", "Info", L["greater_polymorph_message"])
 end
 
 function mod:PrayerOfHealing(_, spellId, _, _, spellName)
-	self:Message(33131, L["prayer_of_healing_message"], "Attention", spellId, "Info")
+	self:Message(33131, "Attention", "Info", L["prayer_of_healing_message"])
 	self:Bar(33131, L["cooldown_bars"]:format(L["prayer_of_healing_message"]), 20, spellId)
 end
 

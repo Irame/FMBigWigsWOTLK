@@ -35,7 +35,7 @@ end
 
 function mod:Wound(player, spellId, _, _, _, stack)
 	if stack > 5 then
-		self:TargetMessage(71127, L["wound_message"], player, "Important", spellId, nil, stack)
+		self:TargetMessage(71127, player, "Important", nil, L["wound_message"], nil, stack)
 	end
 end
 

@@ -59,7 +59,7 @@ end
 
 function mod:OnEngage()
 	if not started then
-		self:Message(28798, L["startwarn"], "Urgent")
+		self:Message(28798, "Urgent", nil, L["startwarn"])
 		self:DelayedMessage(28798, 45, L["enragewarn2"], "Important")
 		local frenzyName = GetSpellInfo(28798)
 		self:Bar(28798, frenzyName, 60, 28798)
@@ -76,12 +76,12 @@ function mod:Silence(unit, spellId)
 	if unit ~= self.displayName then return end
 	if not frenzied then
 		-- preemptive, 30s silence
-		self:Message(28732, L["silencewarn"], "Positive", spellId)
+		self:Message(28732, "Positive", nil, L["silencewarn"])
 		self:Bar(28732, L["silencebar"], 30, spellId)
 		self:DelayedMessage(28732, 25, L["silencewarn5sec"], "Urgent")
 	else
 		-- Reactive enrage removed
-		self:Message(28798, L["enrageremovewarn"], "Positive")
+		self:Message(28798, "Positive", nil, L["enrageremovewarn"])
 		self:DelayedMessage(28798, 45, L["enragewarn2"], "Important")
 		local frenzyName = GetSpellInfo(28798)
 		self:Bar(28798, frenzyName, 60, 28798)
@@ -94,14 +94,14 @@ end
 
 function mod:Rain(player)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(28794, L["rain_message"], "Personal", 54099, "Alarm")
+		self:LocalMessage(28794, "Personal", "Alarm", L["rain_message"], 54099)
 		self:FlashShake(28794)
 	end
 end
 
 function mod:Frenzy(unit, spellId, _, _, spellName)
 	if unit == self.displayName then
-		self:Message(28798, L["enragewarn"], "Urgent", spellId)
+		self:Message(28798, "Urgent", nil, L["enragewarn"])
 		self:SendMessage("BigWigs_StopBar", self, spellName)
 		self:CancelDelayedMessage(L["enragewarn2"])
 		frenzied = true

@@ -88,18 +88,18 @@ end
 --
 
 function mod:IncinerateFlesh(player, spellId)
-	self:TargetMessage(67049, L["incinerate_message"], player, "Urgent", spellId, "Info")
+	self:TargetMessage(67049, player, "Urgent", "Info", L["incinerate_message"])
 	self:Whisper(67049, player, L["incinerate_message"])
 	self:Bar(67049, L["incinerate_other"]:format(player), 12, spellId)
 end
 
 function mod:IncinerateFleshRemoved(player, spellId)
-	self:Message(67049, L["incinerate_safe"]:format(player), "Positive", 17) -- Power Word: Shield icon.
+	self:Message(67049, "Positive", nil, L["incinerate_safe"]:format(player), 17) -- Power Word: Shield icon.
 	self:SendMessage("BigWigs_StopBar", self, L["incinerate_other"]:format(player))
 end
 
 function mod:LegionFlame(player, spellId)
-	self:TargetMessage(68123, L["legionflame_message"], player, "Personal", spellId, "Alert")
+	self:TargetMessage(68123, player, "Personal", "Alert", L["legionflame_message"])
 	if UnitIsUnit(player, "player") then self:FlashShake(68123) end
 	self:Whisper(68123, player, L["legionflame_message"])
 	self:Bar(68123, L["legionflame_other"]:format(player), 8, spellId)
@@ -108,24 +108,24 @@ end
 
 function mod:NetherPower(unit, spellId, _, _, spellName)
 	if unit == self.displayName then
-		self:Message(67106, spellName, "Attention", spellId)
+		self:Message(67106, "Attention")
 		self:Bar(67106, L["netherpower_bar"], 44, spellId)
 	end
 end
 
 function mod:NetherPortal(_, spellId, _, _, spellName)
-	self:Message("adds", spellName, "Urgent", spellId, "Alarm")
+	self:Message("adds", "Urgent", "Alarm", nil, spellId)
 	self:Bar("adds", L["infernal_bar"], 60, 66258)
 end
 
 function mod:InfernalEruption(_, spellId, _, _, spellName)
-	self:Message("adds", spellName, "Urgent", spellId, "Alarm")
+	self:Message("adds", "Urgent", "Alarm", nil, spellId)
 	self:Bar("adds", L["netherportal_bar"], 60, 68404)
 end
 
 function mod:MistressKiss(player, spellId)
 	if not UnitIsUnit(player, "player") then return end
-	self:LocalMessage(67905, L["kiss_message"], "Personal", spellId)
+	self:LocalMessage(67905, "Personal", nil, L["kiss_message"])
 	self:Bar(67905, L["kiss_message"], 15, spellId)
 	self:FlashShake(67905)
 end
@@ -137,6 +137,6 @@ end
 
 function mod:MistressKissInterrupted(player, spellId)
 	if not UnitIsUnit(player, "player") then return end
-	self:LocalMessage(67905, L["kiss_interrupted"], "Personal", spellId)
+	self:LocalMessage(67905, "Personal", nil, L["kiss_interrupted"])
 end
 

@@ -86,7 +86,7 @@ end
 --
 
 function mod:Punch(_, spellId, _, _, spellName)
-	self:Message(61903, spellName, "Urgent", spellId)
+	self:Message(61903, "Urgent")
 end
 
 function mod:Overwhelm(player, spellId, _, _, spellName)
@@ -94,7 +94,7 @@ function mod:Overwhelm(player, spellId, _, _, spellName)
 		self:OpenProximity(15,64637)
 		self:FlashShake(64637)
 	end
-	self:TargetMessage(64637, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(64637, player, "Personal", "Alert")
 	self:Whisper(64637, player, spellName)
 	self:Bar(64637, L["overwhelm_other"]:format(player), overwhelmTime, spellId)
 	self:PrimaryIcon(64637, player)
@@ -110,12 +110,12 @@ end
 function mod:Shield(_, spellId, _, _, _, _, _, _, _, dGUID)
 	local target = self.GetMobIdByGUID[dGUID]
 	if target and target == 32927 then
-		self:Message(62274, L["shield_message"], "Attention", spellId)
+		self:Message(62274, "Attention", nil, L["shield_message"])
 	end
 end
 
 function mod:RunePower(_, spellId, _, _, spellName)
-	self:Message(61974, spellName, "Positive", spellId)
+	self:Message(61974, "Positive")
 	self:Bar(61974, spellName, 30, spellId)
 end
 
@@ -125,22 +125,22 @@ end
 
 function mod:RuneDeath(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(62269, L["death_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(62269, "Personal", "Alarm", L["death_message"])
 		self:FlashShake(62269)
 	end
 end
 
 function mod:RuneSummoning(_, spellId)
-	self:Message(62273, L["summoning_message"], "Attention", spellId)
+	self:Message(62273, "Attention", nil, L["summoning_message"])
 end
 
 function mod:Overload(_, spellId, _, _, spellName)
-	self:Message(61869, L["overload_message"], "Attention", spellId, "Long")
+	self:Message(61869, "Attention", "Long", L["overload_message"])
 	self:Bar(61869, spellName, 6, spellId)
 end
 
 function mod:Whirl(_, spellId, _, _, spellName)
-	self:Message(63483, spellName, "Attention", spellId)
+	self:Message(63483, "Attention")
 end
 
 local function targetCheck()
@@ -150,10 +150,10 @@ local function targetCheck()
 	if target ~= previous then
 		if target then
 			if UnitIsUnit(target, "player") then
-				mod:LocalMessage(61887, L["chased_you"], "Personal", nil, "Alarm")
+				mod:LocalMessage(61887, "Personal", "Alarm", L["chased_you"])
 				mod:FlashShake(61887)
 			else
-				mod:Message(61887, L["chased_other"]:format(target), "Attention")
+				mod:Message(61887, "Attention", nil, L["chased_other"]:format(target))
 				mod:Whisper(61887, target, L["chased_you"])
 			end
 			mod:PrimaryIcon(61887, target)
@@ -175,7 +175,7 @@ do
 	function mod:Tendrils(_, spellId, _, _, spellName)
 		local t = GetTime()
 		if not last or (t > last + 2) then
-			self:Message(61887, spellName, "Attention", spellId)
+			self:Message(61887, "Attention")
 			self:Bar(61887, spellName, 25, spellId)
 			if not tendrilscanner then
 				tendrilscanner = self:ScheduleRepeatingTimer(targetCheck, 0.2)
@@ -187,7 +187,7 @@ end
 function mod:Deaths(_, _, unitName)
 	deaths = deaths + 1
 	if deaths < 3 then
-		self:Message("bosskill", L["council_dies"]:format(unitName), "Positive")
+		self:Message("bosskill", "Positive", nil, L["council_dies"]:format(unitName), false)
 	else
 		self:Win()
 	end

@@ -136,7 +136,7 @@ end
 
 function mod:Jormungars()
 	local m = L["boss_incoming"]:format(jormungars)
-	self:Message("bosses", m, "Positive")
+	self:Message("bosses", "Positive", nil, m, false)
 	self:Bar("bosses", m, 15, "INV_Misc_MonsterScales_18")
 	if difficulty > 2 then
 		self:Bar("bosses", L["boss_incoming"]:format(icehowl), 200, "INV_Misc_MonsterHorn_07")
@@ -149,7 +149,7 @@ end
 
 function mod:Icehowl()
 	local m = L["boss_incoming"]:format(icehowl)
-	self:Message("bosses", m, "Positive")
+	self:Message("bosses", "Positive", nil, m, false)
 	self:Bar("bosses", m, 10, "INV_Misc_MonsterHorn_07")
 	self:CancelTimer(handle_Jormungars, true)
 	handle_Jormungars = nil
@@ -171,20 +171,20 @@ function mod:UNIT_AURA(event, unit)
 	if snobolledWarned[n] and not name then
 		snobolledWarned[n] = nil
 	elseif name and not snobolledWarned[n] then
-		self:TargetMessage("snobold", L["snobold_message"], n, "Attention", icon)
+		self:TargetMessage("snobold", n, "Attention", nil, L["snobold_message"], icon)
 		snobolledWarned[n] = true
 	end
 end
 
 function mod:Impale(player, spellId, _, _, spellName, stack)
 	if stack and stack > 1 then
-		self:TargetMessage(67477, L["impale_message"], player, "Urgent", spellId, "Info", stack)
+		self:TargetMessage(67477, player, "Urgent", "Info", L["impale_message"], nil, stack)
 	end
 	self:Bar(67477, spellName, 10, spellId)
 end
 
 function mod:StaggeringStomp(_, spellId, _, _, spellName)
-	self:Message(66330, spellName, "Important", spellId)
+	self:Message(66330, "Important")
 	self:Bar(66330, spellName, 21, spellId)
 end
 
@@ -194,7 +194,7 @@ do
 		if UnitIsUnit(player, "player") then
 			local t = GetTime()
 			if not last or (t > last + 4) then
-				self:LocalMessage(67472, L["firebomb_message"], "Personal", spellId, last and nil or "Alarm")
+				self:LocalMessage(67472, "Personal", last and nil or "Alarm", L["firebomb_message"])
 				self:FlashShake(67472)
 				last = t
 			end
@@ -220,18 +220,18 @@ do
 	end
 
 	function mod:Spray(_, spellId, _, _, spellName)
-		self:Message("sprays", spellName, "Important", spellId)
+		self:Message("sprays", "Important", nil, nil, 5740)
 		self:Bar("sprays", L["spray"], 20, 5740)
 	end
 end
 
 
 function mod:SlimeCast(_, spellId, _, _, spellName)
-	self:Message(67641, spellName, "Attention", spellId)
+	self:Message(67641, "Attention")
 end
 
 function mod:Spew(_, spellId, _, _, spellName)
-	self:Message("spew", spellName, "Attention", spellId)
+	self:Message("spew", "Attention", nil, nil, false)
 end
 
 do
@@ -239,7 +239,7 @@ do
 	local dontWarn = nil
 	local function toxinWarn(spellId)
 		if not dontWarn then
-			mod:TargetMessage(67618, L["toxin_spell"], toxin, "Urgent", spellId)
+			mod:TargetMessage(67618, toxin, "Urgent", nil, L["toxin_spell"])
 		else
 			dontWarn = nil
 			wipe(toxin)
@@ -252,7 +252,7 @@ do
 		handle = self:ScheduleTimer(toxinWarn, 0.2, spellId)
 		if UnitIsUnit(player, "player") then
 			dontWarn = true
-			self:TargetMessage(67618, L["toxin_spell"], player, "Personal", spellId, "Info")
+			self:TargetMessage(67618, player, "Personal", "Info", L["toxin_spell"])
 			self:FlashShake(67618)
 		end
 	end
@@ -263,7 +263,7 @@ do
 	local dontWarn = nil
 	local function burnWarn(spellId)
 		if not dontWarn then
-			mod:TargetMessage(66869, L["burn_spell"], burn, "Urgent", spellId)
+			mod:TargetMessage(66869, burn, "Urgent", nil, L["burn_spell"])
 		else
 			dontWarn = nil
 			wipe(burn)
@@ -276,13 +276,13 @@ do
 		handle = self:ScheduleTimer(burnWarn, 0.2, spellId)
 		if UnitIsUnit(player, "player") then
 			dontWarn = true
-			self:TargetMessage(66869, L["burn_spell"], player, "Important", spellId, "Info")
+			self:TargetMessage(66869, player, "Important", "Info", L["burn_spell"])
 		end
 	end
 end
 
 function mod:Enraged(_, spellId, _, _, spellName)
-	self:Message(68335, spellName, "Important", spellId, "Long")
+	self:Message(68335, "Important", "Long")
 end
 
 do
@@ -291,7 +291,7 @@ do
 		if UnitIsUnit(player, "player") then
 			local t = GetTime()
 			if not last or (t > last + 4) then
-				self:LocalMessage(67641, L["slime_message"], "Personal", spellId, last and nil or "Alarm")
+				self:LocalMessage(67641, "Personal", last and nil or "Alarm", L["slime_message"])
 				self:FlashShake(67641)
 				last = t
 			end
@@ -304,24 +304,24 @@ end
 --
 
 function mod:Rage(_, spellId, _, _, spellName)
-	self:Message(66759, spellName, "Important", spellId)
+	self:Message(66759, "Important")
 	self:Bar(66759, spellName, 15, spellId)
 end
 
 function mod:Daze(_, spellId, _, _, spellName)
-	self:Message(66758, spellName, "Positive", spellId)
+	self:Message(66758, "Positive")
 	self:Bar(66758, spellName, 15, spellId)
 end
 
 function mod:Butt(player, spellId, _, _, spellName)
-	self:TargetMessage(67654,spellName, player, "Attention", spellId)
+	self:TargetMessage(67654, player, "Attention")
 	self:Bar(67654,L["butt_bar"], 12, spellId)
 end
 
 function mod:Charge(msg, unit, _, _, player)
 	if unit ~= icehowl then return end
 	local spellName = GetSpellInfo(52311)
-	self:TargetMessage("charge", spellName, player, "Personal", 52311, "Alarm")
+	self:TargetMessage("charge", player, "Personal", "Alarm", 52311)
 	if UnitIsUnit(player, "player") then
 		self:FlashShake("charge")
 		self:Say("charge", L["charge_say"])

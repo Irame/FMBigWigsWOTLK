@@ -89,7 +89,7 @@ end
 
 function mod:Flame(player)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(64704, L["flame_message"], "Personal", 64733, "Alarm")
+		self:LocalMessage(64704, "Personal", "Alarm", L["flame_message"], 64733)
 		self:FlashShake(64704)
 	end
 end
@@ -98,7 +98,7 @@ function mod:UNIT_HEALTH(event, msg)
 	if UnitName(msg) == self.displayName then
 		local hp = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if hp > 51 and hp <= 55 and not p2 then
-			self:Message("phase", L["phase2_warning"], "Positive")
+			self:Message("phase", "Positive", nil, L["phase2_warning"], false)
 			p2 = true
 		elseif hp > 70 and p2 then
 			p2 = nil
@@ -109,11 +109,11 @@ end
 function mod:Phase2()
 	phase = 2
 	self:SendMessage("BigWigs_StopBar", self, L["stun_bar"])
-	self:Message("phase", L["phase2_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 end
 
 function mod:Breath()
-	self:Message(64021, L["breath_message"], "Attention", 64021)
+	self:Message(64021, "Attention", nil, L["breath_message"])
 	if phase == 2 then
 		self:Bar(64021, L["breath_bar"], 21, 64021)
 	end
@@ -121,14 +121,14 @@ end
 
 function mod:Harpoon()
 	count = count + 1
-	self:Message("harpoon", L["harpoon_message"]:format(count), "Attention", "Interface\\Icons\\INV_Spear_06")
+	self:Message("harpoon", "Attention", nil, L["harpoon_message"]:format(count), "INV_Spear_06")
 	if count < totalHarpoons then
 		self:Bar("harpoon", L["harpoon_nextbar"]:format(count+1), 18, "INV_Spear_06")
 	end
 end
 
 function mod:Grounded()
-	self:Message("phase", L["ground_message"], "Attention", nil, "Long")
+	self:Message("phase", "Attention", "Long", L["ground_message"], false)
 	self:Bar("phase", L["stun_bar"], 38, 20170) --20170, looks like a stun :p
 	count = 0
 end
@@ -144,7 +144,7 @@ function mod:Airphase()
 		phase = 1
 	else
 		self:SendMessage("BigWigs_StopBar", self, L["stun_bar"])
-		self:Message("phase", L["air_message"], "Attention", nil, "Info")
+		self:Message("phase", "Attention", "Info", L["air_message"], false)
 	end
 end
 

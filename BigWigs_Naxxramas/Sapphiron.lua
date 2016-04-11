@@ -68,25 +68,25 @@ function mod:Airphase()
 	self:CancelDelayedMessage(L["lifedrain_warn1"])
 	self:SendMessage("BigWigs_StopBar", self, L["lifedrain_bar"])
 	--43810 Frost Wyrm, looks like a dragon breathing 'deep breath' :)
-	self:Message(28524, L["deepbreath_incoming_message"], "Attention")
+	self:Message(28524, "Attention", nil, L["deepbreath_incoming_message"])
 	self:Bar(28524, L["deepbreath_incoming_bar"], 14, 43810)
 	self:DelayedMessage(28524, 9, L["deepbreath_incoming_soon_message"], "Attention")
 end
 
 function mod:Deepbreath()
-	self:Message(28524, L["deepbreath_warning"], "Attention")
+	self:Message(28524, "Attention", nil, L["deepbreath_warning"])
 	self:Bar(28524, L["deepbreath_bar"], 10, 29318)
 end
 
 function mod:Breath(_, spellId, _, _, spellName)
 	breath = breath + 1
 	if breath == 2 then
-		self:Message(28524, spellName, "Important", spellId)
+		self:Message(28524, "Important")
 	end
 end
 
 function mod:Drain(_, spellId)
-	self:Message(28542, L["lifedrain_message"], "Urgent", spellId)
+	self:Message(28542, "Urgent", nil, L["lifedrain_message"])
 	self:Bar(28542, L["lifedrain_bar"], 23, spellId)
 	self:DelayedMessage(28542, 18, L["lifedrain_warn1"], "Important")
 end
@@ -99,7 +99,7 @@ function mod:Icebolt(player, spellId, _, _, spellName)
 			BigWigs:Print(L["ping_message"])
 		end
 	else
-		self:TargetMessage(28522, spellName, player, "Attention", spellId)
+		self:TargetMessage(28522, player, "Attention")
 	end
 	self:PrimaryIcon(28522, player)
 end

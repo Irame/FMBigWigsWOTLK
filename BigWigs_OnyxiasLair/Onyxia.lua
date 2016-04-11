@@ -44,19 +44,19 @@ end
 --
 
 function mod:Fear(_, spellId)
-	self:Message(18431, L["fear_message"], "Attention", spellId)
+	self:Message(18431, "Attention", nil, L["fear_message"])
 end
 
 function mod:Breath(_, spellId)
-	self:Message(17086, L["deepbreath_message"], "Important", spellId, "Alarm")
+	self:Message(17086, "Important", "Alarm", L["deepbreath_message"])
 	self:FlashShake(17086)
 end
 
 function mod:Phase2()
-	self:Message("phase", L["phase2_message"], "Positive")
+	self:Message("phase", "Positive", nil, L["phase2_message"], false)
 end
 
 function mod:Phase3()
-	self:Message("phase", L["phase3_message"], "Positive")
+	self:Message("phase", "Positive", nil, L["phase3_message"], false)
 end
 

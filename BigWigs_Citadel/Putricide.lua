@@ -116,12 +116,12 @@ do
 		mod:Bar(71255, L["gasbomb_bar"], 14, 71255)
 		mod:Bar(72295, L["ball_bar"], 6, 72295)
 		if not first then
-			mod:Message("phase", CL.phase:format(2), "Positive")
+			mod:Message("phase", "Positive", nil, CL.phase:format(2), "achievement_boss_profputricide")
 			mod:Bar(71966, L["experiment_bar"], 25, 71966)
 			first = true
 			p2 = true
 		else
-			mod:Message("phase", CL.phase:format(3), "Positive")
+			mod:Message("phase", "Positive", nil, CL.phase:format(3), "achievement_boss_profputricide")
 			first = nil
 			p3 = true
 		end
@@ -130,7 +130,7 @@ do
 	-- Heroic mode phase change
 	function mod:VolatileExperiment()
 		stopOldStuff()
-		self:Message("phase", L["experiment_heroic_message"], "Important")
+		self:Message("phase", "Important", nil, L["experiment_heroic_message"], 71968)
 		if not first then
 			self:Bar("phase", L["phase_bar"], 45, "achievement_boss_profputricide")
 			self:ScheduleTimer(newPhase, 45)
@@ -162,7 +162,7 @@ end
 
 function mod:Plague(player, spellId, _, _, _, stack)
 	stack = stack or 1
-	self:TargetMessage(72451, L["plague_message"], player, "Urgent", spellId, "Info", stack)
+	self:TargetMessage(72451, player, "Urgent", "Info", L["plague_message"], nil, stack)
 	self:Bar(72451, L["plague_bar"], 10, spellId)
 end
 
@@ -178,7 +178,7 @@ local scheduled = nil
 				mod:Say(72295, L["ball_say"])
 			end
 			mod:FlashShake(72295)
-			mod:TargetMessage(72295, spellName, target, "Attention", 72295)
+			mod:TargetMessage(72295, target, "Attention")
 		end
 		if mod:IsDifficulty("hc") then
 			mod:Bar(72295, L["ball_bar"], 30, 72295)
@@ -211,10 +211,10 @@ function mod:UNIT_HEALTH(_, unit)
 	if UnitName(unit) == self.displayName then
 		local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
 		if hp <= 83 and not p2 then
-			self:Message("phase", L["phase_warning"]:format(2), "Positive")
+			self:Message("phase", "Positive", nil, L["phase_warning"]:format(2), "achievement_boss_profputricide")
 			p2 = true
 		elseif hp <= 37 and not p3 then
-			self:Message("phase", L["phase_warning"]:format(3), "Positive")
+			self:Message("phase", "Positive", nil, L["phase_warning"]:format(3), "achievement_boss_profputricide")
 			p3 = true
 		end
 	end
@@ -222,7 +222,7 @@ end
 
 function mod:ChasedByRedOoze(player, spellId)
 	self:SendMessage("BigWigs_StopBar", self, barText)
-	self:TargetMessage(72455, L["blight_message"], player, "Personal", spellId)
+	self:TargetMessage(72455, player, "Personal", nil, L["blight_message"])
 	self:Whisper(72455, player, L["blight_message"])
 	if UnitIsUnit(player, "player") then
 		self:FlashShake(72455)
@@ -236,12 +236,12 @@ function mod:RedOozeDeath()
 end
 
 function mod:StunnedByGreenOoze(player, spellId)
-	self:TargetMessage(70447, L["violation_message"], player, "Personal", spellId)
+	self:TargetMessage(70447, player, "Personal", nil, L["violation_message"])
 	self:PrimaryIcon(70447, player)
 end
 
 function mod:Experiment(_, spellId)
-	self:Message(71966, L["experiment_message"], "Attention", spellId, "Alert")
+	self:Message(71966, "Attention", "Alert", L["experiment_message"])
 	self:Bar(71966, L["experiment_bar"], 38, spellId)
 end
 
@@ -253,7 +253,7 @@ do
 	function mod:Slime(player)
 		if not slimeScheduled then
 			slimeScheduled = true
-			self:Message(70341, L["slime_message"], "Urgent", 70341)
+			self:Message(70341, "Urgent", nil, L["slime_message"])
 			self:Bar(70341, L["slime_bar"], 30, 70341)
 			self:ScheduleTimer(slime, 0.3)
 		end
@@ -261,7 +261,7 @@ do
 end
 
 function mod:GasBomb(_, spellId)
-	self:Message(71255, L["gasbomb_message"], "Urgent", spellId)
+	self:Message(71255, "Urgent", nil, L["gasbomb_message"])
 	self:Bar(71255, L["gasbomb_bar"], 37, spellId)
 end
 
@@ -277,7 +277,7 @@ do
 				mod:FlashShake(72295)
 				mod:Say(72295, L["ball_say"])
 			end
-			mod:TargetMessage(72295, spellName, target, "Attention", 72295)
+			mod:TargetMessage(72295, target, "Attention")
 		end
 	end
 	function mod:BouncingGooBall(_, spellId,...)
@@ -303,7 +303,7 @@ do
 			oldPlagueBar = L["unbound_bar"]:format(player)
 			self:Bar(72855, oldPlagueBar, expirationTime - GetTime(), spellId)
 		end
-		self:TargetMessage(72855, spellName, player, "Personal", spellId, "Alert")
+		self:TargetMessage(72855, player, "Personal", "Alert")
 		self:SecondaryIcon(72855, player)
 		if UnitIsUnit(player, "player") then
 			self:OpenProximity(10, 72855)

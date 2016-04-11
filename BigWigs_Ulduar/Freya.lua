@@ -104,7 +104,7 @@ end
 do
 	local id, name, handle = nil, nil, nil
 	local function rootWarn()
-		mod:TargetMessage(62861, name, root, "Attention", id, "Info")
+		mod:TargetMessage(62861, root, "Attention", "Info")
 		handle = nil
 	end
 	function mod:Root(player, spellId, _, _, spellName)
@@ -133,7 +133,7 @@ do
 		local caster = isCaster()
 		local color = caster and "Personal" or "Attention"
 		local sound = caster and "Long" or nil
-		self:Message(62437, spellName, color, spellId, sound)
+		self:Message(62437, color, sound)
 		if caster then self:FlashShake(62437) end
 		if phase == 1 then
 			self:Bar(62437, spellName, 2, spellId)
@@ -154,7 +154,7 @@ do
 		if not bossId then return end
 		local target = UnitName(bossId .. "target")
 		if target then
-			mod:TargetMessage(62623, name, target, "Attention", id)
+			mod:TargetMessage(62623, target, "Attention")
 			mod:SecondaryIcon(62623, target)
 		end
 		handle = nil
@@ -172,7 +172,7 @@ function mod:Fury(player, spellId)
 		self:OpenProximity(10,62589)
 		self:FlashShake(62589)
 	end
-	self:TargetMessage(62589, L["fury_message"], player, "Personal", spellId, "Alert")
+	self:TargetMessage(62589, player, "Personal", "Alert", L["fury_message"])
 	self:Whisper(62589, player, L["fury_message"])
 	self:Bar(62589, L["fury_other"]:format(player), 10, spellId)
 	self:PrimaryIcon(62589, player)
@@ -188,7 +188,7 @@ end
 function mod:AttunedRemove()
 	phase = 2
 	self:SendMessage("BigWigs_StopBar", self, L["wave_bar"])
-	self:Message("phase", L["phase2_message"], "Important")
+	self:Message("phase", "Important", nil, L["phase2_message"], false)
 end
 
 do
@@ -197,7 +197,7 @@ do
 		if UnitIsUnit(player, "player") then
 			local t = GetTime()
 			if not last or (t > last + 4) then
-				self:LocalMessage(62865, L["energy_message"], "Personal",  62451, "Alarm")
+				self:LocalMessage(62865, "Personal", "Alarm", L["energy_message"], 62451)
 				self:FlashShake(62865)
 				last = t
 			end
@@ -212,7 +212,7 @@ do
 		local t = GetTime()
 		if not last or (t > last + 10) then
 			sunBeamName = unit
-			self:Message(62865, L["sunbeam_message"], "Important", spellId)
+			self:Message(62865, "Important", nil, L["sunbeam_message"])
 			last = t
 		end
 	end
@@ -223,7 +223,7 @@ do
 end
 
 function mod:Tree()
-	self:Message("tree", L["tree_message"], "Urgent", 5420, "Alarm")
+	self:Message("tree", "Urgent", "Alarm", L["tree_message"], 5420)
 end
 
 function mod:Yells(msg)
@@ -232,13 +232,13 @@ function mod:Yells(msg)
 		sheIsDead = true
 		self:Win()
 	elseif msg == L["conservator_trigger"] then
-		self:Message("wave", L["conservator_message"], "Positive", 35594)
+		self:Message("wave", "Positive", nil, L["conservator_message"], 35594)
 		self:Bar("wave", L["wave_bar"], 60, 35594)
 	elseif msg == L["detonate_trigger"] then
-		self:Message("wave", L["detonate_message"], "Positive", 35594)
+		self:Message("wave", "Positive", nil, L["detonate_message"], 35594)
 		self:Bar("wave", L["wave_bar"], 60, 35594)
 	elseif msg == L["elementals_trigger"] then
-		self:Message("wave", L["elementals_message"], "Positive", 35594)
+		self:Message("wave", "Positive", nil, L["elementals_message"], 35594)
 		self:Bar("wave", L["wave_bar"], 60, 35594)
 	end
 end

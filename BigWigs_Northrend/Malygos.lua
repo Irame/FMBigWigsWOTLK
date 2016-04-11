@@ -95,19 +95,19 @@ end
 
 function mod:Spark(unit, spellId)
 	if unit == self.displayName then
-		self:Message("sparkbuff", L["sparkbuff_message"], "Important", spellId)
+		self:Message("sparkbuff", "Important", nil, L["sparkbuff_message"], false)
 	end
 end
 
 function mod:Static(target, spellId, _, _, spellName)
 	if UnitIsUnit(target, "player") then
-		self:LocalMessage(57429, spellName, "Urgent", spellId)
+		self:LocalMessage(57429, "Urgent")
 	end
 end
 
 function mod:Vortex(_, spellId)
 	self:Bar("vortex", L["vortex"], 10, 56105)
-	self:Message("vortex", L["vortex_message"], "Attention", spellId)
+	self:Message("vortex", "Attention", nil, L["vortex_message"], spellId)
 	self:Bar("vortex", L["vortex_next"], 59, 56105)
 	self:DelayedMessage("vortex", 54, L["vortex_warning"], "Attention")
 
@@ -117,20 +117,20 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_WHISPER(event, msg, mob)
 	if phase == 3 and msg == L["surge_trigger"] then
-		self:LocalMessage("surge", L["surge_you"], "Personal", 60936, "Alarm") -- 60936 for phase 3, not 56505
+		self:LocalMessage("surge", "Personal", "Alarm", L["surge_you"], 60936) -- 60936 for phase 3, not 56505
 		self:FlashShake("surge")
 	end
 end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(event, msg)
 	if phase == 1 then
-		self:Message("sparks", L["sparks_message"], "Important", 56152, "Alert")
+		self:Message("sparks", "Important", "Alert", L["sparks_message"], 56152)
 		self:Bar("sparks", L["sparks"], 30, 56152)
 		self:DelayedMessage("sparks", 25, L["sparks_warning"], "Attention")
 	elseif phase == 2 then
 		-- 43810 Frost Wyrm, looks like a dragon breathing 'deep breath' :)
 		-- Correct spellId for 'breath" in phase 2 is 56505
-		self:Message("breath", L["breath_message"], "Important", 43810, "Alert")
+		self:Message("breath", "Important", "Alert", L["breath_message"], 43810)
 		self:Bar("breath", L["breath"], 59, 43810)
 		self:DelayedMessage("breath", 54, L["breath_warning"], "Attention")
 	end
@@ -142,7 +142,7 @@ function mod:Phase2()
 	self:CancelDelayedMessage(L["sparks_warning"])
 	self:SendMessage("BigWigs_StopBar", self, L["sparks"])
 	self:SendMessage("BigWigs_StopBar", self, L["vortex_next"])
-	self:Message("phase", L["phase2_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 	self:Bar("breath", L["breath"], 92, 43810)
 	self:DelayedMessage("breath", 87, L["breath_warning"], "Attention")
 end
@@ -150,12 +150,12 @@ end
 function mod:P2End()
 	self:CancelDelayedMessage(L["breath_warning"])
 	self:SendMessage("BigWigs_StopBar", self, L["breath"])
-	self:Message("phase", L["phase3_warning"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase3_warning"], false)
 end
 
 function mod:Phase3()
 	phase = 3
-	self:Message("phase", L["phase3_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase3_message"], false)
 end
 
 function mod:UNIT_HEALTH(event, msg)
@@ -163,7 +163,7 @@ function mod:UNIT_HEALTH(event, msg)
 	if UnitName(msg) == self.displayName then
 		local hp = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if hp > 51 and hp <= 54 then
-			self:Message("phase", L["phase2_warning"], "Attention")
+			self:Message("phase", "Attention", nil, L["phase2_warning"], false)
 			self:UnregisterEvent("UNIT_HEALTH")
 		end
 	end

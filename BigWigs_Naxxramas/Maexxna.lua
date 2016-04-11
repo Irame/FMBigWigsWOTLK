@@ -60,7 +60,7 @@ end
 do
 	local handle = nil
 	local function cocoonWarn()
-		mod:TargetMessage(28622, L["cocoonbar"], inCocoon, "Important", 745, "Alert")
+		mod:TargetMessage(28622, inCocoon, "Important", "Alert", L["cocoonbar"], 745)
 		handle = nil
 	end
 
@@ -72,7 +72,7 @@ do
 end
 
 function mod:Spray()
-	self:Message(29484, L["webspraywarn"], "Important", 54125)
+	self:Message(29484, "Important", nil, L["webspraywarn"], 54125)
 	self:DelayedMessage(29484, 10, L["webspraywarn30sec"], "Attention")
 	self:DelayedMessage(29484, 20, L["webspraywarn20sec"], "Attention")
 	self:DelayedMessage(29484, 30, L["webspraywarn10sec"], "Attention")
@@ -85,14 +85,14 @@ function mod:Spray()
 end
 
 function mod:Frenzy(_, spellId)
-	self:Message(54123, L["enragewarn"], "Attention", spellId, "Alarm")
+	self:Message(54123, "Attention", "Alarm", L["enragewarn"])
 end
 
 function mod:UNIT_HEALTH(event, msg)
 	if UnitName(msg) == mod.displayName then
 		local health = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if health > 30 and health <= 33 and not enrageannounced then
-			self:Message(54123, L["enragesoonwarn"], "Important")
+			self:Message(54123, "Important", nil, L["enragesoonwarn"])
 			enrageannounced = true
 		elseif health > 40 and enrageannounced then
 			enrageannounced = nil

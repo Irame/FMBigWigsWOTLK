@@ -40,6 +40,6 @@ end
 --
 
 function mod:Frenzy(_, spellId)
-	self:Message(28131, L["enragewarn"], "Attention", spellId, "Alarm")
+	self:Message(28131, "Attention", "Alarm", L["enragewarn"])
 end
 

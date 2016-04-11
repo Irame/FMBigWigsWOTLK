@@ -65,7 +65,7 @@ do
 	--Remove the (25/10 player) text from name
 	achievName = (achievName):gsub("%(.*%)", "")
 	local function impaleWarn(spellName)
-		mod:TargetMessage(69057, spellName, impaleTargets, "Urgent", 69062, "Alert")
+		mod:TargetMessage(69057, impaleTargets, "Urgent", "Alert", 69062)
 		scheduled = nil
 	end
 	function mod:Impale(_, spellId, player, _, spellName)
@@ -82,7 +82,7 @@ end
 
 function mod:Coldflame(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(69138, L["coldflame_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(69138, "Personal", "Alarm", L["coldflame_message"])
 		self:FlashShake(69138)
 	end
 end
@@ -114,7 +114,7 @@ function mod:Bonestorm(_, spellId, _, _, spellName)
 end
 
 function mod:BonestormCast(_, spellId, _, _, spellName)
-	self:Message(69076, spellName, "Attention", spellId)
+	self:Message(69076, "Attention")
 	self:SendMessage("BigWigs_StopBar", self, L["bonestorm_cd"])
 	if self:IsDifficulty("hc") then 
 		self:SendMessage("BigWigs_ReadjustBar", self, L["impale_cd"], 18)

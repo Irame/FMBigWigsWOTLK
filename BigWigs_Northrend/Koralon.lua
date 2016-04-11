@@ -54,20 +54,20 @@ end
 --
 
 function mod:Fists(_, spellId, _, _, spellName)
-	self:Message(66725, spellName, "Attention", spellId)
+	self:Message(66725, "Attention")
 	self:Bar(66725, spellName, 15, spellId)
 	self:Bar(66725, L["fists_bar"], 47, spellId)
 end
 
 function mod:Cinder(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(67332, L["cinder_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(67332, "Personal", "Alarm", L["cinder_message"])
 		self:FlashShake(67332)
 	end
 end
 
 function mod:Breath(_, spellId, _, _, spellName)
-	self:Message(66665, spellName, "Positive", spellId)
+	self:Message(66665, "Positive")
 	count = count + 1
 	self:Bar(66665, L["breath_bar"]:format(count), 45, spellId)
 	self:DelayedMessage(66665, 40, L["breath_message"]:format(count), "Attention")

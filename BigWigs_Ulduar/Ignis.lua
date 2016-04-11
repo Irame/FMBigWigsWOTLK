@@ -58,16 +58,16 @@ end
 --
 
 function mod:Brittle(_, spellId)
-	self:Message(62382, L["brittle_message"], "Positive", spellId)
+	self:Message(62382, "Positive", nil, L["brittle_message"])
 end
 
 function mod:Construct()
-	self:Message(62488, L["construct_message"], "Important", "Interface\\Icons\\INV_Misc_Statue_07")
+	self:Message(62488, "Important", nil, L["construct_message"], "Interface\\Icons\\INV_Misc_Statue_07")
 	self:Bar(62488, L["construct_bar"], spawnTime, "INV_Misc_Statue_07")
 end
 
 function mod:ScorchCast(_, spellId, _, _, spellName)
-	self:Message(62546, spellName, "Attention", spellId)
+	self:Message(62546, "Attention")
 	self:Bar(62546, L["scorch_bar"], 25, spellId)
 	self:DelayedMessage(62546, 20, L["scorch_soon"], "Urgent", spellId)
 end
@@ -78,7 +78,7 @@ do
 		if UnitIsUnit(player, "player") then
 			local t = GetTime()
 			if not last or (t > last + 4) then
-				self:LocalMessage(62546, L["scorch_message"], "Personal", spellId, last and nil or "Alarm")
+				self:LocalMessage(62546, "Personal", last and nil or "Alarm", L["scorch_message"])
 				self:FlashShake(62546)
 				last = t
 			end
@@ -87,7 +87,7 @@ do
 end
 
 function mod:SlagPot(player, spellId, _, _, spellName)
-	self:TargetMessage(62717, spellName, player, "Important", spellId)
+	self:TargetMessage(62717, player, "Important")
 	self:Bar(62717, L["slagpot_message"]:format(player), 10, spellId)
 end
 
@@ -110,7 +110,7 @@ do
 		local color = caster and "Personal" or "Attention"
 		local sound = caster and "Long" or nil
 		if caster then self:FlashShake(62680) end
-		self:Message(62680, spellName, color, spellId, sound)
+		self:Message(62680, color, sound)
 		self:Bar(62680, L["flame_bar"], 25, spellId)
 		if caster then self:Bar(62680, spellName, 2.7, spellId) end
 	end

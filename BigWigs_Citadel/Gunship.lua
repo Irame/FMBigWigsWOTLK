@@ -89,12 +89,12 @@ end
 --
 
 function mod:AddsPortal()
-	self:Message("adds", L["adds_message"], "Attention", 53142)
+	self:Message("adds", "Attention", nil, L["adds_message"], 53142)
 	self:Bar("adds", L["adds_bar"], 60, 53142) --Portal: Dalaran icon
 end
 
 function mod:Frozen(_, spellId)
-	self:Message("mage", L["mage_message"], "Positive", spellId, "Info")
+	self:Message("mage", "Positive", "Info", L["mage_message"], spellId)
 end
 
 function mod:FrozenCD(_, spellId)

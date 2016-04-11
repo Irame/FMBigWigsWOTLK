@@ -98,7 +98,7 @@ end
 function mod:FireDamage(player, spellId)
 	if UnitIsUnit(player, "player") then
 		self:FlashShake(75879)
-		self:LocalMessage(75879, L["fire_damage_message"], "Personal", spellId)
+		self:LocalMessage(75879, "Personal", nil, L["fire_damage_message"])
 	end
 end
 
@@ -108,7 +108,7 @@ function mod:Fire(player, spellId)
 		self:Say(74562, L["fire_say"])
 		self:FlashShake(74562)
 	end
-	self:TargetMessage(74562, L["fire_message"], player, "Personal", spellId, "Info")
+	self:TargetMessage(74562, player, "Personal", "Info", L["fire_message"])
 	self:Whisper(74562, player, L["fire_message"])
 	self:PrimaryIcon(74562, player)
 end
@@ -119,7 +119,7 @@ function mod:Shadow(player, spellId)
 		self:Say(74792, L["shadow_say"])
 		self:FlashShake(74792)
 	end
-	self:TargetMessage(74792, L["shadow_message"], player, "Personal", spellId, "Info")
+	self:TargetMessage(74792, player, "Personal", "Info", L["shadow_message"])
 	self:Whisper(74792, player, L["shadow_message"])
 	self:SecondaryIcon(74792, player)
 end
@@ -139,7 +139,7 @@ do
 		if lastExecute + 5 > ct then return end
 		lastExecute = ct
 		self:Bar(74769, L["twilight_cutter_bar"], 29, 74769)
-		self:Message(74769, L["twilight_cutter_warning"], "Important", 74769, "Alert")
+		self:Message(74769, "Important", "Alert", L["twilight_cutter_warning"])
 	end
 end
 
@@ -148,7 +148,7 @@ function mod:MeteorInc()
 		addsDeaths = 0
 		self:Bar("add_enrage", L["add_enrage_bar"], 26, 26662)
 	end
-	self:Message(75879, L["meteor_warning_message"], "Urgent", 75879, "Long")
+	self:Message(75879, "Urgent", "Long", L["meteor_warning_message"])
 	self:FlashShake(75879)
 	self:Bar(75879, L["meteorstrike_bar"], 48, 75879)
 end
@@ -158,7 +158,7 @@ function mod:MeteorStrike(_, spellId, _, _, spellName)
 		addsDeaths = 0
 		self:Bar("add_enrage", L["add_enrage_bar"], 18, 26662)
 	end
-	self:Message(75879, spellName, "Important", spellId)
+	self:Message(75879, "Important")
 	self:FlashShake(75879)
 	self:Bar(75879, L["meteorstrike_bar"], 40, spellId)
 end
@@ -169,18 +169,18 @@ do
 		local statusFrameText = AlwaysUpFrame1Text:GetText()
 		local corporeality = tonumber(statusFrameText:sub(statusFrameText:find("%d+")))
 		if corporeality >= 0 and corporeality <= 30 then
-			self:Message(74826, L["corporeality_message"]:format(corporeality,L["corporeality_0_to_30_message"]), "Important", 74826, "Alarm")
+			self:Message(74826, "Important", "Alarm", L["corporeality_message"]:format(corporeality,L["corporeality_0_to_30_message"]))
 		elseif corporeality == 40 then
-			self:Message(74826, L["corporeality_message"]:format(corporeality,L["corporeality_40_message"]), "Attention", 74826)
+			self:Message(74826, "Attention", nil, L["corporeality_message"]:format(corporeality,L["corporeality_40_message"]))
 		elseif corporeality == 50 then
-			self:Message(74826, L["corporeality_message"]:format(corporeality,L["corporeality_50_message"]), "Positive", 74826)
+			self:Message(74826, "Positive", nil, L["corporeality_message"]:format(corporeality,L["corporeality_50_message"]))
 		elseif corporeality == 60 then
-			self:Message(74826, L["corporeality_message"]:format(corporeality,L["corporeality_60_message"]), "Attention", 74826)
+			self:Message(74826, "Attention", nil, L["corporeality_message"]:format(corporeality,L["corporeality_60_message"]))
 		elseif corporeality >= 70 and corporeality <= 100 then
 			if lastCorporeality < corporeality then
 				self:FlashShake(74826)
 			end
-			self:Message(74826, L["corporeality_message"]:format(corporeality,L["corporeality_70_to_100_message"]), "Important", 74826, "Alarm")
+			self:Message(74826, "Important", "Alarm", L["corporeality_message"]:format(corporeality,L["corporeality_70_to_100_message"]))
 		end
 		lastCorporeality = corporeality
 	end

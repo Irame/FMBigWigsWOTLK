@@ -71,7 +71,7 @@ end
 --
 
 function mod:Infection(player, spellId)
-	self:TargetMessage(71224, L["infection_message"], player, "Personal", spellId)
+	self:TargetMessage(71224, player, "Personal", nil, L["infection_message"])
 	self:Bar(71224, L["infection_bar"]:format(player), 12, spellId)
 	self:PrimaryIcon(71224, player, "icon")
 	if UnitIsUnit(player, "player") then self:FlashShake(71224) end
@@ -82,7 +82,7 @@ function mod:InfectionRemoved(player)
 end
 
 function mod:SlimeSpray(_, spellId, _, _, spellName)
-	self:Message(69508, spellName, "Important", spellId, "Alarm")
+	self:Message(69508, "Important", "Alarm")
 	self:Bar(69508, L["spray_bar"], 21, 69508)
 end
 
@@ -92,7 +92,7 @@ do
 	local function explodeWarn(explodeName)
 		handle = nil
 		mod:FlashShake(69839)
-		mod:Message(69839, explodeName, "Urgent", 69839, "Alert")
+		mod:Message(69839, "Urgent", "Alert")
 	end
 	function mod:Explode(_, spellId)
 		local explodeName = GetSpellInfo(67729) --"Explode"
@@ -104,7 +104,7 @@ end
 
 function mod:Ooze(_, spellId, _, _, _, stack)
 	if stack > 4 then return end
-	self:Message("ooze", L["ooze_message"]:format(stack), "Attention", spellId)
+	self:Message("ooze", "Attention", nil, L["ooze_message"]:format(stack), spellId)
 end
 
 function mod:VileGas(player, spellId, _, _, spellName)

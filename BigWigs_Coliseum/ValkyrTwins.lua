@@ -118,7 +118,7 @@ do
 						damageDone = damageDone + damage
 					end
 					if currentShieldStrength and not halfWarning and damageDone >= (currentShieldStrength / 2) then
-						mod:Message("shield", L["shield_half_message"], "Positive")
+						mod:Message("shield", "Positive", nil, L["shield_half_message"], false)
 						halfWarning = true
 					end
 				elseif event == "SPELL_INTERRUPT" and heals[healId] then
@@ -133,13 +133,13 @@ do
 	function mod:Healed()
 		if not currentShieldStrength then return end
 		local missing = math.ceil(100 - (100 * damageDone / currentShieldStrength))
-		self:Message("shield", L["shield_left_message"]:format(missing), "Important")
+		self:Message("shield", "Important", nil, L["shield_left_message"]:format(missing), false)
 		stop()
 	end
 end
 
 function mod:Touch(player, spellId, _, _, spellName)
-	self:TargetMessage("touch", spellName, player, "Personal", spellId, "Info")
+	self:TargetMessage("touch", player, "Personal", "Info")
 	if UnitIsUnit(player, "player") then self:FlashShake("touch") end
 	self:Whisper("touch", player, spellName)
 end
@@ -149,9 +149,9 @@ function mod:DarkShield(_, spellId, _, _, spellName)
 	self:Bar("shield", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceDark)
 	if d then
-		self:Message("shield", spellName, "Important", spellId, "Alert")
+		self:Message("shield", "Important", "Alert", spellId)
 	else
-		self:Message("shield", spellName, "Urgent", spellId)
+		self:Message("shield", "Urgent", nil, spellId)
 	end
 end
 
@@ -160,9 +160,9 @@ function mod:LightShield(_, spellId, _, _, spellName)
 	self:Bar("shield", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceLight)
 	if d then
-		self:Message("shield", spellName, "Important", spellId, "Alert")
+		self:Message("shield", "Important", "Alert", spellId)
 	else
-		self:Message("shield", spellName, "Urgent", spellId)
+		self:Message("shield", "Urgent", nil, spellId)
 	end
 end
 
@@ -170,9 +170,9 @@ function mod:LightVortex(_, spellId, _, _, spellName)
 	self:Bar("vortex", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceLight)
 	if d then
-		self:Message("vortex", spellName, "Positive", spellId)
+		self:Message("vortex", "Positive", nil, spellId)
 	else
-		self:Message("vortex", spellName, "Personal", spellId, "Alarm")
+		self:Message("vortex", "Personal", "Alarm", spellId)
 		self:FlashShake("vortex")
 	end
 end
@@ -181,9 +181,9 @@ function mod:DarkVortex(_, spellId, _, _, spellName)
 	self:Bar("vortex", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceDark)
 	if d then
-		self:Message("vortex", spellName, "Positive", spellId)
+		self:Message("vortex", "Positive", nil, spellId)
 	else
-		self:Message("vortex", spellName, "Personal", spellId, "Alarm")
+		self:Message("vortex", "Personal", "Alarm", spellId)
 		self:FlashShake("vortex")
 	end
 end

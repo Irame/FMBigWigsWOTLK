@@ -40,7 +40,7 @@ end
 --
 
 function mod:Inject(player, spellId)
-	self:TargetMessage(28169, L["bomb_message"], player, "Personal", spellId, "Alert")
+	self:TargetMessage(28169, player, "Personal", "Alert", L["bomb_message"])
 	if UnitIsUnit(player, "player") then self:FlashShake(28169) end
 	self:Whisper(28169, player, L["bomb_message"])
 	self:Bar(28169, L["bomb_message_other"]:format(player), 10, spellId)
@@ -48,7 +48,7 @@ function mod:Inject(player, spellId)
 end
 
 function mod:Cloud(_, spellId, _, _, spellName)
-	self:Message(28240, spellName, "Attention", spellId)
+	self:Message(28240, "Attention")
 	self:Bar(28240, spellName, 15, spellId)
 end
 

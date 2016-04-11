@@ -94,7 +94,7 @@ end
 --
 
 function mod:Vapor()
-	self:Message("vapor", L["vapor_message"]:format(vaporCount), "Positive", 63323)
+	self:Message("vapor", "Positive", nil, L["vapor_message"]:format(vaporCount), 63323)
 	vaporCount = vaporCount + 1
 	if vaporCount < 7 then
 		self:Bar("vapor", L["vapor_bar"]:format(vaporCount), 30, 63323)
@@ -102,7 +102,7 @@ function mod:Vapor()
 end
 
 function mod:Animus()
-	self:Message("animus", L["animus_message"], "Important", 63319)
+	self:Message("animus", "Important", nil, L["animus_message"], 63319)
 end
 
 function mod:UNIT_AURA(event, unit)
@@ -110,7 +110,7 @@ function mod:UNIT_AURA(event, unit)
 	local _, _, icon, stack = UnitDebuff("player", vapor)
 	if stack and stack ~= lastVapor then
 		if stack > 5 then
-			self:LocalMessage("vaporstack", L["vaporstack_message"]:format(stack), "Personal", icon)
+			self:LocalMessage("vaporstack", "Personal", nil, L["vaporstack_message"]:format(stack), icon)
 			self:FlashShake("vaporstack")
 		end
 		lastVapor = stack
@@ -128,7 +128,7 @@ do
 				mod:FlashShake(62660)
 				mod:Say(62660, L["crash_say"])
 			end
-			mod:TargetMessage(62660, name, target, "Personal", id, "Alert")
+			mod:TargetMessage(62660, target, "Personal", "Alert")
 			mod:Whisper(62660, target, name)
 			mod:SecondaryIcon(62660, target)
 		end
@@ -143,7 +143,7 @@ do
 end
 
 function mod:Mark(player, spellId)
-	self:TargetMessage(63276, L["mark_message"], player, "Personal", spellId, "Alert")
+	self:TargetMessage(63276, player, "Personal", "Alert", L["mark_message"])
 	if UnitIsUnit(player, "player") then self:FlashShake(63276) end
 	self:Whisper(63276, player, L["mark_message"])
 	self:Bar(63276, L["mark_message_other"]:format(player), 10, spellId)
@@ -151,11 +151,11 @@ function mod:Mark(player, spellId)
 end
 
 function mod:Flame(_, spellId, _, _, spellName)
-	self:Message(62661, spellName, "Urgent", spellId)
+	self:Message(62661, "Urgent")
 end
 
 function mod:Surge(_, spellId)
-	self:Message(62662, L["surge_message"]:format(surgeCount), "Important", spellId)
+	self:Message(62662, "Important", nil, L["surge_message"]:format(surgeCount))
 	self:Bar(62662, L["surge_cast"]:format(surgeCount), 3, spellId)
 	surgeCount = surgeCount + 1
 	self:Bar(62662, L["surge_bar"]:format(surgeCount), 60, spellId)

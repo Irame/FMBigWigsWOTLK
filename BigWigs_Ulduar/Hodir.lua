@@ -75,14 +75,14 @@ end
 --
 
 function mod:Cloud(player, spellId, _, _, spellName)
-	self:TargetMessage(65123, spellName, player, "Positive", spellId, "Info")
+	self:TargetMessage(65123, player, "Positive", "Info")
 	self:Whisper(65123, player, spellName)
 	self:Bar(65123, spellName..": "..player, 30, spellId)
 	self:PrimaryIcon(65123, player)
 end
 
 function mod:FlashCast(_, spellId, _, _, spellName)
-	self:Message(61968, L["flash_warning"], "Attention", spellId)
+	self:Message(61968, "Attention", nil, L["flash_warning"])
 	self:Bar(61968, spellName, 9, spellId)
 	self:Bar(61968, spellName, 35, spellId)
 	self:DelayedMessage(61968, 30, L["flash_soon"], "Attention")
@@ -91,7 +91,7 @@ end
 do
 	local id, name, handle = nil, nil, nil
 	local function flashWarn()
-		mod:TargetMessage(61968, name, flashFreezed, "Urgent", id, "Alert")
+		mod:TargetMessage(61968, flashFreezed, "Urgent", "Alert")
 		handle = nil
 	end
 
@@ -106,7 +106,7 @@ do
 end
 
 function mod:Frozen(_, spellId, _, _, spellName)
-	self:Message(62478, spellName, "Important", spellId)
+	self:Message(62478, "Important")
 	self:Bar(62478, spellName, 20, spellId)
 end
 
@@ -115,7 +115,7 @@ function mod:UNIT_AURA(event, unit)
 	local _, _, icon, stack = UnitDebuff("player", cold)
 	if stack and stack ~= lastCold then
 		if stack > 1 then
-			self:LocalMessage("cold", L["cold_message"]:format(stack), "Personal", icon)
+			self:LocalMessage("cold", "Personal", nil, L["cold_message"]:format(stack), icon)
 			self:FlashShake("cold")
 		end
 		lastCold = stack

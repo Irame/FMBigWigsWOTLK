@@ -468,9 +468,17 @@ function HasVoice()
 	hasVoice = core:GetPlugin("Voice") ~= nil
 end
 
-function boss:Message(key, text, color, icon, sound)
+-- old order: key, text, color, icon, sound
+function boss:Message(key, color, sound, text, icon)
 	if not checkFlag(self, key, C.MESSAGE) then return end
-	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+	
+	local textType = type(text)
+	local temp = (icon == false and 0) or (icon ~= false and icon) or (textType == "number" and text) or key
+	if temp == key and type(key) == "string" then
+		BigWigs:Print(("Message '%s' doesn't have an icon set."):format(textType == "string" and text or spells[text or key])) -- XXX temp
+	end
+	
+	self:SendMessage("BigWigs_Message", self, key, textType == "string" and text or spells[text or key], color, icon ~= false and icons[icon or textType == "number" and text or key])
 	self:SendMessage("BigWigs_Broadcast", text)
 	
 	if HasVoice() and checkFlag(self, key, C.VOICE) then
@@ -481,8 +489,16 @@ function boss:Message(key, text, color, icon, sound)
 end
 
 -- Outputs a local message only, no raid warning.
-function boss:LocalMessage(key, text, color, icon, sound)
+-- old order: key, text, color, icon, sound
+function boss:LocalMessage(key, color, sound, text, icon)
 	if not checkFlag(self, key, C.MESSAGE) then return end
+	
+	local textType = type(text)
+	local temp = (icon == false and 0) or (icon ~= false and icon) or (textType == "number" and text) or key
+	if temp == key and type(key) == "string" then
+		BigWigs:Print(("Message '%s' doesn't have an icon set."):format(textType == "string" and text or spells[text or key])) -- XXX temp
+	end
+	
 	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
 	
 	if HasVoice() and checkFlag(self, key, C.VOICE) then
@@ -519,17 +535,22 @@ do
 		return setmetatable({}, mt)
 	end
 
-	function boss:TargetMessage(key, spellName, player, color, icon, sound, ...)
+	-- old Order key, spellName, player, color, icon, sound
+	function boss:TargetMessage(key, player, color, sound, text, icon, ...)
+		local textType = type(text)
+		local msg = textType == "string" and text or spells[text or key]
+		local texture = icon ~= false and icons[icon or textType == "number" and text or key]
+	
 		if not checkFlag(self, key, C.MESSAGE) then return end
 		if type(player) == "table" then
 			local list = table.concat(player, ", ")
 			local onMe = string:find(list, pName, nil, true)
 			if onMe and #player == 1 then
-				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), "Personal", icon)
+				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), "Personal", texture)
 			else
-				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], spellName, list), color, icon)
+				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], msg, list), color, texture)
 			end
-			self:SendMessage("BigWigs_Broadcast", fmt(L["other"], spellName, list))
+			self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, list))
 			if HasVoice() and checkFlag(self, key, C.VOICE) then
 				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
 			else
@@ -539,12 +560,12 @@ do
 		else
 			if UnitIsUnit(player, "player") then
 				if ... then
-					local text = fmt(spellName, coloredNames[player], ...)
-					self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+					local text = fmt(msg, coloredNames[player], ...)
+					self:SendMessage("BigWigs_Message", self, key, text, color, texture)
 					self:SendMessage("BigWigs_Broadcast", text)
 				else
-					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], spellName), color, icon)
-					self:SendMessage("BigWigs_Broadcast", fmt(L["other"], spellName, player))
+					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), color, texture)
+					self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, player))
 				end
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
@@ -557,11 +578,11 @@ do
 				if color == "Personal" then color = "Important" end
 				local text = nil
 				if ... then
-					text = fmt(spellName, coloredNames[player], ...)
+					text = fmt(msg, coloredNames[player], ...)
 				else
-					text = fmt(L["other"], spellName, coloredNames[player])
+					text = fmt(L["other"], msg, coloredNames[player])
 				end
-				self:SendMessage("BigWigs_Message", self, key, text, color, icon)
+				self:SendMessage("BigWigs_Message", self, key, text, color, texture)
 				self:SendMessage("BigWigs_Broadcast", text)
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
@@ -652,7 +673,7 @@ function boss:Berserk(seconds, noEngageMessage, customBoss)
 	local boss = customBoss or self.displayName
 	if not noEngageMessage then
 		-- Engage warning with minutes to enrage
-		self:Message("berserk", fmt(L["berserk_start"], boss, seconds / 60), "Attention")
+		self:Message("berserk", "Attention", nil, fmt(L["berserk_start"], boss, seconds / 60), false)
 	end
 
 	-- Half-way to enrage warning.

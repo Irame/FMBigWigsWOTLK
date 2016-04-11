@@ -22,7 +22,7 @@ end
 --
 
 function mod:Shout(_, spellId, _, _, spellName)
-	self:Message(71022, spellName, "Personal", spellId)
+	self:Message(71022, "Personal")
 	self:Bar(71022, spellName, 3, spellId)
 	self:FlashShake(71022)
 end

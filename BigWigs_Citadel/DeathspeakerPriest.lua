@@ -23,7 +23,7 @@ end
 --
 
 function mod:Reckoning(player, spellId, _, _, spellName)
-	self:TargetMessage(69483, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(69483, player, "Personal", "Alert")
 	self:Bar(69483, spellName, 8, spellId)
 	if UnitIsUnit(player, "player") then
 		self:FlashShake(69483)

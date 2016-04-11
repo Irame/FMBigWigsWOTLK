@@ -58,27 +58,27 @@ end
 --
 
 function mod:Whiteout(_, spellId, _, _, spellName)
-	self:Message(72034, spellName, "Positive", spellId)
+	self:Message(72034, "Positive")
 	count = count + 1
 	self:Bar(72034, L["whiteout_bar"]:format(count), 38, spellId)
 	self:DelayedMessage(72034, 33, L["whiteout_message"]:format(count), "Attention")
 end
 
 function mod:Orbs(_, spellId, _, _, spellName)
-	self:Message(72091, spellName, "Important", spellId)
+	self:Message(72091, "Important")
 	self:Bar(72091, L["orb_bar"], 30, spellId)
 end
 
 function mod:Frostbite(player, spellId, _, _, _, stack)
 	if stack and stack > 4 then
-		self:TargetMessage(72004, L["frostbite_message"], player, "Urgent", spellId, nil, stack)
+		self:TargetMessage(72004, player, "Urgent", nil, L["frostbite_message"], nil, stack)
 	end
 end
 
 do
 	local scheduled = nil
 	local function freezeWarn()
-		mod:TargetMessage(72090, L["freeze_message"], freezeTargets, "Personal", 72090)
+		mod:TargetMessage(72090, freezeTargets, "Personal", nil, L["freeze_message"])
 		scheduled = nil
 	end
 	function mod:Freeze(player)

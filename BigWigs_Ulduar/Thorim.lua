@@ -90,7 +90,7 @@ end
 
 function mod:OnEngage()
 	chargeCount = 1
-	self:Message("phase", L["phase1_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase1_message"], false)
 end
 
 --------------------------------------------------------------------------------
@@ -98,24 +98,24 @@ end
 --
 
 function mod:Barrier(_, spellId, _, _, spellName)
-	self:Message(62338, L["barrier_message"], "Urgent", spellId, "Alarm")
+	self:Message(62338, "Urgent", "Alarm", L["barrier_message"])
 	self:Bar(62338, spellName, 20, spellId)
 end
 
 function mod:Charge(_, spellId)
-	self:Message(62279, L["charge_message"]:format(chargeCount), "Attention", spellId)
+	self:Message(62279, "Attention", nil, L["charge_message"]:format(chargeCount))
 	chargeCount = chargeCount + 1
 	self:Bar(62279, L["charge_bar"]:format(chargeCount), 15, spellId)
 end
 
 function mod:Hammer(player, spellId, _, _, spellName)
-	self:TargetMessage(62042, spellName, player, "Urgent", spellId)
+	self:TargetMessage(62042, player, "Urgent")
 	self:Bar(62042, spellName, 16, spellId)
 	self:PrimaryIcon(62042, player)
 end
 
 function mod:Strike(player, spellId, _, _, spellName)
-	self:TargetMessage(62130, spellName, player, "Attention", spellId)
+	self:TargetMessage(62130, player, "Attention")
 	self:Bar(62130, spellName..": "..player, 15, spellId)
 end
 
@@ -124,7 +124,7 @@ function mod:StrikeCooldown(player, spellId)
 end
 
 function mod:Orb(_, spellId, _, _, spellName)
-	self:Message(62016, spellName, "Urgent", spellId)
+	self:Message(62016, "Urgent")
 	self:Bar(62016, spellName, 15, spellId)
 end
 
@@ -134,28 +134,28 @@ function mod:Shock(player, spellId)
 	if (time - last) > 5 then
 		last = time
 		if UnitIsUnit(player, "player") then
-			self:LocalMessage(62017, L["shock_message"], "Personal", spellId, "Info")
+			self:LocalMessage(62017, "Personal", "Info", L["shock_message"])
 			self:FlashShake(62017)
 		end
 	end
 end
 
 function mod:Impale(player, spellId, _, _, spellName)
-	self:TargetMessage(62331, spellName, player, "Important", spellId)
+	self:TargetMessage(62331, player, "Important")
 end
 
 function mod:Detonation(player, spellId, _, _, spellName)
 	if UnitIsUnit(player, "player") then
 		self:Say(62526, L["detonation_say"])
 	else
-		self:TargetMessage(62526, spellName, player, "Important", spellId)
+		self:TargetMessage(62526, player, "Important")
 	end
 	self:Bar(62526, spellName..": "..player, 4, spellId)
 	self:PrimaryIcon(62526, player)
 end
 
 function mod:PhaseTwo()
-	self:Message("phase", L["phase2_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 	self:Bar("phase", CL["berserk"], 375, 20484)
 	self:Bar("hardmode", L["hardmode"], 173, 6673)
 	self:DelayedMessage("hardmode", 173, L["hardmode_warning"], "Attention")
@@ -165,7 +165,7 @@ function mod:PhaseThree()
 	self:CancelDelayedMessage(L["hardmode_warning"])
 	self:SendMessage("BigWigs_StopBar", self, L["hardmode"])
 	self:SendMessage("BigWigs_StopBar", self, CL["berserk"])
-	self:Message("phase", L["phase3_message"], "Attention")
+	self:Message("phase", "Attention", nil, L["phase3_message"], false)
 	self:OpenProximity(5,62131)
 end
 

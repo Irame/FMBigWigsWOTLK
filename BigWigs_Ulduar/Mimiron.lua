@@ -97,28 +97,28 @@ end
 --
 
 function mod:Bomb(_, spellId, _, _, spellName)
-	self:Message(63811, L["bomb_message"], "Important", 63811, "Alert")
+	self:Message(63811, "Important", "Alert", L["bomb_message"])
 end
 
 function mod:Suppressant(_, spellId, _, _, spellName)
-	self:Message(64570, L["suppressant_warning"], "Important", spellId)
+	self:Message(64570, "Important", nil, L["suppressant_warning"])
 	self:Bar(64570, spellName, 3, spellId)
 end
 
 function mod:FBomb(_, spellId, _, _, spellName)
-	self:Message(64623, spellName, "Important", spellId)
+	self:Message(64623, "Important")
 	self:Bar(64623, spellName, 2, spellId)
 	self:Bar(64623, L["fbomb_bar"], 30, spellId)
 end
 
 function mod:Plasma(_, spellId, _, _, spellName)
-	self:Message(62997, L["plasma_warning"], "Important", spellId)
+	self:Message(62997, "Important", nil, L["plasma_warning"])
 	self:Bar(62997, L["plasma_warning"], 3, spellId)
 	self:Bar(62997, L["plasma_bar"], 30, spellId)
 end
 
 function mod:Shock(_, spellId, _, _, spellName)
-	self:Message(63631, spellName, "Important", spellId)
+	self:Message(63631, "Important")
 	self:Bar(63631, spellName, 3.5, spellId)
 	self:Bar(63631, L["shock_next"], 34, spellId)
 end
@@ -129,7 +129,7 @@ do
 		local ct = GetTime()
 		if ct - lastExecute < 3 then return end
 		lastExecute = ct
-		self:Message(63274, L["laser_soon"], "Personal", spellId, "Long")
+		self:Message(63274, "Personal", "Long", L["laser_soon"])
 		self:FlashShake(63274)
 	end
 end
@@ -144,14 +144,14 @@ do
 end
 
 function mod:Magnetic(_, spellId, _, _, spellName)
-	self:Message(64444, L["magnetic_message"], "Important", spellId)
+	self:Message(64444, "Important", nil, L["magnetic_message"])
 	self:Bar(64444, spellName, 15, spellId)
 end
 
 
 do
 	local function fireTrailsSpawn()
-		self:Message("fire", L["fire_message"], "Attention", "Interface\\Icons\\Spell_Fire_BurningSpeed")
+		self:Message("fire", "Attention", nil, L["fire_message"], "Spell_Fire_BurningSpeed")
 		self:Bar("fire", L["fire_bar"], 30, "Interface\\Icons\\Spell_Fire_BurningSpeed")
 		self:ScheduleTimer(fireTrailsSpawn, 30)
 	end
@@ -170,7 +170,7 @@ do
 			mod:ScheduleTimer(fireTrailsSpawn, 7)
 			mod:Bar("fire", L["fire_bar"], 7, "Interface\\Icons\\Spell_Fire_BurningSpeed")
 			
-			mod:Message("phase", L["engage_warning"], "Attention")
+			mod:Message("phase", "Attention", nil, L["engage_warning"], false)
 			mod:Bar("phase", L["phase_bar"]:format(phase), 25, "INV_Gizmo_01")
 
 			mod:Bar(63631, L["shock_next"], 44, 63631)
@@ -179,7 +179,7 @@ do
 		else
 			mod:Berserk(900, true)
 			
-			mod:Message("phase", L["engage_warning"], "Attention")
+			mod:Message("phase", "Attention", nil, L["engage_warning"], false)
 			mod:Bar("phase", L["phase_bar"]:format(phase), 8, "INV_Gizmo_01")
 
 			mod:Bar(63631, L["shock_next"], 27, 63631)
@@ -198,7 +198,7 @@ do
 			phase = 2
 			self:SendMessage("BigWigs_StopBar", self, L["plasma_bar"])
 			self:SendMessage("BigWigs_StopBar", self, L["shock_next"])
-			self:Message("phase", L["phase2_warning"], "Attention")
+			self:Message("phase", "Attention", nil, L["phase2_warning"], false)
 			self:Bar("phase", L["phase_bar"]:format(phase), 40, "INV_Gizmo_01")
 			self:Bar(63274, L["laser_bar"], 64, 63274)
 			self:ScheduleTimer(function(...) mod:Spinning(nil,63274) end, 60)  --Simulate Spinning ^^
@@ -210,11 +210,11 @@ do
 			phase = 3
 			self:SendMessage("BigWigs_StopBar", self, L["laser_bar"])
 			self:SendMessage("BigWigs_StopBar", self, L["fbomb_bar"])
-			self:Message("phase", L["phase3_warning"], "Attention")
+			self:Message("phase", "Attention", nil, L["phase3_warning"], false)
 			self:Bar("phase", L["phase_bar"]:format(phase), 20, "INV_Gizmo_01")
 		elseif msg:find(L["phase4_trigger"]) then
 			phase = 4
-			self:Message("phase", L["phase4_warning"], "Attention")
+			self:Message("phase", "Attention", nil, L["phase4_warning"], false)
 			self:Bar("phase", L["phase_bar"]:format(phase), 20, "INV_Gizmo_01")
 			if ishardmode then
 				self:Bar(64623, L["fbomb_bar"], 30, 64623)
@@ -253,9 +253,9 @@ end
 
 function mod:OnSync(sync, rest, nick)
 	if sync == "MimiLoot" and rest then
-		self:TargetMessage(64444, GetSpellInfo(64444), rest, "Positive", "Interface\\Icons\\INV_Gizmo_KhoriumPowerCore", "Info")
+		self:TargetMessage(64444, rest, "Positive", "Info")
 	elseif sync == "MimiBarrage" then
-		self:Message(63274, L["laser_bar"], "Important", 63274)
+		self:Message(63274, "Important", nil, L["laser_bar"])
 		self:Bar(63274, L["laser_bar"], 60, 63274)
 		self:ScheduleTimer(function(...) mod:Spinning(nil,63274) end, 56)  --Simulate Spinning ^^
 	end

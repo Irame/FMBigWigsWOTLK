@@ -93,17 +93,17 @@ end
 --
 
 function mod:Bomb(_, spellId, _, _, spellName)
-	self:Message(72052, spellName, "Attention", spellId, "Alert")
+	self:Message(72052, "Attention", "Alert")
 end
 
 function mod:Prison(player, spellId, _, _, _, stack)
 	if stack > 2 and UnitIsUnit(player, "player") then
-		self:LocalMessage(72999, L["prison_message"]:format(stack), "Personal", spellId)
+		self:LocalMessage(72999, "Personal", nil, L["prison_message"]:format(stack))
 	end
 end
 
 function mod:Switch(unit, spellId, _, _, spellName)
-	self:Message(70981, L["switch_message"]:format(unit), "Positive", spellId, "Info")
+	self:Message(70981, "Positive", "Info", L["switch_message"]:format(unit))
 	self:Bar(70981, L["switch_bar"], 45, spellId)
 	self:SendMessage("BigWigs_StopBar", self, L["empowered_bar"])
 	for i = 1, 3 do
@@ -122,7 +122,7 @@ function mod:Switch(unit, spellId, _, _, spellName)
 end
 
 function mod:EmpoweredShock(_, spellId)
-	self:Message(72039, L["empowered_shock_message"], "Important", spellId, "Alert")
+	self:Message(72039, "Important", "Alert", L["empowered_shock_message"])
 	--self:OpenProximity(15,72039)
 	--self:ScheduleTimer(self.CloseProximity, 5, self)
 	self:Bar(72039, L["shock_bar"], 16, spellId)
@@ -141,7 +141,7 @@ function mod:RegularShock()
 					self:FlashShake(72037)
 					self:Say(72037, L["shock_say"])
 				end
-				self:TargetMessage(72037, L["regular_shock_message"], target, "Urgent", 72037)
+				self:TargetMessage(72037, target, "Urgent", nil, L["regular_shock_message"])
 				self:Whisper(72037, target, L["regular_shock_message"])
 				self:Bar(72037, L["shock_bar"], 16, 72037)
 			end
@@ -154,7 +154,7 @@ function mod:EmpoweredFlame(msg, _, _, _, player)
 	if UnitIsUnit(player, "player") then
 		self:FlashShake(72040)
 	end
-	self:TargetMessage(72040, L["empowered_flames"], player, "Urgent", 72040, "Long")
+	self:TargetMessage(72040, player, "Urgent", "Long", L["empowered_flames"])
 	self:SecondaryIcon(72040, player)
 	self:Bar(72040, L["empowered_bar"], 20, 72040)
 end

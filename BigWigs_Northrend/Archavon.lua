@@ -53,14 +53,14 @@ end
 --
 
 function mod:Stomp(_, spellId)
-	self:Message(58663, L["stomp_message"], "Positive", spellId)
+	self:Message(58663, "Positive", nil, L["stomp_message"])
 	self:Bar(58663, L["stomp_bar"], 47, spellId)
 	self:DelayedMessage(58663, 42, L["stomp_warning"], "Attention")
 end
 
 function mod:Cloud(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(58965, L["cloud_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(58965, "Personal", "Alarm", L["cloud_message"])
 		self:FlashShake(58965)
 	end
 end
@@ -72,8 +72,8 @@ do
 		if not bossId then return end
 		local target = UnitName(bossId .. "target")
 		if target then
-			mod:TargetMessage(58965, name, target, "Important", id)
-			mod:PrimaryIcon(58965, target)
+			mod:TargetMessage(58678, target, "Important")
+			mod:PrimaryIcon(58678, target)
 		end
 		handle = nil
 	end
@@ -87,7 +87,7 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(_, _, unit, _, _, player)
 	if unit == self.displayName then
-		self:TargetMessage("charge", L["charge"], player, "Attention", 11578)
+		self:TargetMessage("charge", player, "Attention", nil, L["charge"], 11578)
 	end
 end
 

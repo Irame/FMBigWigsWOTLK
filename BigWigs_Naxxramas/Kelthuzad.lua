@@ -87,7 +87,7 @@ end
 --
 
 function mod:Fizzure(_, spellId, _, _, spellName)
-	self:Message(27810, spellName, "Important", spellId)
+	self:Message(27810, "Important")
 end
 
 do
@@ -95,7 +95,7 @@ do
 	local name = nil
 	local handle = nil
 	local function fbWarn()
-		mod:TargetMessage(27808, name, fbTargets, "Important", spell, "Alert")
+		mod:TargetMessage(27808, fbTargets, "Important", "Alert")
 		mod:DelayedMessage(27808, 32, L["frostblast_soon_message"], "Attention")
 		mod:Bar(27808, L["frostblast_bar"], 37, spell)
 		handle = nil
@@ -111,7 +111,7 @@ do
 end
 
 function mod:Detonate(player, spellId, _, _, spellName)
-	self:TargetMessage(27819, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(27819, player, "Personal", "Alert")
 	if UnitIsUnit(player, "player") then self:FlashShake(27819) end
 	self:Whisper(27819, player, spellName)
 	self:PrimaryIcon(27819, player)
@@ -125,7 +125,7 @@ do
 	local handle = nil
 	local function mcWarn()
 		local spellName = GetSpellInfo(605) -- Mind Control
-		mod:TargetMessage(28410, spellName, mcTargets, "Important", spell, "Alert")
+		mod:TargetMessage(28410, mcTargets, "Important", "Alert")
 		mod:Bar(28410, spellName, 20, 28410)
 		mod:DelayedMessage(28410, 68, L["mc_warning"], "Urgent")
 		mod:Bar(28410, L["mc_nextbar"], 68, spell)
@@ -144,7 +144,7 @@ function mod:UNIT_HEALTH(event, msg)
 	if UnitName(msg) == mod.displayName then
 		local health = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if health > 40 and health <= 43 and not self.warnedAboutPhase3Soon then
-			self:Message("phase", L["phase3_soon_warning"], "Attention")
+			self:Message("phase", "Attention", nil, L["phase3_soon_warning"], false)
 			self.warnedAboutPhase3Soon = true
 		elseif health > 60 and self.warnedAboutPhase3Soon then
 			self.warnedAboutPhase3Soon = nil
@@ -154,7 +154,7 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 	if msg == L["start_trigger"] then
-		self:Message("phase", L["start_warning"], "Attention")
+		self:Message("phase", "Attention", nil, L["start_warning"], false)
 		self:Bar("phase", L["start_bar"], 215, "Spell_Fire_FelImmolation")
 		wipe(mcTargets)
 		wipe(fbTargets)
@@ -162,13 +162,13 @@ function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 		self:Engage()
 	elseif msg == L["phase2_trigger1"] or msg == L["phase2_trigger2"] or msg == L["phase2_trigger3"] then
 		self:SendMessage("BigWigs_StopBar", self, L["start_bar"])
-		self:Message("phase", L["phase2_warning"], "Important")
+		self:Message("phase", "Important", nil, L["phase2_warning"], false)
 		self:Bar("phase", L["phase2_bar"], 15, "Spell_Shadow_Charm")
 		self:OpenProximity(10,27819)
 	elseif msg == L["phase3_trigger"] then
-		self:Message("phase", L["phase3_warning"], "Attention")
+		self:Message("phase", "Attention", nil, L["phase3_warning"], false)
 	elseif msg == L["guardians_trigger"] then
-		self:Message("guardians", L["guardians_warning"], "Important")
+		self:Message("guardians", "Important", nil, L["guardians_warning"], false)
 		self:Bar("guardians", L["guardians_bar"], 10, 28866)
 	end
 end

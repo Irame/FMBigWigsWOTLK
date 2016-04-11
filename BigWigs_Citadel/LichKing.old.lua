@@ -164,7 +164,7 @@ function mod:PlagueTick(horrorName, _, _, tickDamage, _, _, _, _, _, dGUID)
 		local damageLeft = (3 - plagueTicks[dGUID]) * tickDamage
 		local hp = UnitHealth(unitId)
 		if hp > damageLeft then
-			self:Message(70372, L["frenzy_survive_message"]:format(horrorName), "Attention", 72143)
+			self:Message(70372, "Attention", nil, L["frenzy_survive_message"]:format(horrorName), 72143)
 		end
 	else
 		local hp, max = UnitHealth(unitId), UnitHealthMax(unitId)
@@ -175,7 +175,7 @@ function mod:PlagueTick(horrorName, _, _, tickDamage, _, _, _, _, _, dGUID)
 		local percentHp = (nextTickHP / max) * 100
 		-- This sucker will frenzy in 5 seconds
 		if percentHp < 21 then
-			self:Message(70372, L["frenzy_soon_message"], "Important", 72143, "Info")
+			self:Message(70372, "Important", "Info", L["frenzy_soon_message"], 72143)
 			self:Bar(70372, L["frenzy_bar"]:format(horrorName), 5, 72143)
 		end
 	end
@@ -183,11 +183,11 @@ end
 
 function mod:Frenzy(_, _, _, _, _, _, _, _, _, dGUID)
 	frenzied[dGUID] = true
-	self:Message(70372, L["frenzy_message"], "Important", 72143, "Long")
+	self:Message(70372, "Important", "Long", L["frenzy_message"], 72143)
 end
 
 function mod:Horror(_, spellId)
-	self:Message(70372, L["horror_message"], "Attention", spellId)
+	self:Message(70372, "Attention", nil, L["horror_message"])
 	self:Bar(70372, L["horror_bar"], 60, spellId)
 end
 
@@ -200,22 +200,22 @@ function mod:FuryofFrostmourne()
 end
 
 function mod:Infest(_, spellId, _, _, spellName)
-	self:Message(70541, spellName, "Urgent", spellId)
+	self:Message(70541, "Urgent")
 	self:Bar(70541, L["infest_bar"], 22, spellId)
 end
 
 function mod:VileSpirits(_, spellId, _, _, spellName)
-	self:Message(70498, spellName, "Urgent", spellId)
+	self:Message(70498, "Urgent")
 	self:Bar(70498, L["vilespirits_bar"], 30.5, spellId)
 end
 
 function mod:SoulReaper(player, spellId, _, _, spellName)
-	self:TargetMessage(69409, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(69409, player, "Personal", "Alert")
 	self:Bar(69409, L["reaper_bar"], 34, spellId)
 end
 
 function mod:NecroticPlague(player, spellId, _, _, spellName)
-	self:TargetMessage(73912, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(73912, player, "Personal", "Alert")
 	if UnitIsUnit(player, "player") then 
 		self:FlashShake(73912)
 	end
@@ -231,7 +231,7 @@ do
 			if player then
 				local debuffed, _, _, _, _, _, expire = UnitDebuff(player, plague)
 				if debuffed and (expire - GetTime()) > 13 then
-					mod:TargetMessage(73912, plague, player, "Personal", 70337, "Alert")
+					mod:TargetMessage(73912, player, "Personal", "Alert")
 					if UnitIsUnit(player, "player") then mod:FlashShake(73912) end
 					mod:SecondaryIcon(73912, player)
 				end
@@ -245,15 +245,15 @@ end
 
 function mod:Enrage(_, spellId, _, _, spellName)
 	if class == "HUNTER" or class == "ROGUE" then
-		self:Message(72143, spellName, "Attention", spellId, "Info")
+		self:Message(72143, "Attention", "Info")
 		self:Bar(72143, L["enrage_bar"], 21, spellId)
 	else
-		self:Message(72143, spellName, "Attention", spellId)
+		self:Message(72143, "Attention")
 	end
 end
 
 function mod:RagingSpirit(player, spellId, _, _, spellName)
-	self:TargetMessage(69200, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(69200, player, "Personal", "Alert")
 	self:Bar(69200, L["ragingspirit_bar"], 23, spellId)
 end
 
@@ -263,7 +263,7 @@ function mod:DefileRun(player, spellId)
 	if (time - last) > 2 then
 		last = time
 		if UnitIsUnit(player, "player") then
-			self:LocalMessage(72762, L["defile_message"], "Personal", spellId, "Info")
+			self:LocalMessage(72762, "Personal", "Info", L["defile_message"])
 			self:FlashShake(72762)
 		end
 	end
@@ -277,7 +277,7 @@ do
 				hugged[#hugged + 1] = n
 			end
 		end
-		mod:TargetMessage(69037, L["valkyrhug_message"], hugged, "Urgent", 71844)
+		mod:TargetMessage(69037, hugged, "Urgent", nil, L["valkyrhug_message"])
 	end
 
 	local t = 0
@@ -285,7 +285,7 @@ do
 		local time = GetTime()
 		if (time - t) > 4 then
 			t = time
-			self:Message(69037, L["valkyr_message"], "Attention", 71844)
+			self:Message(69037, "Attention", nil, L["valkyr_message"], 71844)
 			self:Bar(69037, L["valkyr_bar"], 46, 71844)
 			self:ScheduleTimer(ValkyrHugCheck, 6.1)
 		end
@@ -302,7 +302,7 @@ function mod:HarvestSoul(player, spellId, _, _, spellName)
 	else
 		self:Bar(68980, L["harvestsoul_bar"], 75, spellId)
 		if UnitIsUnit(player, "player") then self:FlashShake(68980) end
-		self:TargetMessage(68980, spellName, player, "Attention", spellId)
+		self:TargetMessage(68980, player, "Attention")
 		self:Whisper(68980, player, spellName)
 		self:SecondaryIcon(68980, player)
 	end
@@ -321,7 +321,7 @@ function mod:RemorselessWinter(_, spellId)
 	self:SendMessage("BigWigs_StopBar", self, L["reaper_bar"])
 	self:SendMessage("BigWigs_StopBar", self, L["valkyr_bar"])
 	self:SendMessage("BigWigs_StopBar", self, L["trap_bar"])
-	self:LocalMessage(74270, L["remorselesswinter_message"], "Urgent", spellId, "Alert")
+	self:LocalMessage(74270, "Urgent", "Alert", L["remorselesswinter_message"])
 	self:Bar(72262, L["quake_bar"], 62, 72262)
 	self:Bar(69200, L["ragingspirit_bar"], 15, spellId)
 end
@@ -329,7 +329,7 @@ end
 function mod:Quake(_, spellId)
 	phase = phase + 1
 	self:SendMessage("BigWigs_StopBar", self, L["ragingspirit_bar"])
-	self:LocalMessage(72262, L["quake_message"], "Urgent", spellId, "Alert")
+	self:LocalMessage(72262, "Urgent", "Alert", L["quake_message"])
 	self:Bar(72762, L["defile_bar"], 37, 72762)
 	self:Bar(70541, L["infest_bar"], 13, 70541)
 	self:Bar(69409, L["reaper_bar"], 30, 69409)
@@ -352,7 +352,7 @@ do
 				mod:FlashShake(72762)
 				mod:Say(72762, L["defile_say"])
 			end
-			mod:TargetMessage(72762, name, target, "Important", id, "Alert")
+			mod:TargetMessage(72762, target, "Important", "Alert")
 			mod:Whisper(72762, target, name)
 			mod:PrimaryIcon(72762, target)
 		end
@@ -379,7 +379,7 @@ do
 				mod:FlashShake(73529)
 				mod:Say(73529, L["trap_say"])
 			end
-			mod:TargetMessage(73529, L["trap_message"], target, "Attention", 73539)
+			mod:TargetMessage(73529, target, "Attention", nil, L["trap_message"])
 			mod:Whisper(73529, target, spellName)
 			mod:PrimaryIcon(73529, target)
 		end

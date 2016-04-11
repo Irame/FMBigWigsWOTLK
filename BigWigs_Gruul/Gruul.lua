@@ -62,27 +62,27 @@ end
 --
 
 function mod:GroundSlam(_, spellId, _, _, spellName)
-	self:Message(33525, spellName, "Important", spellId, "Long")
+	self:Message(33525, "Important", "Long")
 	self:Bar(33525, L["cooldown_bars"]:format(spellName), 85, spellId)
 	self:Bar(33654, L["cooldown_bars"]:format(L["shatter_message"]), 11, 33654)
 end
 
 function mod:CaveIn(player , spellId, _, _, spellName)
 	if UnitIsUnit(player,"player") then
-		self:LocalMessage(36240, L["cave_in_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(36240, "Personal", "Alarm", L["cave_in_message"])
 		self:FlashShake(36240)
 	end
 end
 
 function mod:Reverberation(_, spellId, _, _, spellName)
-	self:Message(36297, spellName, "Attention", spellId)
+	self:Message(36297, "Attention")
 	self:Bar(36297, L["cooldown_bars"]:format(spellName), 20, spellId)
 end
 
 function mod:Growth(_, spellId, _, _, spellName, stack)
 	print(spellName, stack, spellId)
 	if stack > 7 then
-		self:Message(36300, L["growth_message"]:format(stack), "Urgent", spellId)
+		self:Message(36300, "Urgent", nil, L["growth_message"]:format(stack))
 		self:Bar(36300, L["cooldown_bars"]:format(spellName), 30, spellId)
 	end
 end

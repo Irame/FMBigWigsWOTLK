@@ -86,11 +86,11 @@ end
 --
 
 function mod:DKDead()
-	self:Message("adddeath", L["dkdiewarn"], "Important")
+	self:Message("adddeath", "Important", nil, L["dkdiewarn"], false)
 end
 
 function mod:RiderDead()
-	self:Message("adddeath", L["riderdiewarn"], "Important")
+	self:Message("adddeath", "Important", nil, L["riderdiewarn"], false)
 end
 
 local colors = {
@@ -101,7 +101,7 @@ local colors = {
 local function waveWarn(message)
 	wave = wave + 1
 	if wave < 24 then
-		mod:Message("add", L["wave"]:format(wave, message), colors[message])
+		mod:Message("add", colors[message], nil, L["wave"]:format(wave, message), false)
 	end
 	if wave == 23 then
 		mod:SendMessage("BigWigs_StopBar", mod, L["trabar"]:format(numTrainer - 1))
@@ -133,7 +133,7 @@ local function newRider()
 end
 
 function mod:OnEngage()
-	self:Message("room", L["startwarn"], "Important")
+	self:Message("room", "Important", nil, L["startwarn"], false)
 	self:Bar("room", L["inroombartext"], 270, "Spell_Magic_LesserInvisibilty")
 	self:DelayedMessage("room", 90, L["warn1"], "Attention")
 	self:DelayedMessage("room", 180, L["warn2"], "Attention")
@@ -155,6 +155,6 @@ function mod:OnEngage()
 end
 
 function mod:InRoom()
-	self:Message("room", L["inroomwarn"], "Important")
+	self:Message("room", "Important", nil, L["inroomwarn"], false)
 end
 

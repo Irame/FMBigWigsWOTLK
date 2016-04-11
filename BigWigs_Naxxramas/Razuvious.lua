@@ -46,25 +46,25 @@ end
 
 function mod:Shout(_, spellId, _, _, spellName)
 	if spellName then
-		self:Message(29107, spellName, "Important", 55543)
+		self:Message(29107, "Important")
 	end
 	self:Bar(29107, L["shout_next"], 15, 55543)
 	self:DelayedMessage(29107, 12, L["shout_warning"], "Attention")
 end
 
 function mod:ShieldWall(_, spellId, _, _, spellName)
-	self:Message(29061, spellName, "Positive", spellId)
+	self:Message(29061, "Positive")
 	self:Bar(29061, spellName, 20, spellId)
 	self:DelayedMessage(29061, 15, L["taunt_warning"], "Attention")
 end
 
 function mod:Taunt(_, spellId, _, _, spellName)
-	self:Message(29060, spellName, "Positive", spellId)
+	self:Message(29060, "Positive")
 	self:Bar(29060, spellName, 20, spellId)
 	self:DelayedMessage(29060, 15, L["shieldwall_warning"], "Attention")
 end
 
 function mod:Knife(player, spellId, _, _, spellName)
-	self:TargetMessage(55550, spellName, player, "Important", spellId)
+	self:TargetMessage(55550, player, "Important")
 end
 

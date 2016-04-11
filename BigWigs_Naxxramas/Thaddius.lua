@@ -79,7 +79,7 @@ end
 --
 
 function mod:StalaggPower(_, spellId, _, _, spellName)
-	self:Message(28134, L["surge_message"], "Important", spellId)
+	self:Message(28134, "Important", nil, L["surge_message"])
 	self:Bar(28134, spellName, 10, spellId)
 end
 
@@ -105,15 +105,14 @@ function mod:UNIT_AURA(event, unit)
 	end
 	if newCharge then
 		if not lastCharge then
-			self:LocalMessage(28089, newCharge == "Interface\\Icons\\Spell_ChargePositive" and
-				L["polarity_first_positive"] or L["polarity_first_negative"],
-				"Personal", newCharge, "Alert")
+			self:LocalMessage(28089, "Personal", "Alert", newCharge == "Interface\\Icons\\Spell_ChargePositive" and
+				L["polarity_first_positive"] or L["polarity_first_negative"], newCharge)
 			self:FlashShake(28089)
 		else
 			if newCharge == lastCharge then
-				self:LocalMessage(28089, L["polarity_nochange"], "Positive", newCharge)
+				self:LocalMessage(28089, "Positive", nil, L["polarity_nochange"], newCharge)
 			else
-				self:LocalMessage(28089, L["polarity_changed"], "Personal", newCharge, "Alert")
+				self:LocalMessage(28089, "Personal", "Alert", L["polarity_changed"], newCharge)
 				self:FlashShake(28089)
 			end
 		end
@@ -126,7 +125,7 @@ end
 function mod:Shift()
 	shiftTime = GetTime()
 	self:RegisterEvent("UNIT_AURA")
-	self:Message(28089, L["polarity_message"], "Important", 28089)
+	self:Message(28089, "Important", nil, L["polarity_message"])
 end
 
 local function throw()
@@ -141,7 +140,7 @@ function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 		self:Bar(28089, L["polarity_bar"], 28, "Spell_Nature_Lightning")
 	elseif msg == L["trigger_phase1_1"] or msg == L["trigger_phase1_2"] then
 		if not stage1warn then
-			self:Message("phase", L["phase1_message"], "Important")
+			self:Message("phase", "Important", nil, L["phase1_message"], false)
 		end
 		deaths = 0
 		stage1warn = true
@@ -150,7 +149,7 @@ function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 	elseif msg:find(L["trigger_phase2_1"]) or msg:find(L["trigger_phase2_2"]) or msg:find(L["trigger_phase2_3"]) then
 		self:CancelTimer(throwHandle, true)
 		self:SendMessage("BigWigs_StopBar", self, L["throw_bar"])
-		self:Message("phase", L["phase2_message"], "Important")
+		self:Message("phase", "Important", nil, L["phase2_message"], false)
 		self:Berserk(360, true)
 	end
 end

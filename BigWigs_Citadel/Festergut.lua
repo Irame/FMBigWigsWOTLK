@@ -77,7 +77,7 @@ end
 do
 	local scheduled = nil
 	local function sporeWarn(spellName)
-		mod:TargetMessage(69279, spellName, sporeTargets, "Urgent", 69279, "Alert")
+		mod:TargetMessage(69279, sporeTargets, "Urgent", "Alert")
 		scheduled = nil
 	end
 	local function sporeNext()
@@ -99,7 +99,7 @@ do
 end
 
 function mod:InhaleCD(_, spellId, _, _, spellName)
-	self:Message(69165, L["inhale_message"]:format(count), "Attention", spellId)
+	self:Message(69165, "Attention", nil, L["inhale_message"]:format(count))
 	count = count + 1
 	if count == 4 then
 		self:DelayedMessage(71219, 28.5, L["blight_warning"], "Attention")
@@ -111,13 +111,13 @@ end
 
 function mod:Blight(_, spellId, _, _, spellName)
 	count = 1
-	self:Message(71219, spellName, "Attention", spellId)
+	self:Message(71219, "Attention")
 	self:Bar(69165, L["inhale_bar"]:format(count), 33.5, 69165)
 end
 
 function mod:Bloat(player, spellId, _, _, _, stack)
 	if stack > 5 then
-		self:TargetMessage(72551, L["bloat_message"], player, "Positive", spellId, nil, stack)
+		self:TargetMessage(72551, player, "Positive", nil, L["bloat_message"], nil, stack)
 		self:Bar(72551, L["bloat_bar"], 10, spellId)
 	end
 end
@@ -128,7 +128,7 @@ do
 		local time = GetTime()
 		if (time - t) > 2 then
 			t = time
-			self:Message(71218, spellName, "Important", spellId)
+			self:Message(71218, "Important")
 		end
 	end
 end
@@ -144,7 +144,7 @@ end
 
 function mod:OnSync(sync, rest, nick)
 	if sync == "GooBall" then
-		self:Message(72295, L["ball_message"], "Important", 72295)
+		self:Message(72295, "Important", nil, L["ball_message"])
 	end
 end
 

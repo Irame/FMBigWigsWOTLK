@@ -79,7 +79,7 @@ function mod:OnEngage()
 	wave1time = 10
 	wave2time = 41
 
-	self:Message("teleport", L["startwarn"], "Important")
+	self:Message("teleport", "Important", nil, L["startwarn"], false)
 	self:DelayedMessage("teleport", timeroom - 10, L["teleportwarn2"], "Urgent")
 	self:Bar("teleport", L["teleportbar"], timeroom, "Spell_Magic_LesserInvisibilty")
 	if GetRaidDifficulty() == 2 then
@@ -94,14 +94,14 @@ end
 --
 
 function mod:Curse(_, spellId)
-	self:Message(29213, L["cursewarn"], "Important", spellId, "Alarm")
+	self:Message(29213, "Important", "Alarm", L["cursewarn"])
 	self:DelayedMessage(29213, cursetime - 10, L["curse10secwarn"], "Urgent")
 	self:Bar(29213, L["cursebar"], cursetime, spellId)
 	self:Bar(29213, L["curseexplosion"], 10, spellId)
 end
 
 function mod:Blink()
-	self:Message("blink", L["blinkwarn"], "Important", 29208)
+	self:Message("blink", "Important", nil, L["blinkwarn"], 29208)
 	self:DelayedMessage("blink", 34, L["blinkwarn2"], "Attention")
 	self:Bar("blink", L["blinkbar"], 39, 29208)
 end
@@ -116,7 +116,7 @@ function mod:TeleportToBalcony()
 	self:SendMessage("BigWigs_StopBar", self, L["blinkbar"])
 	self:SendMessage("BigWigs_StopBar", self, L["cursebar"])
 
-	self:Message("teleport", L["teleportwarn"], "Important")
+	self:Message("teleport", "Important", nil, L["teleportwarn"], false)
 	self:Bar("teleport", L["backbar"], timebalcony, "Spell_Magic_LesserInvisibilty")
 	self:DelayedMessage("teleport", timebalcony - 10, L["backwarn2"], "Urgent")
 
@@ -135,7 +135,7 @@ function mod:TeleportToRoom()
 		timebalcony = 120
 	end
 
-	self:Message("teleport", L["backwarn"]:format(timeroom), "Important")
+	self:Message("teleport", "Important", nil, L["backwarn"]:format(timeroom), false)
 	self:Bar("teleport", L["teleportbar"], timeroom, "Spell_Magic_LesserInvisibilty")
 	self:DelayedMessage("teleport", timeroom - 10, L["teleportwarn2"], "Urgent")
 	self:ScheduleTimer("TeleportToBalcony", timeroom)

@@ -47,7 +47,7 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Message("engage", L["engage_message"]:format(self.displayName), "Attention")
+	self:Message("engage", "Attention", nil, L["engage_message"]:format(self.displayName), false)
 end
 
 --------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ function mod:Pyrite(_, spellId, _, _, spellName, _, _, sFlags)
 end
 
 function mod:Flame(_, spellId, _, _, spellName)
-	self:Message(62396, spellName, "Urgent", spellId)
+	self:Message(62396, "Urgent")
 	self:Bar(62396, spellName, 10, spellId)
 end
 
@@ -71,12 +71,12 @@ end
 
 function mod:Shutdown(unit, spellId, _, _, spellName)
 	if unit ~= self.displayName then return end
-	self:Message(62475, L["shutdown_message"], "Positive", spellId, "Long")
+	self:Message(62475, "Positive", "Long", L["shutdown_message"])
 	self:Bar(62475, spellName, 20, spellId)
 end
 
 function mod:Pursue(_, _, _, _, player)
-	self:TargetMessage("pursue", L["pursue"], player, "Personal", 62374, "Alarm")
+	self:TargetMessage("pursue", player, "Personal", "Alarm", L["pursue"], 62374)
 	if UnitIsUnit(player, "player") then self:FlashShake("pursue") end
 	self:Bar("pursue", L["pursue_other"]:format(player), 30, 62374)
 end

@@ -59,7 +59,7 @@ end
 --
 
 function mod:Hellfire(player, spellId, _, _, spellName)
-	self:Message(65816, spellName, "Urgent", spellId)
+	self:Message(65816, "Urgent")
 	self:Bar(65816, spellName, 15, spellId)
 end
 
@@ -73,7 +73,7 @@ do
 		if UnitIsUnit(player, "player") then
 			local t = GetTime()
 			if not last or (t > last + 4) then
-				self:TargetMessage(65816, spellName, player, "Personal", spellId, last and nil or "Alarm")
+				self:TargetMessage(65816, player, "Personal", last and nil or "Alarm")
 				self:FlashShake(65816)
 				last = t
 			end
@@ -82,38 +82,38 @@ do
 end
 
 function mod:Wyvern(player, spellId, _, _, spellName)
-	self:TargetMessage(65877, spellName, player, "Attention", spellId)
+	self:TargetMessage(65877, player, "Attention")
 end
 
 function mod:Blind(player, spellId, _, _, spellName)
-	self:TargetMessage(65960, spellName, player, "Attention", spellId)
+	self:TargetMessage(65960, player, "Attention")
 end
 
 function mod:Polymorph(player, spellId, _, _, spellName)
-	self:TargetMessage(65801, spellName, player, "Attention", spellId)
+	self:TargetMessage(65801, player, "Attention")
 end
 
 function mod:DivineShield(player, spellId)
-	self:Message(66010, L["Shield on %s!"]:format(player), "Urgent", spellId)
+	self:Message(66010, "Urgent", nil, L["Shield on %s!"]:format(player))
 end
 
 function mod:Bladestorm(player, spellId)
-	self:Message(65947, L["Bladestorming!"], "Important", spellId)
+	self:Message(65947, "Important", nil, L["Bladestorming!"])
 end
 
 function mod:Cat(player, spellId)
-	self:Message(67777, L["Hunter pet up!"], "Urgent", spellId)
+	self:Message(67777, "Urgent", nil, L["Hunter pet up!"])
 end
 
 function mod:Felhunter(player, spellId)
-	self:Message(67514, L["Felhunter up!"], "Urgent", spellId)
+	self:Message(67514, "Urgent", nil, L["Felhunter up!"])
 end
 
 function mod:Heroism(player, spellId)
-	self:Message(65983, L["Heroism on champions!"], "Important", spellId)
+	self:Message(65983, "Important", nil, L["Heroism on champions!"])
 end
 
 function mod:Bloodlust(player, spellId)
-	self:Message(65980, L["Bloodlust on champions!"], "Important", spellId)
+	self:Message(65980, "Important", nil, L["Bloodlust on champions!"])
 end
 

@@ -97,7 +97,7 @@ end
 
 local function scheduleWave()
 	if isBurrowed then return end
-	mod:Message("burrow", L["nerubian_message"], "Urgent", 66333)
+	mod:Message("burrow", "Urgent", nil, L["nerubian_message"], 65919)
 	mod:Bar("burrow", L["nerubian_burrower"], 45, 66333)
 	handle_NextWave = mod:ScheduleTimer(scheduleWave, 45)
 end
@@ -105,7 +105,7 @@ end
 function mod:OnEngage(diff)
 	isBurrowed = nil
 	difficulty = diff
-	self:Message("burrow", L["engage_message"], "Attention", 65919)
+	self:Message("burrow", "Attention", nil, L["engage_message"], 65919)
 	self:Bar("burrow", L["burrow_cooldown"], 80, 65919)
 	self:DelayedMessage("burrow", 65, L["burrow_soon"], "Attention")
 
@@ -131,7 +131,7 @@ end
 do
 	local scheduled = nil
 	local function coldWarn(spellName)
-		mod:TargetMessage(68510, spellName, coldTargets, "Urgent", 68510)
+		mod:TargetMessage(68510, coldTargets, "Urgent")
 		scheduled = nil
 	end
 	function mod:ColdDebuff(player, spellId, _, _, spellName)
@@ -149,7 +149,7 @@ end
 
 function mod:ColdDebuff(player, spellId, _, _, spellName)
 	if not UnitIsUnit(player, "player") or not phase2 then return end
-	self:LocalMessage(68510, spellName, "Personal", spellId)
+	self:LocalMessage(68510, "Personal")
 	self:FlashShake(68510)
 end
 
@@ -159,7 +159,7 @@ function mod:ColdCooldown(_, spellId)
 end
 
 function mod:Swarm(player, spellId, _, _, spellName)
-	self:Message(66118, spellName, "Important", spellId, "Long")
+	self:Message(66118, "Important", "Long")
 	phase2 = true
 	self:SendMessage("BigWigs_StopBar", self, L["burrow_cooldown"])
 	self:CancelDelayedMessage(L["burrow_soon"])
@@ -170,7 +170,7 @@ function mod:Swarm(player, spellId, _, _, spellName)
 end
 
 function mod:Pursue(player, spellId)
-	self:TargetMessage(67574, L["chase"], player, "Personal", spellId, "Alert")
+	self:TargetMessage(67574, player, "Personal", "Alert", L["chase"])
 	if UnitIsUnit(player, "player") then self:FlashShake(67574) end
 	self:Whisper(67574, player, L["chase"])
 	self:PrimaryIcon(67574, player, "icon")

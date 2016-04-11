@@ -79,7 +79,7 @@ function mod:UNIT_HEALTH(event, msg)
 	if UnitName(msg) == self.displayName then
 		local hp = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if hp <= 20 and not p2 then
-			self:Message("phase", L["phase2_warning"], "Positive")
+			self:Message("phase", "Positive", nil, L["phase2_warning"], false)
 			p2 = true
 		elseif hp > 20 and p2 then
 			p2 = nil
@@ -93,23 +93,23 @@ end
 
 function mod:PunchCount(player, spellId, _, _, _, stack)
 	if stack >= 4 then
-		self:TargetMessage(64412, L["punch_message"], player, "Urgent", spellId, "Alert", stack)
+		self:TargetMessage(64412, player, "Urgent", "Alert", L["punch_message"], nil, stack)
 	end
 end
 
 function mod:Smash(_, _, _, _, spellName)
-	self:Message(62301, L["smash_message"], "Attention", 64597, "Info")
+	self:Message(62301, "Attention", "Info", L["smash_message"], 64597)
 	self:Bar(62301, L["smash_message"], 5, 64597)
 	self:Bar(62301, spellName, 25, 64597)
 end
 
 function mod:BlackHole(_, spellId)
 	blackholes = blackholes + 1
-	self:Message(64122, L["blackhole_message"]:format(blackholes), "Positive", spellId)
+	self:Message(64122, "Positive", nil, L["blackhole_message"]:format(blackholes))
 end
 
 function mod:BigBang(_, spellId, _, _, spellName)
-	self:Message(64443, spellName, "Important", 64443, "Alarm")
+	self:Message(64443, "Important", "Alarm")
 	self:Bar(64443, spellName, 8, 64443)
 	self:Bar(64443, L["bigbang_bar"], 90, 64443)
 	self:DelayedMessage(64443, 85, L["bigbang_soon"], "Attention")

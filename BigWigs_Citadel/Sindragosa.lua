@@ -104,14 +104,14 @@ do
 	local scheduled = nil
 	local function baconWarn(spellName)
 		if phase == 1 and ((#beaconTargets < 2 and mod:IsDifficulty("10")) or (#beaconTargets < 5 and mod:IsDifficulty("25nh")) or (#beaconTargets < 6 and mod:IsDifficulty("25hc"))) then
-			mod:Message(70126, L["mage_bug_message"]:format(spellName), "Important", 70126, "Alarm")
+			mod:Message(70126, "Important", "Alarm", L["mage_bug_message"]:format(spellName))
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
 				self:OpenProximity(10,70126)
 				self:ScheduleTimer(self.CloseProximity, 7, self)
 			end
 		end
-		mod:TargetMessage(70126, spellName, beaconTargets, "Urgent", 70126)
+		mod:TargetMessage(70126, beaconTargets, "Urgent")
 		mod:Bar(70126, spellName, 7, 70126)
 		scheduled = nil
 	end
@@ -129,7 +129,7 @@ do
 end
 
 function mod:Grip()
-	self:Message(71047, L["boom_message"], "Important", 71047, "Alarm")
+	self:Message(71047, "Important", "Alarm", L["boom_message"])
 	self:Bar(71047, L["boom_bar"], 5, 71047)
 	if phase == 2 then
 		self:Bar(71047, L["grip_bar"], 67, 70117)
@@ -137,7 +137,7 @@ function mod:Grip()
 end
 
 function mod:AirPhase()
-	self:Message("airphase", L["airphase_message"], "Positive")
+	self:Message("airphase", "Positive", nil, L["airphase_message"], 23684)
 	self:Bar("airphase", L["airphase_bar"], 110, 23684)
 	self:Bar(71047, L["grip_bar"], 80, 70117)
 	self:Bar(69762, L["unchained_bar"], 57, 69762)
@@ -146,20 +146,20 @@ end
 function mod:Phase2()
 	phase = 2
 	self:SendMessage("BigWigs_StopBar", self, L["airphase_bar"])
-	self:Message("phase2", L["phase2_message"], "Positive", nil, "Long")
+	self:Message("phase2", "Positive", "Long", L["phase2_message"], false)
 	self:Bar(71047, L["grip_bar"], 38, 70117)
 end
 
 function mod:Buffet(player, spellId, _, _, _, stack)
 	self:Bar(70127, L["buffet_cd"], 6, 70127)
 	if (stack % 2 == 0) and UnitIsUnit(player, "player") then
-		self:LocalMessage(70127, L["buffet_message"]:format(stack), "Attention", spellId, "Info")
+		self:LocalMessage(70127, "Attention", "Info", L["buffet_message"]:format(stack))
 	end
 end
 
 function mod:Instability(player, spellId, _, _, _, stack)
 	if stack > 4 and UnitIsUnit(player, "player") then
-		self:LocalMessage(69766, L["instability_message"]:format(stack), "Personal", spellId)
+		self:LocalMessage(69766, "Personal", nil, L["instability_message"]:format(stack))
 		if (stack % 2 == 0) and mod:IsDifficulty("hc") then
 			self:Say(69766, L["instability_message"]:format(stack))
 		end
@@ -168,7 +168,7 @@ end
 
 function mod:Chilled(player, spellId, _, _, _, stack)
 	if stack > 4 and UnitIsUnit(player, "player") then
-		self:LocalMessage(70106, L["chilled_message"]:format(stack), "Personal", spellId)
+		self:LocalMessage(70106, "Personal", nil, L["chilled_message"]:format(stack))
 	end
 end
 
@@ -176,14 +176,14 @@ do
 	local scheduledUnchained = nil
 	local function unchainedTargetWarning(spellName)
 		if ((#unchainedTargets < 6 and mod:IsDifficulty("25")) or (#unchainedTargets < 2 and mod:IsDifficulty("10"))) then
-			mod:Message(69762, L["mage_bug_message"]:format(spellName), "Important", 69762, "Alarm")
+			mod:Message(69762, "Important", "Alarm", L["mage_bug_message"]:format(spellName))
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
 				self:OpenProximity(20,69762)
 				self:ScheduleTimer(self.CloseProximity, 30, self)
 			end
 		end
-		mod:TargetMessage(69762, spellName, unchainedTargets, "Urgent", 69762)
+		mod:TargetMessage(69762, unchainedTargets, "Urgent")
 		scheduledUnchained = nil
 	end
 	function mod:Unchained(player, spellId, _, _, spellName)

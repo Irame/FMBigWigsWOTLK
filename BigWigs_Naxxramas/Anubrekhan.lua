@@ -51,7 +51,7 @@ function mod:OnEngage(diff)
 	if started then return end
 	started = true
 	locustTime = diff == 1 and 102 or 90
-	self:Message(28785, L["engagewarn"]:format(locustTime), "Urgent")
+	self:Message(28785, "Urgent", nil, L["engagewarn"]:format(locustTime))
 	self:DelayedMessage(28785, locustTime - 10, L["gainwarn10sec"], "Important")
 	self:Bar(28785, L["gainincbar"], locustTime, 28785)
 end
@@ -70,7 +70,7 @@ function mod:GainSwarm(unit, spellId, _, _, spellName)
 end
 
 function mod:Swarm(_, spellId)
-	self:Message(28785, L["castwarn"], "Attention", spellId)
+	self:Message(28785, "Attention", nil, L["castwarn"])
 	self:Bar(28785, L["castwarn"], 3, spellId)
 end
 

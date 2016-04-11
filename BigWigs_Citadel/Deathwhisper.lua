@@ -92,7 +92,7 @@ end
 
 function mod:DnD(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(71001, L["dnd_message"], "Personal", spellId, "Alarm")
+		self:LocalMessage(71001, "Personal", "Alarm", L["dnd_message"])
 		self:FlashShake(71001)
 	end
 end
@@ -106,7 +106,7 @@ function mod:Barrier(_, spellId)
 		self:Bar("adds", L["adds_bar"], 45, 70768)
 		handle_Adds = self:ScheduleTimer(adds, 45, 45)
 	end
-	self:Message(70842, L["phase2_message"], "Positive", spellId, "Info")
+	self:Message(70842, "Positive", "Info", L["phase2_message"])
 	self:Bar(71426, L["spirit_bar"], 12, 71426)
 	self:Bar(71204, L["touch_bar"], 6, 71204)
 	self:HealthBarStop(70842, 36855, 0)
@@ -115,7 +115,7 @@ end
 do
 	local scheduled = nil
 	local function dmWarn(spellName)
-		mod:TargetMessage(71289, spellName, dmTargets, "Important", 71289, "Alert")
+		mod:TargetMessage(71289, dmTargets, "Important", "Alert")
 		scheduled = nil
 	end
 	function mod:DominateMind(player, spellId, _, _, spellName)
@@ -130,13 +130,13 @@ end
 
 function mod:Touch(player, spellId, _, _, _, stack)
 	if stack and stack > 1 then
-		self:TargetMessage(71204, L["touch_message"], player, "Urgent", spellId, nil, stack)
+		self:TargetMessage(71204, player, "Urgent", nil, L["touch_message"], nil, stack)
 	end
 	self:Bar(71204, L["touch_bar"], 9, spellId)
 end
 
 function mod:Deformed()
-	self:Message("adds", L["deformed_fanatic"], "Urgent", 70900)
+	self:Message("adds", "Urgent", nil, L["deformed_fanatic"], 70900)
 end
 
 do
@@ -145,7 +145,7 @@ do
 		local time = GetTime()
 		if (time - t) > 5 then
 			t = time
-			self:Message(71426, L["spirit_message"], "Attention", spellId)
+			self:Message(71426, "Attention", nil, L["spirit_message"])
 			self:Bar(71426, L["spirit_bar"], 18, spellId)
 		end
 	end

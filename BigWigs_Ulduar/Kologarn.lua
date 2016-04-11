@@ -69,14 +69,14 @@ end
 
 function mod:Armor(player, spellId, _, _, _, stack)
 	if stack > 1 then
-		self:TargetMessage(63355, L["armor_message"], player, "Urgent", spellId, "Info", stack)
+		self:TargetMessage(63355, player, "Urgent", "Info", L["armor_message"], nil, stack)
 	end
 end
 
 do
 	local id, name, handle = nil, nil, nil
 	local function gripWarn()
-		mod:TargetMessage(64290, name, grip, "Attention", id, "Alert")
+		mod:TargetMessage(64290, grip, "Attention", "Alert")
 		mod:Bar(64290, name, 10, id)
 	end
 
@@ -90,7 +90,7 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_WHISPER(event, msg)
 	if msg:find(L["eyebeam_trigger"]) then
-		self:LocalMessage("eyebeam", L["eyebeam_you"], "Personal", 63976, "Long")
+		self:LocalMessage("eyebeam", "Personal", "Long", L["eyebeam_you"], 63976)
 		self:FlashShake("eyebeam")
 		self:Say("eyebeam", L["eyebeam_say"])
 	end
@@ -99,10 +99,10 @@ end
 
 function mod:Deaths(guid)
 	if guid == 32933 then
-		self:Message("arm", L["left_dies"], "Attention")
+		self:Message("arm", "Attention", nil, L["left_dies"], false)
 		self:Bar("arm", L["left_wipe_bar"], 50, 2062)
 	elseif guid == 32934 then
-		self:Message("arm", L["right_dies"], "Attention")
+		self:Message("arm", "Attention", nil, L["right_dies"], false)
 		self:Bar("arm", L["right_wipe_bar"], 50, 2062)
 	else
 		self:Win()
@@ -111,14 +111,14 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 	if msg == L["shockwave_trigger"] then
-		self:Message("shockwave", L["shockwave"], "Attention", 63982)
+		self:Message("shockwave", "Attention", nil, L["shockwave"], 63982)
 		self:Bar("shockwave", L["shockwave"], 21, 63982)
 	end
 end
 
 function mod:OnSync(sync, rest, nick)
 	if sync == "EyeBeamWarn" and rest then
-		self:TargetMessage("eyebeam", GetSpellInfo(40620), rest, "Positive", 63976, "Info") --40620 = "Eyebeam"
+		self:TargetMessage("eyebeam", rest, "Positive", "Info", 40620, 63976) --40620 = "Eyebeam"
 		self:Bar("eyebeam", L["eyebeam_message"]:format(rest), 11, 63976)
 		self:Bar("eyebeam", L["eyebeam_bar"], 20, 63976)
 		self:PrimaryIcon("eyebeam", rest)

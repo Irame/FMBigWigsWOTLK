@@ -113,7 +113,7 @@ end
 --
 
 function mod:LayWaste(_, spellId, _, _, spellName)
-	self:Message(71730, spellName, "Attention", spellId)
+	self:Message(71730, "Attention")
 	self:Bar(71730, spellName, 12, spellId)
 end
 
@@ -123,7 +123,7 @@ end
 
 function mod:Portal()
 	-- 46 sec cd until initial positioning, +14 sec until 'real' spawn.
-	self:Message("portal", L["portalcd_message"]:format(portalCount), "Important")
+	self:Message("portal", "Important", nil, L["portalcd_message"]:format(portalCount), 72482)
 	self:Bar("portal", L["portal_bar"], 14, 72482)
 	self:DelayedMessage("portal", 14, L["portal_message"], "Important")
 	portalCount = portalCount + 1
@@ -135,7 +135,7 @@ do
 	function mod:ManaVoid(player, spellId)
 		if (GetTime()-t > 2) and UnitIsUnit(player, "player") then
 			t = GetTime()
-			self:LocalMessage(71741, L["manavoid_message"], "Personal", spellId, "Alarm")
+			self:LocalMessage(71741, "Personal", "Alarm", L["manavoid_message"])
 			self:FlashShake(71741)
 		end
 	end

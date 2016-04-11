@@ -97,7 +97,7 @@ end
 do
 	local scheduled = nil
 	local function boilingWarn(spellName)
-		mod:TargetMessage(72385, spellName, bbTargets, "Urgent", 72385)
+		mod:TargetMessage(72385, bbTargets, "Urgent")
 		scheduled = nil
 	end
 	function mod:BoilingBlood(player, spellId, _, _, spellName)
@@ -110,23 +110,23 @@ do
 end
 
 function mod:BloodNova(_, spellId)
-	self:Message(72378, L["nova_message"], "Attention", spellId, "Alarm")
+	self:Message(72378, "Attention", "Alarm", L["nova_message"])
 	self:Bar(72378, L["nova_bar"], 20, spellId, 5)
 end
 
 function mod:Adds(_, spellId)
-	self:Message("adds", L["adds_message"], "Positive", spellId, "Alarm")
+	self:Message("adds", "Positive", "Alarm", L["adds_message"], spellId)
 	self:DelayedMessage("adds", 35, L["adds_warning"], "Urgent")
 	self:Bar("adds", L["adds_bar"], 40, spellId)
 end
 
 function mod:RuneofBlood(player, spellId, _, _, spellName)
-	self:TargetMessage(72410, spellName, player, "Attention", spellId)
+	self:TargetMessage(72410, player, "Attention")
 	self:Bar(72410, L["rune_bar"], 20, spellId, 5)
 end
 
 function mod:Mark(player, spellId, _, _, spellName)
-	self:TargetMessage(72293, L["mark"]:format(count), player, "Attention", spellId, "Alert")
+	self:TargetMessage(72293, player, "Attention", "Alert", L["mark"]:format(count))
 	count = count + 1
 	self:Whisper(72293, player, spellName)
 	self:PrimaryIcon(72293, player)
@@ -134,7 +134,7 @@ function mod:Mark(player, spellId, _, _, spellName)
 end
 
 function mod:Frenzy(_, spellId, _, _, spellName)
-	self:Message(72737, spellName, "Important", spellId, "Long")
+	self:Message(72737, "Important", "Long")
 end
 
 function mod:Deaths()

@@ -200,42 +200,42 @@ end
 
 -- Spore
 function mod:Swarm(_, spellID, _, _, spellName)
-	self:Message(31306, spellName, "Attention", spellID)
+	self:Message(31306, "Attention")
 	self:AbilityBar(31306, spellName, 21, spellID)
 end
 
 -- Schleim
 function mod:Gas(_, spellID, _, _, spellName)
-	self:Message(45855, spellName, "Important", spellID, "Alert")
+	self:Message(45855, "Important", "Alert")
 	self:AbilityBar(45855, spellName, 12, spellID)
 end
 
 --Blutbestie
 function mod:BeastEnraged(_, spellId, _, _, spellName)
-	self:Message(68335, spellName, "Attention", spellId)
+	self:Message(68335, "Attention")
 end
 
 --Essenz
 function mod:Essence(player, spellId, _, _, spellName)
 	if UnitIsUnit(player, "player") then
-		self:LocalMessage(41350, spellName, "Attention", spellId)
+		self:LocalMessage(41350, "Attention")
 	end
 end
 
 --Blume
 function mod:LeechingSwarm(_, spellId, _, _, spellName)
-	self:Message(66118, spellName, "Important", spellId, "Long")
+	self:Message(66118, "Important", "Long")
 end
 
 --Wasser Ele
 function mod:ManaBarrier(_, spellId, _, _, spellName)
-	self:Message(70842, spellName, "Attention", spellId)
+	self:Message(70842, "Attention")
 end
 
 --Frost Kugel
 function mod:Chilled(player, spellId, _, _, _, stack)
 	if stack > 4 and UnitIsUnit(player, "player") then
-		self:LocalMessage(70106, L["chilled_message"]:format(stack), "Personal", spellId)
+		self:LocalMessage(70106, "Personal", nil, L["chilled_message"]:format(stack))
 		if stack > 10 then
 			self:FlashShake(70106)
 		end
@@ -244,7 +244,7 @@ end
 
 --Arcane Ele
 function mod:SoulstormBoss(_, spellId, _, _, spellName)
-	self:Message(68872, spellName, "Important", spellId)
+	self:Message(68872, "Important")
 end
 
 function mod:SoulstormPlayer(player, spellId, _, _, spellName)
@@ -258,7 +258,7 @@ end
 do
 	local legionFlameScheduled = nil
 	local function legionFlame()
-		mod:TargetMessage(68123, L["legionflame_message"], flameTargets, "Important", 68123, "Alert")
+		mod:TargetMessage(68123, flameTargets, "Important", "Alert", L["legionflame_message"])
 		legionFlameScheduled = nil
 	end
 	function mod:LegionFlame(player)
@@ -279,7 +279,7 @@ end
 do
 	local lightBombScheduled = nil
 	local function lightBomb()
-		mod:TargetMessage(63018, L["lightbomb_other"], lightBombTargets, "Important", 63018, "Alert")
+		mod:TargetMessage(63018, lightBombTargets, "Important", "Alert", L["lightbomb_other"])
 		lightBombScheduled = nil
 	end
 	function mod:LightBomb(player)
@@ -307,7 +307,7 @@ end
 do
 	local fatalAttractionScheduled = nil
 	local function fatalAttraction()
-		mod:TargetMessage(41001, L["fatalAttraction_message"], fatalAttractionTargets, "Important", 41001, "Alert")
+		mod:TargetMessage(41001, fatalAttractionTargets, "Important", "Alert", L["fatalAttraction_message"])
 		fatalAttractionScheduled = nil
 	end
 	function mod:FatalAttraction(player)
@@ -326,7 +326,7 @@ end
 do
 	local pactDarkfallenScheduled = nil
 	local function pactDarkfallen()
-		mod:TargetMessage(71340, L["pactDarkfallen_message"], pactDarkfallenTargets, "Important", 71340, "Alert")
+		mod:TargetMessage(71340, pactDarkfallenTargets, "Important", "Alert", L["pactDarkfallen_message"])
 		pactDarkfallenScheduled = nil
 	end
 	function mod:PactDarkfallen(player)
@@ -345,7 +345,7 @@ end
 do
 	local swarmingShadowsScheduled = nil
 	local function swarmingShadows()
-		mod:TargetMessage(71861, L["swarmingShadows_message"], shadowsTargets, "Important", 71861, "Alert")
+		mod:TargetMessage(71861, shadowsTargets, "Important", "Alert", L["swarmingShadows_message"])
 		swarmingShadowsScheduled = nil
 	end
 	function mod:SwarmingShadows(player)
@@ -362,7 +362,7 @@ do
 end
 
 function mod:AddSpawn()
-	self:Message("add_warning_key", L["add_message"], "Important", 71772, "Alarm")
+	self:Message("add_warning_key", "Important", "Alarm", L["add_message"], 71772)
 	abilityWarningBar = L["nextAbilitys_bar"]
 	self:Bar("ability_warning_key", L["nextAbilitys_bar"], 37, 71623)
 	self:Bar("add_warning_key", L["nextAdds_bar"], 76, 71772)
@@ -385,7 +385,7 @@ function mod:CheckForAdds(_,unit)
 			end
 			local timeLeft = addSpawnTime + 37 - GetTime()
 			addData[mobId]["bar"] = L[addData[mobId]["id"].."_walk_bar"]
-			self:Message(addData[mobId]["spell1"], L[addData[mobId]["id"].."_identify_massage"], "Important", addData[mobId]["spell1"])
+			self:Message(addData[mobId]["spell1"], "Important", L[addData[mobId]["id"].."_identify_massage"])
 			self:Bar(addData[mobId]["spell1"], L[addData[mobId]["id"].."_walk_bar"], timeLeft, addData[mobId]["spell1"])
 		end
 		--[[
@@ -406,6 +406,6 @@ function mod:Deaths(entryId)
 end
 --[[
 function mod:EnrageWarning()
-	self:Message("berserk", L["enrage_message"], "Important", 26662, "Alarm")
+	self:Message("berserk", "Important", "Alarm", L["enrage_message"], 26662)
 end
 ]]

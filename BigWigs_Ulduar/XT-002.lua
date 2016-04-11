@@ -69,18 +69,18 @@ end
 --
 
 function mod:Exposed(_, spellId, _, _, spellName)
-	self:Message(63849, L["exposed_message"], "Attention", spellId)
+	self:Message(63849, "Attention", nil, L["exposed_message"])
 	self:Bar(63849, spellName, 30, spellId)
 end
 
 function mod:Heartbreak(_, spellId, _, _, spellName)
 	phase = 2
-	self:Message(64193, spellName, "Important", spellId)
+	self:Message(64193, "Important")
 end
 
 function mod:Tantrum(_, spellId, _, _, spellName)
 	if phase == 2 then
-		self:Message(62776, spellName, "Attention", spellId)
+		self:Message(62776, "Attention")
 		self:Bar(62776, L["tantrum_bar"], 65, spellId)
 	end
 end
@@ -90,7 +90,7 @@ function mod:GravityBomb(player, spellId, _, _, spellName)
 		self:OpenProximity(10,63024)
 		self:FlashShake(63024)
 	end
-	self:TargetMessage(63024, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(63024, player, "Personal", "Alert")
 	self:Whisper(63024, player, spellName)
 	self:Bar(63024, L["gravitybomb_other"]:format(player), 9, spellId)
 	self:SecondaryIcon(63024, player)
@@ -101,7 +101,7 @@ function mod:LightBomb(player, spellId, _, _, spellName)
 		self:OpenProximity(10,63018)
 		self:FlashShake(63018)
 	end
-	self:TargetMessage(63018, spellName, player, "Personal", spellId, "Alert")
+	self:TargetMessage(63018, player, "Personal", "Alert")
 	self:Whisper(63018, player, spellName)
 	self:Bar(63018, L["lightbomb_other"]:format(player), 9, spellId)
 	self:PrimaryIcon(63018, player)
@@ -126,13 +126,13 @@ function mod:UNIT_HEALTH(event, msg)
 		local health = UnitHealth(msg) / UnitHealthMax(msg) * 100
 		if not exposed1 and health > 86 and health <= 88 then
 			exposed1 = true
-			self:Message(63849, L["exposed_warning"], "Attention")
+			self:Message(63849, "Attention", nil, L["exposed_warning"])
 		elseif not exposed2 and health > 56 and health <= 58 then
 			exposed2 = true
-			self:Message(63849, L["exposed_warning"], "Attention")
+			self:Message(63849, "Attention", nil, L["exposed_warning"])
 		elseif not exposed3 and health > 26 and health <= 28 then
 			exposed3 = true
-			self:Message(63849, L["exposed_warning"], "Attention")
+			self:Message(63849, "Attention", nil, L["exposed_warning"])
 		end
 	end
 end
