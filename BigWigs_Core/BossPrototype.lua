@@ -9,11 +9,6 @@ local function dbg(self, msg) print(dbgStr:format(self.displayName, msg)) end
 local AL = LibStub("AceLocale-3.0")
 local core = BigWigs
 local C = core.C
-local metaMap = {__index = function(t, k) t[k] = {} return t[k] end}
-local combatLogMap = setmetatable({}, metaMap)
-local yellMap = setmetatable({}, metaMap)
-local emoteMap = setmetatable({}, metaMap)
-local deathMap = setmetatable({}, metaMap)
 local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty, UpdateDispelStatus, UpdateInterruptStatus
 local updateData = function()
 	UpdateZoneData()
@@ -23,6 +18,35 @@ local updateData = function()
 	UpdateInterruptStatus()
 end
 
+-------------------------------------------------------------------------------
+-- Metatables
+--
+local metaMap = {__index = function(t, k) t[k] = {} return t[k] end}
+local combatLogMap = setmetatable({}, metaMap)
+local yellMap = setmetatable({}, metaMap)
+local emoteMap = setmetatable({}, metaMap)
+local deathMap = setmetatable({}, metaMap)
+local icons = setmetatable({}, {__index =
+	function(self, key)
+		if not key then return end
+		local value = nil
+		if type(key) == "number" then value = select(3, GetSpellInfo(key))
+		else value = "Interface\\Icons\\" .. key end
+		self[key] = value
+		return value
+	end
+})
+local spells = setmetatable({}, {__index =
+	function(self, key)
+		local value = GetSpellInfo(key)
+		self[key] = value
+		return value
+	end
+})
+
+-------------------------------------------------------------------------------
+-- Core module functionality
+--
 local boss = {}
 core.bossCore:SetDefaultModulePrototype(boss)
 function boss:IsBossModule() return true end
@@ -53,13 +77,15 @@ function boss:Reboot()
 	self:Enable()
 end
 
+-------------------------------------------------------------------------------
+-- Localization
+--
 function boss:NewLocale(locale, default) return AL:NewLocale(self.name, locale, default) end
 function boss:GetLocale() return AL:GetLocale(self.name) end
 
 -------------------------------------------------------------------------------
 -- Enable triggers
 --
-
 function boss:RegisterEnableMob(...) core:RegisterEnableMob(self, ...) end
 function boss:RegisterEnableYell(...) core:RegisterEnableYell(self, ...) end
 
@@ -284,6 +310,8 @@ do
 		if debug then dbg(self, ":Win") end
 		if self.OnWin then self:OnWin() end
 		self:Sync("Death", self.moduleName)
+		wipe(icons) -- Wipe icon cache
+		wipe(spells)
 	end
 end
 
@@ -556,28 +584,15 @@ function boss:Say(key, msg)
 	SendChatMessage(msg, "SAY")
 end
 
-do
-	local icons = setmetatable({}, {__index =
-		function(self, key)
-			if not key then return end
-			local value = nil
-			if type(key) == "number" then value = select(3, GetSpellInfo(key))
-			else value = "Interface\\Icons\\" .. key end
-			self[key] = value
-			return value
-		end
-	})
-
-	function boss:Bar(key, text, length, icon, expTime, barColor, barEmphasized, barText, barBackground, ...)
-		if checkFlag(self, key, C.BAR) then
-			self:SendMessage("BigWigs_StartBar", self, key, text, length, icons[icon], expTime, ...)
-		end
+function boss:Bar(key, text, length, icon, expTime, barColor, barEmphasized, barText, barBackground, ...)
+	if checkFlag(self, key, C.BAR) then
+		self:SendMessage("BigWigs_StartBar", self, key, text, length, icons[icon], expTime, ...)
 	end
-	
-	function boss:HealthBar(key, Id, powerType, icon, text, minValue, maxValue, Value, func, ...)
-		if checkFlag(self, key, C.HEALTHBAR) then
-			self:SendMessage("BigWigs_AddGeneralBar", self, key, Id, powerType, icons[icon], text, minValue, maxValue, Value, func, ...)
-		end
+end
+
+function boss:HealthBar(key, Id, powerType, icon, text, minValue, maxValue, Value, func, ...)
+	if checkFlag(self, key, C.HEALTHBAR) then
+		self:SendMessage("BigWigs_AddGeneralBar", self, key, Id, powerType, icons[icon], text, minValue, maxValue, Value, func, ...)
 	end
 end
 
