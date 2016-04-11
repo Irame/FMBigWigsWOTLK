@@ -30,9 +30,9 @@ local nearby = 2
 local general = 3
 
 local paths = {
-	[general] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%s.mp3"
-	[personal] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sy.mp3"
-	[nearby] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sn.mp3"
+	[general] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%s.mp3",
+	[personal] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sy.mp3",
+	[nearby] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sn.mp3",
 }
 function plugin:BigWigs_Voice(event, module, key, sound, onMe, near)
 	local success = false;
