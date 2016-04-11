@@ -1055,7 +1055,7 @@ function plugin:OnDBMSync(_, sender, prefix, time, text)
 		if text:find(L.pull) then
 			startPull(time, sender, true)
 		else
-			startCustomBar(time.." "..text, sender, nil, true)
+			startCustomBar(time.." "..text, sender, true)
 		end
 	end
 end
@@ -1103,7 +1103,7 @@ SlashCmdList.BIGWIGSPULL = function(input)
 		end
 		BigWigs:Transmit("BWPull", input)
 
-		SendAddonMessage("D4", ("U\t%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
+		SendAddonMessage("DBMv4-Pizza", ("%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
 	else
 		BigWigs:Print(L.requiresLeadOrAssist)
 	end
@@ -1121,7 +1121,7 @@ SlashCmdList.BIGWIGSPULLNA = function(input)
 		end
 		BigWigs:Transmit("BWPullNA", input)
 
-		SendAddonMessage("D4", ("U\t%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
+		SendAddonMessage("DBMv4-Pizza", ("%d\t%s"):format(time, L.pull), plugin:GetRightChannel()) -- DBM message
 	else
 		BigWigs:Print(L.requiresLeadOrAssist)
 	end
