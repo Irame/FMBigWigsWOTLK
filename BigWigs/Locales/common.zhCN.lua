@@ -7,6 +7,7 @@ L.you = ">你< %s！"
 L.other = "%s：>%s<！"
 L.stack = "%3$s %1$d层>%2$s<"
 L.stackyou = ">你< %d层%s"
+L.near = ">%s< 你附近！"
 
 L.phase = "阶段%d"
 L.normal = "普通模式"

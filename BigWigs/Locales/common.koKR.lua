@@ -7,6 +7,7 @@ L.you = "당신은 %s"
 L.other = "%s: %s"
 L.stack = "%dx %s - %s"
 L.stackyou = "당신에게 %d중첩의 %s"
+L.near = "당신과 가까움 %s!"
 
 L.phase = "%d 단계"
 L.normal = "일반 모드"

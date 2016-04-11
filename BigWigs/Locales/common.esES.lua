@@ -7,6 +7,7 @@ L.you = "%s en TI"
 L.other = "%s: %s"
 L.stack = "%dx %s en %s"
 L.stackyou = "%dx %s en TI"
+L.near = "¡%s cerca de TI!"
 
 L.phase = "Fase %d"
 

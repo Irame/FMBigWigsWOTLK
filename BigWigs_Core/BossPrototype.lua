@@ -497,6 +497,18 @@ function boss:LocalMessage(key, color, sound, text, icon)
 	end
 end
 
+function boss:RangeMessage(key, color, sound, text, icon)
+	if not checkFlag(self, key, C.MESSAGE) then return end
+	local textType = type(text)
+	self:SendMessage("BigWigs_Message", self, key, format(L.near, textType == "string" and text or spells[text or key]), color == nil and "Personal" or color, icon ~= false and icons[icon or textType == "number" and text or key])
+	
+	if HasVoice() and checkFlag(self, key, C.VOICE) then
+		self:SendMessage("BigWigs_Voice", self, key, sound, nil, true)
+	else
+		self:SendMessage("BigWigs_Sound", sound == nil and "Alarm" or sound)
+	end
+end
+
 do
 	local hexColors = {}
 	for k, v in pairs(RAID_CLASS_COLORS) do

@@ -7,6 +7,7 @@ L.you = "%s на ВАС"
 L.other = "%s: %s"
 L.stack = "%dx %s на %s"
 L.stackyou = "%dx %s на ТЕБЕ"
+L.near = "%s возле ТЕБЯ!"
 
 L.phase = "Фаза %d"
 L.normal = "Обычный режим"

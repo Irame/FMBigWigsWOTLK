@@ -5,6 +5,7 @@ L.you = "%s on YOU"
 L.other = "%s: %s"
 L.stack = "%dx %s on %s"
 L.stackyou = "%dx %s on YOU"
+L.near = "%s near YOU!"
 
 L.phase = "Phase %d"
 L.normal = "Normal mode"

@@ -7,6 +7,7 @@ L.you = "%s auf DIR!"
 L.other = "%s: %s"
 L.stack = "%dx %s auf %s"
 L.stackyou = "%dx %s auf DIR"
+L.near = "%s in DEINER Nähe!"
 
 L.phase = "Phase %d"
 L.normal = "Normaler Modus"
