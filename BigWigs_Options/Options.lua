@@ -472,15 +472,26 @@ local function getOptionDetails(module, bossOption)
 	local bf = module.toggleDefaults[option]
 	if t == "string" then
 		if customBossOptions[option] then
-			return option, customBossOptions[option][1], customBossOptions[option][2], bf
+			return option, customBossOptions[option][1], customBossOptions[option][2], nil, bf
 		else
 			local L = module:GetLocale()
-			return option, L[option], L[option .. "_desc"], bf
+			local icon = L[option .. "_icon"]
+			if icon == option .. "_icon" then icon = nil end
+			if type(icon) == "number" then
+				if icon > 10 then
+					_, _, icon = GetSpellInfo(icon)
+				elseif icon > 0 then
+					icon = ("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_%d"):format(icon)
+				end
+			elseif type(icon) == "string" and not icon:find("\\", nil, true) then
+				icon = "Interface\\Icons\\" .. icon
+			end
+			return option, L[option], L[option .. "_desc"], icon, bf
 		end
 	elseif t == "number" then
-		local spellName = GetSpellInfo(option)
+		local spellName, _, spellIcon = GetSpellInfo(option)
 		if not spellName then error(("Invalid option %d in module %s."):format(option, module.displayName)) end
-		return spellName, spellName, getSpellDescription(option), bf
+		return spellName, spellName, getSpellDescription(option), spellIcon, bf
 	end
 end
 
@@ -598,7 +609,7 @@ local advancedTabs = {
 }
 
 local function getAdvancedToggleOption(scrollFrame, dropdown, module, bossOption)
-	local dbKey, name, desc = getOptionDetails(module, bossOption)
+	local dbKey, name, desc, icon = getOptionDetails(module, bossOption)
 	local back = AceGUI:Create("Button")
 	back:SetText(L["<< Back"])
 	back:SetFullWidth(true)
@@ -617,6 +628,7 @@ local function getAdvancedToggleOption(scrollFrame, dropdown, module, bossOption
 	check:SetUserData("option", bossOption)
 	check:SetCallback("OnValueChanged", masterOptionToggled)
 	check:SetValue(getMasterOption(check))
+	if icon then check:SetImage(icon, 0.07, 0.93, 0.07, 0.93) end
 
 	local tabs = AceGUI:Create("TabGroup")
 	tabs:SetLayout("Flow")
@@ -644,7 +656,7 @@ local function buttonClicked(widget)
 end
 
 local function getDefaultToggleOption(scrollFrame, dropdown, module, bossOption)
-	local dbKey, name, desc = getOptionDetails(module, bossOption)
+	local dbKey, name, desc, icon = getOptionDetails(module, bossOption)
 	local check = AceGUI:Create("CheckBox")
 	check:SetLabel(colorize[name])
 	check:SetTriState(true)
@@ -655,6 +667,7 @@ local function getDefaultToggleOption(scrollFrame, dropdown, module, bossOption)
 	check:SetDescription(desc)
 	check:SetCallback("OnValueChanged", masterOptionToggled)
 	check:SetValue(getMasterOption(check))
+	if icon then check:SetImage(icon, 0.07, 0.93, 0.07, 0.93) end
 
 	local button = AceGUI:Create("Button")
 	button:SetText(">>")
