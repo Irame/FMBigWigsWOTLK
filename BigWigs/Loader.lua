@@ -290,6 +290,7 @@ function loader:OnEnable()
 	self:RegisterEvent("PARTY_MEMBERS_CHANGED", "CheckRoster")
 
 	self:RegisterEvent("CHAT_MSG_ADDON")
+	self:RegisterMessage("BigWigs_AddonMessage")
 
 	self:RegisterMessage("BigWigs_JoinedGroup")
 	self:RegisterMessage("BigWigs_LeftGroup")
@@ -303,6 +304,20 @@ end
 -----------------------------------------------------------------------
 -- Events
 --
+
+function loader:CHAT_MSG_ADDON(_, prefix, msg, _, sender)
+	if prefix == "BigWigs" then
+		if string.match(msg, "^BWPull") or string.match(msg, "^BWBreak") then loadAndEnableCore() end
+		self:SendMessage("BigWigs_AddonMessage", sender, "Transmit", msg)
+	elseif string.match(prefix, "^BW") then
+		self:SendMessage("BigWigs_AddonMessage", sender, prefix, msg)
+	elseif string.match(prefix, "^DBMv4") then
+		if prefix == "DBMv4-Pizza" then loadAndEnableCore() end
+		local dbmPrefix = string.sub(prefix, 7)
+		local arg1, arg2, arg3 = strsplit("\t", msg)
+		self:SendMessage("DBM_AddonMessage", sender, dbmPrefix, arg1, arg2, arg3)
+	end
+end
 
 do
 	local delayTransmitter = CreateFrame("Frame")
@@ -319,7 +334,7 @@ do
 		end
 	end)
 
-	function loader:CHAT_MSG_ADDON(event, prefix, message, distribution, sender)
+	function loader:BigWigs_AddonMessage(event, sender, prefix, message)
 		if prefix == "BWVQ3" then
 			if not usersRelease[sender] and not usersAlpha[sender] then
 				usersUnknown[sender] = true
