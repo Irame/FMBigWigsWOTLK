@@ -42,7 +42,6 @@ if L then
 	L.eyebeamsay = "Eyebeam Say"
 	L.eyebeamsay_desc = "Say when you are the target of Focused Eyebeam."
 
-	L.armor_message = "%2$dx Crunch on %1$s"
 end
 L = mod:GetLocale()
 
@@ -69,7 +68,7 @@ end
 
 function mod:Armor(player, spellId, _, _, _, stack)
 	if stack > 1 then
-		self:TargetMessage(63355, player, "Urgent", "Info", L["armor_message"], nil, stack)
+		self:StackMessage(63355, player, stack, "Urgent", "Info")
 	end
 end
 

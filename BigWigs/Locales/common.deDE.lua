@@ -5,6 +5,8 @@ if not L then return end
 -- Prototype.lua common words
 L.you = "%s auf DIR!"
 L.other = "%s: %s"
+L.stack = "%dx %s auf %s"
+L.stackyou = "%dx %s auf DIR"
 
 L.phase = "Phase %d"
 L.normal = "Normaler Modus"

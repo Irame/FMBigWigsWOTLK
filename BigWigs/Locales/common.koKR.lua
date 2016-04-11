@@ -5,6 +5,8 @@ if not L then return end
 -- Prototype.lua common words
 L.you = "당신은 %s"
 L.other = "%s: %s"
+L.stack = "%dx %s - %s"
+L.stackyou = "당신에게 %d중첩의 %s"
 
 L.phase = "%d 단계"
 L.normal = "일반 모드"

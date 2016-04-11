@@ -35,7 +35,6 @@ if L then
 	L.snobold = "Снобольд"
 	L.snobold_desc = "Сообщать о том, на кого прыгнул снобольд."
 	L.snobold_message = "Снобольд на:"
-	L.impale_message = "%2$dx Прокалывания на %1$s"
 	L.firebomb_message = "Огненная бомба на ВАС!"
 
 	-- Jormungars

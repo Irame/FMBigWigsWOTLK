@@ -35,7 +35,6 @@ if L then
 	L.snobold = "Schneebold"
 	L.snobold_desc = "Warnt davor, wer einen Schneebold auf seinem Kopf hat."
 	L.snobold_message = "Schneebold"
-	L.impale_message = "%2$dx Pfählen: %1$s"
 	L.firebomb_message = "Feuer auf DIR!"
 
 	-- Jormungars

@@ -29,7 +29,6 @@ if L then
 	L.adds_bar = "Nuevos Adds"
 	L.adds_warning = "¡Nuevos adds en 5 sec!"
 
-	L.touch_message = "%2$dx Toque en %1$s"
 	L.touch_bar = "Siguiente Toque"
 
 	L.deformed_fanatic = "¡Fanático deformado!"
@@ -50,7 +49,6 @@ if L then
 	L.blight_warning = "¡Añublo acre en ~5sec!"
 	L.blight_bar = "Próximo Añublo acre"
 
-	L.bloat_message = "%2$dx Hinchazón gástrica en %1$s"
 	L.bloat_bar = "~Hinchazón gástrica"
 
 	L.spore_bar = "~Esporas de gas"
@@ -156,11 +154,6 @@ if L then
 	L.engage_trigger = "¡La Plaga arrasará este mundo como un enjambre de muerte y destrucción!"
 end
 
-L = BigWigs:NewBossLocale("Putricide Dogs", "esES")
-if L then
-	L.wound_message = "%2$dx Blessure mortelle sur %1$s"
-end
-
 L = BigWigs:NewBossLocale("Professor Putricide", "esES")
 if L then
 	L.phase = "Fases"
@@ -179,7 +172,6 @@ if L then
 	L.blight_message = "Babosa Roja"
 	L.violation_message = "Babosa Verde"
 
-	L.plague_message = "%2$dx peste en %1$s"
 	L.plague_bar = "Siguiente Peste"
 
 	L.gasbomb_bar = "Más Bombas de gas asfixiante"
@@ -269,9 +261,3 @@ if L then
 	L.blazing_desc = "Esqueleto llameante |cffff0000estimated|r tiempo de reaparición. Este contador puede que no sea preciso."
 	L.blazing_warning = "¡Esqueleto llameante pronto!"
 end
-
-L = BigWigs:NewBossLocale("Putricide Dogs", "esES")
-if L then
-	L.wound_message = "%2$dx Herida mortal en %1$s"
-end
-

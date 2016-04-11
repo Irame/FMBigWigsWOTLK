@@ -99,7 +99,6 @@ if L then
 	L.whiteout_bar = "Schneesturm %d"
 	L.whiteout_message = "Schneesturm %d bald!"
 
-	L.frostbite_message = "%2$dx Erfrierung: %1$s"
 
 	L.freeze_message = "Eingefroren"
 

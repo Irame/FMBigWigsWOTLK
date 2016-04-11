@@ -29,7 +29,6 @@ if L then
 	L.whiteout_bar = "Tormenta de nieve %d"
 	L.whiteout_message = "¡Tormenta de nieve %d pronto!"
 
-	L.frostbite_message = "%2$dx Mordedura de Escarcha en %1$s"
 
 	L.freeze_message = "Congelado"
 

@@ -33,7 +33,6 @@ if L then
 	L.whiteout_bar = "Пурга %d"
 	L.whiteout_message = "Скоро пурга %d!"
 
-	L.frostbite_message = "%2$dx Обморожение на %1$s"
 
 	L.freeze_message = "Заморозка"
 end
@@ -107,7 +106,6 @@ if L then
 	L.whiteout_bar = "Пурга %d"
 	L.whiteout_message = "Скоро Пурга %d!"
 
-	L.frostbite_message = "%2$dx Обморожение у %1$s"
 
 	L.freeze_message = "Мерзлый грунт"
 	

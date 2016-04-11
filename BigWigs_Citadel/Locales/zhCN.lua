@@ -62,7 +62,6 @@ if L then
 	L.blight_warning = "约5秒后，Pungent Blight！"
 	L.blight_bar = "<下一Pungent Blight>"
 
-	L.bloat_message = "Gastric Bloat%2$dx：>%1$s<！"
 	L.bloat_bar = "<下一Gastric Bloat>"
 
 	L.spore_bar = "<下一Gas Spore>"
@@ -103,7 +102,6 @@ if L then
 	L.adds_bar = "<下一增援>"
 	L.adds_warning = "5秒后，新的增援！"
 
-	L.touch_message = "Touch of Insignificance%2$dx：>%1$s<！"
 	L.touch_bar = "<下一Touch of Insignificance>"
 
 	L.deformed_fanatic = "Deformed Fanatic!"
@@ -144,18 +142,12 @@ if L then
 	L.blight_message = "毒氣雲！"
 	L.violation_message = "暴躁軟泥怪！"
 
-	L.plague_message = "%2$dx突變瘟疫：>%1$s<！"
 	L.plague_bar = "<下一突變瘟疫>"
 
 	L.gasbomb_bar = "<多個窒息毒氣彈>"
 	L.gasbomb_message = "窒息毒氣彈！"
 
 	L.unbound_bar = "<Unbound Plague：%s>"
-end
-
-L = BigWigs:NewBossLocale("Putricide Dogs", "zhCN")
-if L then
-	L.wound_message = " Mortal Wound%2$dx：>%1$s<！"
 end
 
 L = BigWigs:NewBossLocale("Rotface", "zhCN")

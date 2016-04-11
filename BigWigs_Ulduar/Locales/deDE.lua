@@ -7,7 +7,6 @@ if L then
 	L.phase_bar = "Phase %d"
 	L.engage_trigger = "Euer Handeln ist unlogisch. Alle Möglichkeiten dieser Begegnung wurden berechnet. Das Pantheon wird die Nachricht des Beobachters erhalten, ungeachtet des Ausgangs."
 
-	L.punch_message = "%2$dx Phasenschlag: %1$s!"
 	L.smash_message = "Kosmischer Schlag kommt!"
 	L.blackhole_message = "Schwarzes Loch %dx!"
 	L.bigbang_bar = "Nächster Großer Knall"
@@ -145,7 +144,6 @@ if L then
 	L.eyebeamsay = "Augenstrahl /sagen"
 	L.eyebeamsay_desc = "Verkündet, wenn du das Ziel des Augenstrahls bist."
 
-	L.armor_message = "%2$dx Rüstung zermalmen: %1$s!"
 end
 
 L = BigWigs:NewBossLocale("Flame Leviathan", "deDE")

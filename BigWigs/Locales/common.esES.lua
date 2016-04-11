@@ -5,6 +5,8 @@ if not L then return end
 -- Prototype.lua common words
 L.you = "%s en TI"
 L.other = "%s: %s"
+L.stack = "%dx %s en %s"
+L.stackyou = "%dx %s en TI"
 
 L.phase = "Fase %d"
 

@@ -35,7 +35,6 @@ if L then
 	L.snobold = "極地狗頭人奴僕"
 	L.snobold_desc = "當出現極地狗頭人奴僕時發出警報。"
 	L.snobold_message = "極地狗頭人奴僕！"
-	L.impale_message = "%2$dx 刺穿：>%1$s<！"
 	L.firebomb_message = ">你< 燃燒彈！"
 
 	-- Jormungars

@@ -35,7 +35,6 @@ if L then
 	L.snobold = "狗头人奴隶"
 	L.snobold_desc = "当出现狗头人奴隶时发出警报。"
 	L.snobold_message = "狗头人奴隶！"
-	L.impale_message = "%2$dx 穿刺：>%1$s<！"
 	L.firebomb_message = ">你< 燃烧弹！"
 
 	-- Jormungars

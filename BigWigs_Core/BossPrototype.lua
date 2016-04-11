@@ -524,8 +524,25 @@ do
 		return setmetatable({}, mt)
 	end
 
+	function boss:StackMessage(key, player, stack, color, sound, text, icon)
+		if checkFlag(self, key, C.MESSAGE) then
+			local textType = type(text)
+			local onMe = player == pName
+			if onMe then
+				self:SendMessage("BigWigs_Message", self, key, format(L.stackyou, stack or 1, textType == "string" and text or spells[text or key]), "Personal", icon ~= false and icons[icon or textType == "number" and text or key])
+			else
+				self:SendMessage("BigWigs_Message", self, key, format(L.stack, stack or 1, textType == "string" and text or spells[text or key], coloredNames[player]), color, icon ~= false and icons[icon or textType == "number" and text or key])
+			end
+			if hasVoice and checkFlag(self, key, C.VOICE) then
+				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
+			else
+				self:SendMessage("BigWigs_Sound", sound)
+			end
+		end
+	end
+
 	-- old Order key, spellName, player, color, icon, sound
-	function boss:TargetMessage(key, player, color, sound, text, icon, ...)
+	function boss:TargetMessage(key, player, color, sound, text, icon)
 		local textType = type(text)
 		local msg = textType == "string" and text or spells[text or key]
 		local texture = icon ~= false and icons[icon or textType == "number" and text or key]
@@ -548,14 +565,8 @@ do
 			wipe(player)
 		else
 			if UnitIsUnit(player, "player") then
-				if ... then
-					local text = fmt(msg, coloredNames[player], ...)
-					self:SendMessage("BigWigs_Message", self, key, text, color, texture)
-					self:SendMessage("BigWigs_Broadcast", text)
-				else
-					self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), color, texture)
-					self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, player))
-				end
+				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), color, texture)
+				self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, coloredNames[player]))
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
 					self:SendMessage("BigWigs_Voice", self, key, sound, true)
@@ -565,14 +576,10 @@ do
 			else
 				-- Change color and remove sound when warning about effects on other players
 				if color == "Personal" then color = "Important" end
-				local text = nil
-				if ... then
-					text = fmt(msg, coloredNames[player], ...)
-				else
-					text = fmt(L["other"], msg, coloredNames[player])
-				end
-				self:SendMessage("BigWigs_Message", self, key, text, color, texture)
-				self:SendMessage("BigWigs_Broadcast", text)
+
+				fmtMsg = fmt(L["other"], msg, coloredNames[player])
+				self:SendMessage("BigWigs_Message", self, key, fmtMsg, color, texture)
+				self:SendMessage("BigWigs_Broadcast", fmtMsg)
 			
 				if HasVoice() and checkFlag(self, key, C.VOICE) then
 					self:SendMessage("BigWigs_Voice", self, key, sound)

@@ -34,7 +34,6 @@ if L then
 	L.blight_warning = "Pungent Blight in ~5sec!"
 	L.blight_bar = "Next Blight"
 
-	L.bloat_message = "%2$dx Gastric Bloat on %1$s"
 	L.bloat_bar = "~Gastric Bloat"
 
 	L.spore_bar = "~Gas Spores"
@@ -117,7 +116,7 @@ end
 
 function mod:Bloat(player, spellId, _, _, _, stack)
 	if stack > 5 then
-		self:TargetMessage(72551, player, "Positive", nil, L["bloat_message"], nil, stack)
+		self:StackMessage(72551, player, stack, "Positive")
 		self:Bar(72551, L["bloat_bar"], 10, spellId)
 	end
 end

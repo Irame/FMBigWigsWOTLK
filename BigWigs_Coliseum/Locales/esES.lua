@@ -35,7 +35,6 @@ if L then
 	L.snobold = "Snobold"
 	L.snobold_desc = "Avisa quien tiene un Snobold en su cabeza."
 	L.snobold_message = "Add"
-	L.impale_message = "%2$dx Empalar en %1$s"
 	L.firebomb_message = "¡Fuego en TI!"
 
 	-- Jormungars

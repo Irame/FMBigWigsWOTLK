@@ -5,6 +5,8 @@ if not L then return end
 -- Prototype.lua common words
 L.you = "%s на ВАС"
 L.other = "%s: %s"
+L.stack = "%dx %s на %s"
+L.stackyou = "%dx %s на ТЕБЕ"
 
 L.phase = "Фаза %d"
 L.normal = "Обычный режим"

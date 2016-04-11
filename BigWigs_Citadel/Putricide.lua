@@ -50,7 +50,6 @@ if L then
 	L.blight_message = "Red ooze"
 	L.violation_message = "Green ooze"
 
-	L.plague_message = "%2$dx plague on %1$s"
 	L.plague_bar = "Next plague"
 	L.unboundplague_bar = "Next Unbound Plague"
 
@@ -162,7 +161,7 @@ end
 
 function mod:Plague(player, spellId, _, _, _, stack)
 	stack = stack or 1
-	self:TargetMessage(72451, player, "Urgent", "Info", L["plague_message"], nil, stack)
+	self:StackMessage(72451, player, stack, "Urgent", "Info")
 	self:Bar(72451, L["plague_bar"], 10, spellId)
 end
 

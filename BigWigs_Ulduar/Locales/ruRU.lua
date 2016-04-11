@@ -8,7 +8,6 @@ if L then
 	L.phase_bar = "%d-ая фаза"
 	L.engage_trigger = "Ваши действия нелогичны. Все возможные исходы этой схватки просчитаны. Пантеон получит сообщение от Наблюдателя в любом случае."
 
-	L.punch_message = "%2$dx фазовых удара на |3-5(%1$s)"
 	L.smash_message = "Наступление Кары небесной!"
 	L.blackhole_message = "Появление черной дыры %d"
 	L.bigbang_bar = "~Суровый удар"
@@ -144,7 +143,6 @@ if L then
 	L.eyebeamsay = "Сказать о взгяде"
 	L.eyebeamsay_desc = "Сказать когда вы цель взгляда."
 
-	L.armor_message = "%2$dx Хруста на |3-5(%1$s)"
 end
 
 L = LibStub("AceLocale-3.0"):NewLocale("Flame Leviathan", "ruRU")

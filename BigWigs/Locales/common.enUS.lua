@@ -3,6 +3,8 @@ local L = LibStub("AceLocale-3.0"):NewLocale("Big Wigs: Common", "enUS", true, t
 -- Prototype.lua common words
 L.you = "%s on YOU"
 L.other = "%s: %s"
+L.stack = "%dx %s on %s"
+L.stackyou = "%dx %s on YOU"
 
 L.phase = "Phase %d"
 L.normal = "Normal mode"

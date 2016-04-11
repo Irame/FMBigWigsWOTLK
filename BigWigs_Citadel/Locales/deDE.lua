@@ -66,7 +66,6 @@ if L then
 	L.blight_warning = "Stechende Seuche in ~5 sek!"
 	L.blight_bar = "Nächste Seuche"
 
-	L.bloat_message = "%2$dx Magenblähung: %1$s"
 	L.bloat_bar = "~Magenblähung"
 
 	L.spore_bar = "~Gassporen"
@@ -178,7 +177,6 @@ if L then
 	L.adds_bar = "Nächsten Adds"
 	L.adds_warning = "Adds in 5 sek!"
 
-	L.touch_message = "%2$dx Berührung: %1$s"
 	L.touch_bar = "~Nächste Berührung"
 
 	L.deformed_fanatic = "Deformierter Fanatiker!"
@@ -221,18 +219,12 @@ if L then
 	L.blight_message = "Roter Schlamm"
 	L.violation_message = "Grüner Schlamm"
 
-	L.plague_message = "%2$dx Seuche: %1$s"
 	L.plague_bar = "Nächste Seuche"
 
 	L.gasbomb_bar = "Weitere Gasbomben"
 	L.gasbomb_message = "Gasbomben!"
 
 	L.unbound_bar = "Entfesselte Seuche: %s"
-end
-
-L = BigWigs:NewBossLocale("Putricide Dogs", "deDE")
-if L then
-	L.wound_message = "%2$dx Tödliche Wunde: %1$s"
 end
 
 L = BigWigs:NewBossLocale("Rotface", "deDE")

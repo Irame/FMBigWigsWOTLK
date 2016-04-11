@@ -14,7 +14,6 @@ mod.order = 20
 
 local L = mod:NewLocale("enUS", true)
 if L then
-	L.wound_message = "%2$dx Mortal Wound on %1$s"
 	L.decimate_bar = "Decimate"
 end
 L = mod:GetLocale()
@@ -35,7 +34,7 @@ end
 
 function mod:Wound(player, spellId, _, _, _, stack)
 	if stack > 5 then
-		self:TargetMessage(71127, player, "Important", nil, L["wound_message"], nil, stack)
+		self:StackMessage(71127, player, stack, "Important")
 	end
 end
 

@@ -8,7 +8,6 @@ if L then
 	L.phase_bar = "%d 단계"
 	L.engage_trigger = "^너희 행동은 비논리적이다."
 
-	L.punch_message = "위상의 주먹 %2$dx : %1$s"
 	L.smash_message = "곧 우주의 강타!"
 	L.blackhole_message = "검은 구멍 폭발 %dx 소환"
 	L.bigbang_bar = "다음 대폭발"
@@ -146,7 +145,6 @@ if L then
 	L.eyebeamsay = "안광 일반 대화"
 	L.eyebeamsay_desc = "안광 집중의 대상시 일반 대화로 알립니다."
 
-	L.armor_message = "방어구 씹기 x%2$d: %1$s"
 end
 
 L = BigWigs:NewBossLocale("Flame Leviathan", "koKR")

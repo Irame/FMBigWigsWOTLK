@@ -43,7 +43,6 @@ if L then
 	L.snobold = "Snobold"
 	L.snobold_desc = "Warn who gets a Snobold on their heads."
 	L.snobold_message = "Add"
-	L.impale_message = "%2$dx Impale on %1$s"
 	L.firebomb_message = "Fire on YOU!"
 
 	-- Jormungars
@@ -178,7 +177,7 @@ end
 
 function mod:Impale(player, spellId, _, _, spellName, stack)
 	if stack and stack > 1 then
-		self:TargetMessage(67477, player, "Urgent", "Info", L["impale_message"], nil, stack)
+		self:StackMessage(67477, player, stack, "Urgent", "Info")
 	end
 	self:Bar(67477, spellName, 10, spellId)
 end

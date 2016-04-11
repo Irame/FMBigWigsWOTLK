@@ -122,7 +122,6 @@ if L then
 	L.whiteout_bar = "Blanc aveuglant %d"
 	L.whiteout_message = "Blanc aveuglant %d imminent !"
 
-	L.frostbite_message = "%2$dx Morsure de givre sur %1$s"
 
 	L.freeze_message = "Sol givrant"
 

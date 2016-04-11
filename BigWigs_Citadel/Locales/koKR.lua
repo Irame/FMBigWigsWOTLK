@@ -27,7 +27,6 @@ if L then
 	L.blight_warning = "약 5초 후 파멸의 역병!"
 	L.blight_bar = "다음 파멸 역병"
 
-	L.bloat_message = "위 팽창 %2$dx : %1$s"
 	L.bloat_bar = "~다음 위 팽창"
 
 	L.spore_bar = "~다음 가스 포자"
@@ -68,7 +67,6 @@ if L then
 	L.adds_bar = "다음 추가"
 	L.adds_warning = "5초 후 몹 추가!"
 
-	L.touch_message = "손길 %2$dx : %1$s"
 	L.touch_bar = "다음 손길"
 
 	L.deformed_fanatic = "광신자 변형"
@@ -91,11 +89,6 @@ if L then
 	L.engage_trigger = "스컬지가 죽음과 파괴의 무리가 되어 이 세상을 쓸어버리리라!"
 end
 
-L = BigWigs:NewBossLocale("Putricide Dogs", "koKR")
-if L then
-	L.wound_message = "죽음의 상처 %2$dx : %1$s"
-end
-
 L = BigWigs:NewBossLocale("Professor Putricide", "koKR")
 if L then
 	L.phase = "단계"
@@ -114,7 +107,6 @@ if L then
 	L.blight_message = "붉은 수액"
 	L.violation_message = "녹색 수액"
 
-	L.plague_message = "돌연변이 역병 %2$dx : %1$s"
 	L.plague_bar = "다음 역병"
 
 	L.gasbomb_bar = "다음 노란 가스탄"

@@ -38,7 +38,6 @@ if L then
 	L.adds_bar = "Next Adds"
 	L.adds_warning = "New adds in 5 sec!"
 
-	L.touch_message = "%2$dx Touch on %1$s"
 	L.touch_bar = "Next Touch"
 
 	L.deformed_fanatic = "Deformed Fanatic!"
@@ -130,7 +129,7 @@ end
 
 function mod:Touch(player, spellId, _, _, _, stack)
 	if stack and stack > 1 then
-		self:TargetMessage(71204, player, "Urgent", nil, L["touch_message"], nil, stack)
+		self:StackMessage(71204, player, stack, "Urgent")
 	end
 	self:Bar(71204, L["touch_bar"], 9, spellId)
 end

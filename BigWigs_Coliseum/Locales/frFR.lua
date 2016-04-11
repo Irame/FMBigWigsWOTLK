@@ -35,7 +35,6 @@ if L then
 	L.snobold = "Frigbold"
 	L.snobold_desc = "Prévient quand un joueur a un frigbold sur sa tête."
 	L.snobold_message = "Frigbold"
-	L.impale_message = "%2$dx Empaler sur %1$s"
 	L.firebomb_message = "Bombe incendiaire en dessous de VOUS !"
 
 	-- Jormungars

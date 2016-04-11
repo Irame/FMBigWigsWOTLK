@@ -3,6 +3,8 @@ if not L then return end
 -- Prototype.lua common words
 L.you = "%s sur VOUS"
 L.other = "%s : %s"
+L.stack = "%dx %s sur %s"
+L.stackyou = "%dx %s sur VOUS"
 
 L.phase = "Phase %d"
 L.normal = "Mode normal"

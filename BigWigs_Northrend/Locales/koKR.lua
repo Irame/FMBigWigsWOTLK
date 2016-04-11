@@ -34,7 +34,6 @@ if L then
 	L.whiteout_bar = "시아상실 %d"
 	L.whiteout_message = "곧 시아상실 %d !"
 
-	L.frostbite_message = "동상 %2$dx : %1$s"
 
 	L.freeze_message = "땅얼리기"
 

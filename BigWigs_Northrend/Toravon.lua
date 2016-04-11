@@ -24,7 +24,6 @@ if L then
 	L.whiteout_bar = "Whiteout %d"
 	L.whiteout_message = "Whiteout %d soon!"
 
-	L.frostbite_message = "%2$dx Frostbite on %1$s"
 
 	L.freeze_message = "Freeze"
 
@@ -71,7 +70,7 @@ end
 
 function mod:Frostbite(player, spellId, _, _, _, stack)
 	if stack and stack > 4 then
-		self:TargetMessage(72004, player, "Urgent", nil, L["frostbite_message"], nil, stack)
+		self:StackMessage(72004, player, stack, "Urgent")
 	end
 end
 

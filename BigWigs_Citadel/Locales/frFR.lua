@@ -29,7 +29,6 @@ if L then
 	L.adds_bar = "Prochains membres du culte"
 	L.adds_warning = "Prochains membres du culte dans 5 sec. !"
 
-	L.touch_message = "%2$dx Toucher sur %1$s"
 	L.touch_bar = "Prochain Toucher"
 
 	L.deformed_fanatic = "Fanatique déformé !"
@@ -50,7 +49,6 @@ if L then
 	L.blight_warning = "Chancre âcre dans ~5 sec. !"
 	L.blight_bar = "Prochain Chancre"
 
-	L.bloat_message = "%2$dx Ballonnement gastrique sur %1$s"
 	L.bloat_bar = "~Ballonnement gastrique"
 
 	L.spore_bar = "~Spores gazeuses"
@@ -156,11 +154,6 @@ if L then
 	L.engage_trigger = "Le Fléau va déferler sur ce monde dans un torrent de mort et de destruction !"
 end
 
-L = BigWigs:NewBossLocale("Putricide Dogs", "frFR")
-if L then
-	L.wound_message = "%2$dx Blessure mortelle sur %1$s"
-end
-
 L = BigWigs:NewBossLocale("Professor Putricide", "frFR")
 if L then
 	L.phase = "Phases"
@@ -179,7 +172,6 @@ if L then
 	L.blight_message = "Nuage de gaz"
 	L.violation_message = "Limon volatil"
 
-	L.plague_message = "%2$dx Peste mutée sur %1$s"
 	L.plague_bar = "Prochaine Peste"
 
 	L.gasbomb_bar = "D'autres Bombes de gaz !"

@@ -116,7 +116,6 @@ if L then
 	L.whiteout_bar = "寒霜厲雪：>%d<！"
 	L.whiteout_message = "即將寒霜厲雪：>%d<！"
 
-	L.frostbite_message = "%2$dx霜寒刺骨：>%1$s<！"
 
 	L.freeze_message = "冰凍之地！"
 

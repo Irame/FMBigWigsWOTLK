@@ -74,7 +74,6 @@ if L then
 	L.blight_warning = "Едкая гниль через ~5сек!"
 	L.blight_bar = "~Следущая Гниль"
 
-	L.bloat_message = "%2$dx Газовое вздутие on %1$s"
 	L.bloat_bar = "~Следущее Вздутие"
 
 	L.spore_bar = "~Следующие Газообразные споры"
@@ -115,7 +114,6 @@ if L then
 	L.adds_bar = "~Новые Вестники Смерти"
 	L.adds_warning = "Новые Вестники Смерти через 5 сек!"
 
-	L.touch_message = "%2$dx Прикосновений у: %1$s"
 	L.touch_bar = "~Прикосновение"
 
 	L.deformed_fanatic = "Кособокий фанатик!"
@@ -144,18 +142,12 @@ if L then
 	L.blight_message = "Газовое облако"
 	L.violation_message = "Зеленый слизнюк"
 
-	L.plague_message = "%2$dx чума на %1$s"
 	L.plague_bar = "Следующая чума"
 
 	L.gasbomb_bar = "Следующие желтые газовые бомбы"
 	L.gasbomb_message = "Желтые бомбы!"
 	
 	L.unbound_bar = "Безудержная чума: %s"
-end
-
-L = BigWigs:NewBossLocale("Putricide Dogs", "ruRU")
-if L then
-	L.wound_message = "%2$dx смертельных ран у: %1$s"
 end
 
 L = BigWigs:NewBossLocale("Rotface", "ruRU")

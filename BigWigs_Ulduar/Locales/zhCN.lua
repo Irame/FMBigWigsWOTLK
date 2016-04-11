@@ -8,7 +8,6 @@ if L then
 	L.phase_bar = "<阶段%d>"
 	L.engage_trigger = "你们的行动不合逻辑。这场战斗所有可能产生的结果都已被计算在内。无论结果如何，万神殿都会收到观察者发出的信息。"
 
-	L.punch_message = "相位冲压%2$d层：>%1$s<！"
 	L.smash_message = "即将 宇宙重击！"
 	L.blackhole_message = "黑洞爆炸：>%dx< 出现！"
 	L.bigbang_bar = "<下一大爆炸>"
@@ -146,7 +145,6 @@ if L then
 	L.eyebeamsay = "聚焦视线"
 	L.eyebeamsay_desc = "当你中了聚焦视线时发出自身警报。"
 
-	L.armor_message = "粉碎护甲%2$d层：>%1$s<！"
 end
 
 L = BigWigs:NewBossLocale("Flame Leviathan", "zhCN")
