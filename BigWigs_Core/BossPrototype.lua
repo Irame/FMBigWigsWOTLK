@@ -446,7 +446,7 @@ function boss:DelayedMessage(key, delay, color, text, icon, sound)
 		self:CancelDelayedMessage(text or key)
 		if not self.scheduledMessages then self.scheduledMessages = {} end
 		local id = self:ScheduleTimer("Message", delay, key, color, sound, text, icon or false)
-		scheduledMessages[text or key] = id
+		self.scheduledMessages[text or key] = id
 		return id
 	end
 end
@@ -464,7 +464,7 @@ function boss:Message(key, color, sound, text, icon)
 	local textType = type(text)
 	local temp = (icon == false and 0) or (icon ~= false and icon) or (textType == "number" and text) or key
 	if temp == key and type(key) == "string" then
-		BigWigs:Print(("Message '%s' doesn't have an icon set."):format(textType == "string" and text or spells[text or key])) -- XXX temp
+		BigWigs:Print(("Message '%s' doesn't have an icon set."):format(textType == "string" and text or spells[text or key] or key)) -- XXX temp
 	end
 	
 	self:SendMessage("BigWigs_Message", self, key, textType == "string" and text or spells[text or key], color, icon ~= false and icons[icon or textType == "number" and text or key])
