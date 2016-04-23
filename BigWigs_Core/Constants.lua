@@ -14,7 +14,7 @@ for i, toggle in next, coreToggles do
 end
 
 -- Toggles that should actually be shown in the interface options
-local listToggles = { "MESSAGE", "BAR", "FLASHSHAKE", "ICON", "WHISPER", "SAY", "PING", "HEALTHBAR", "VOICE", "DISPEL" }
+local listToggles = { "MESSAGE", "BAR", "FLASHSHAKE", "ICON", "WHISPER", "SAY", "PROXIMITY", "PING", "HEALTHBAR", "VOICE", "DISPEL" }
 
 local used = nil
 function BigWigs:RegisterOption(key, name, desc)

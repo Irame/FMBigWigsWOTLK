@@ -166,8 +166,8 @@ L["The proximity display will show next time. To disable it completely for this 
 L["Graphical display"] = "Grafische Anzeige"
 L["Sound delay"] = "Soundverzögerung"
 
-L.proximity = "Nähe"
-L.proximity_desc = "Zeigt das Fenster für nahe Spieler an. Es listet alle Spieler auf, die dir zu nahe stehen."
+L.proximity = "Näheanzeige"
+L.proximity_desc = "Fähigkeiten von Begegnungen erfordern manchmal, dass alle Mitspieler auseinander stehen. Die Näheanzeige wird speziell für diese Fähigkeit eingestellt, so dass du auf einen Blick siehst, ob du sicher bist oder nicht."
 
 L.proximityfont = "Fonts\\FRIZQT__.TTF"
 

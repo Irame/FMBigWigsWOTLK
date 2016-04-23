@@ -185,7 +185,7 @@ L["Sound delay"] = true
 L["Specify how long Big Wigs should wait between repeating the specified sound when someone is too close to you."] = true
 
 L.proximity = "Proximity display"
-L.proximity_desc = "Show the proximity window when appropriate for this encounter, listing players who are standing too close to you."
+L.proximity_desc = "Abilities will sometimes require you to spread out. The proximity display will be set up specifically for this ability so that you will be able to tell at-a-glance whether or not you are safe."
 L.proximityfont = "Fonts\\FRIZQT__.TTF"
 
 L["Close"] = true
