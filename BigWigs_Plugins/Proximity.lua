@@ -1668,6 +1668,7 @@ function plugin:Open(range, module, key, player, isReverse, spellName, spellIcon
 			else
 				activeProximityRadarFunction = multiTargetProximity
 			end
+			wipe(player)
 		else
 			for i = 1, plugin:GetNumGroupMembers() do
 				if UnitIsUnit(player, unitList[i]) then
