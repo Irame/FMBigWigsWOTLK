@@ -15,6 +15,7 @@ mod.optionHeaders = {
 --------------------------------------------------------------------------------
 -- Locals
 --
+local lastReverberation = 0
 
 --------------------------------------------------------------------------------
 --  Localization
@@ -75,6 +76,9 @@ function mod:CaveIn(player , spellId, _, _, spellName)
 end
 
 function mod:Reverberation(_, spellId, _, _, spellName)
+	local ct = GetTime()
+	if ct - lastReverberation < 2 then return end
+	lastReverberation = ct
 	self:Message(36297, "Attention")
 	self:Bar(36297, L["cooldown_bars"]:format(spellName), 20, spellId)
 end
