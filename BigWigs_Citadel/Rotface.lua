@@ -5,12 +5,11 @@
 local mod = BigWigs:NewBoss("Rotface", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(36627)
-mod.toggleOptions = {{69839, "FLASHSHAKE"}, {71224, "FLASHSHAKE", "ICON"}, 69508, "ooze", 72272, "proximity", "berserk", "bosskill"}
+mod.toggleOptions = {{69839, "FLASHSHAKE"}, {71224, "FLASHSHAKE", "ICON"}, 69508, "ooze", {72272, "PROXIMITY"}, "berserk", "bosskill"}
 mod.optionHeaders = {
 	[69839] = "normal",
 	[72272] = "heroic",
 	berserk = "general",
-	proximity = "general",
 }
 mod.order = 22
 

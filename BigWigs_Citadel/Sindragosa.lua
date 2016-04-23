@@ -6,7 +6,7 @@ local mod = BigWigs:NewBoss("Sindragosa", "Icecrown Citadel")
 if not mod then return end
 -- Sindragosa, Rimefang, Spinestalker
 mod:RegisterEnableMob(36853, 37533, 37534)
-mod.toggleOptions = {"airphase", "phase2", 70127, {69762, "FLASHSHAKE"}, {69766, "SAY"}, 70106, 71047, {70126, "FLASHSHAKE"}, "proximity", "berserk", "bosskill"}
+mod.toggleOptions = {"airphase", "phase2", 70127, {69762, "FLASHSHAKE"}, {69766, "PROXIMITY", "SAY"}, 70106, 71047, {70126, "PROXIMITY", "FLASHSHAKE"}, "berserk", "bosskill"}
 local CL = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Common")
 mod.optionHeaders = {
 	airphase = CL.phase:format(1),
@@ -20,8 +20,8 @@ mod.order = 43
 --
 
 local phase = 0
-local beaconTargets = mod:NewTargetList()
-local unchainedTargets = mod:NewTargetList()
+local playerHasUnchained = false
+local proxInstabilityTargetTable = {}
 
 --------------------------------------------------------------------------------
 -- Localization
@@ -66,6 +66,8 @@ function mod:OnBossEnable()
 	self:Log("SPELL_AURA_APPLIED", "Unchained", 69762)
 	self:Log("SPELL_AURA_REMOVED", "UnchainedRemoved", 69762)
 	self:Log("SPELL_AURA_APPLIED_DOSE", "Instability", 69766)
+	self:Log("SPELL_AURA_APPLIED", "Instability", 69766)
+	self:Log("SPELL_AURA_REMOVED", "InstabilityRemoved", 69766)
 	self:Log("SPELL_AURA_APPLIED_DOSE", "Chilled", 70106)
 	self:Log("SPELL_AURA_APPLIED_DOSE", "Buffet", 70127, 72528, 72529, 72530)
 
@@ -88,6 +90,8 @@ function mod:OnEngage()
 	self:Bar("airphase", L["airphase_bar"], 63, 23684)
 	self:Bar(69762, L["unchained_bar"], 15, 69762)
 	self:Bar(71047, L["grip_bar"], 34, 70117)
+	playerHasUnchained = false
+	wipe(proxInstabilityTargetTable)
 end
 
 --------------------------------------------------------------------------------
@@ -101,9 +105,12 @@ function mod:Tombed(player)
 end
 
 do
+	local msgTargets = mod:NewTargetList()
+	local proxTargets = {}
+	local onMe = false
 	local scheduled = nil
 	local function baconWarn(spellName)
-		if phase == 1 and ((#beaconTargets < 2 and mod:IsDifficulty("10")) or (#beaconTargets < 5 and mod:IsDifficulty("25nh")) or (#beaconTargets < 6 and mod:IsDifficulty("25hc"))) then
+		if phase == 1 and ((#msgTargets < 2 and mod:IsDifficulty("10")) or (#msgTargets < 5 and mod:IsDifficulty("25nh")) or (#msgTargets < 6 and mod:IsDifficulty("25hc"))) then
 			mod:Message(70126, "Important", "Alarm", L["mage_bug_message"]:format(spellName))
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
@@ -111,14 +118,21 @@ do
 				self:ScheduleTimer(self.CloseProximity, 7, self)
 			end
 		end
-		mod:TargetMessage(70126, beaconTargets, "Urgent")
+		if onMe then
+			self:OpenProximity(10, 70126)
+		else
+			self:OpenProximity(10, 70126, proxTargets)
+		end
+		mod:TargetMessage(70126, msgTargets, "Urgent")
 		mod:Bar(70126, spellName, 7, 70126)
 		scheduled = nil
+		onMe = false
 	end
 	function mod:FrostBeacon(player, spellId, _, _, spellName)
-		beaconTargets[#beaconTargets + 1] = player
+		msgTargets[#msgTargets + 1] = player
+		proxTargets[#proxTargets + 1] = player
 		if UnitIsUnit(player, "player") then
-			self:OpenProximity(10,70126)
+			onMe = true
 			self:FlashShake(70126)
 		end
 		if not scheduled then
@@ -157,15 +171,40 @@ function mod:Buffet(player, spellId, _, _, _, stack)
 	end
 end
 
-function mod:Instability(player, spellId, _, _, _, stack)
-	if stack > 4 and UnitIsUnit(player, "player") then
-		self:LocalMessage(69766, "Personal", nil, L["instability_message"]:format(stack))
-		if (stack % 2 == 0) and mod:IsDifficulty("hc") then
-			self:Say(69766, L["instability_message"]:format(stack))
+do
+	function mod:Instability(player, spellId, _, _, _, stack)
+		if not stack then stack = 1 end
+		if stack > 4 and UnitIsUnit(player, "player") then
+			self:LocalMessage(69766, "Personal", nil, L["instability_message"]:format(stack))
+			if (stack % 2 == 0) and mod:IsDifficulty("hc") then
+				self:Say(69766, L["instability_message"]:format(stack))
+			end
+		end
+		if not proxInstabilityTargetTable[player] then
+			proxInstabilityTargetTable[player] = true
+			if not playerHasUnchained then
+				local proxTargets = {}
+				for p, _ in pairs(proxInstabilityTargetTable) do
+					proxTargets[#proxTargets + 1] = p
+				end
+				mod:OpenProximity(20, 69766, proxTargets)
+			end
+		end
+	end
+	function mod:InstabilityRemoved(player)
+		if proxInstabilityTargetTable[player] then
+			proxInstabilityTargetTable[player] = nil
+			if not playerHasUnchained then
+				local proxTargets = {}
+				for p, _ in pairs(proxInstabilityTargetTable) do
+					proxTargets[#proxTargets + 1] = p
+				end
+				mod:OpenProximity(20, 69766, proxTargets)
+			end
 		end
 	end
 end
-
+	
 function mod:Chilled(player, spellId, _, _, _, stack)
 	if stack > 4 and UnitIsUnit(player, "player") then
 		self:LocalMessage(70106, "Personal", nil, L["chilled_message"]:format(stack))
@@ -173,6 +212,7 @@ function mod:Chilled(player, spellId, _, _, _, stack)
 end
 
 do
+	local unchainedTargets = mod:NewTargetList()
 	local scheduledUnchained = nil
 	local function unchainedTargetWarning(spellName)
 		if ((#unchainedTargets < 6 and mod:IsDifficulty("25")) or (#unchainedTargets < 2 and mod:IsDifficulty("10"))) then
@@ -191,6 +231,7 @@ do
 		if UnitIsUnit(player, "player") then
 			self:FlashShake(69762)
 			if mod:IsDifficulty("hc") then
+				playerHasUnchained = true
 				self:OpenProximity(20,69762)
 			end
 		end
@@ -208,7 +249,13 @@ end
 
 function mod:UnchainedRemoved(player, spellId)
 	if UnitIsUnit(player, "player") then
-		self:CloseProximity()
+		playerHasUnchained = false
+		self:CloseProximity(69762)
+		local proxTargets = {}
+		for p, _ in pairs(proxInstabilityTargetTable) do
+			proxTargets[#proxTargets + 1] = p
+		end
+		mod:OpenProximity(20, 69766, proxTargets)
 	end
 end
 

@@ -5,11 +5,10 @@
 local mod = BigWigs:NewBoss("Festergut", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(36626)
-mod.toggleOptions = {{69279, "FLASHSHAKE"}, 69165, 71219, 72551, 71218, 72295, "proximity", "berserk", "bosskill"}
+mod.toggleOptions = {{69279, "PROXIMITY", "FLASHSHAKE"}, 69165, 71219, 72551, {71218, "PROXIMITY"}, 72295, "berserk", "bosskill"}
 mod.optionHeaders = {
 	[69279] = "normal",
 	[72295] = "heroic",
-	proximity = "general",
 }
 mod.order = 21
 
@@ -17,7 +16,6 @@ mod.order = 21
 -- Locals
 --
 
-local sporeTargets = mod:NewTargetList()
 local count = 1
 
 --------------------------------------------------------------------------------
@@ -74,18 +72,30 @@ end
 --
 
 do
+	local onMe = false
+	local msgTargets = mod:NewTargetList()
+	local proxTargets = {}
 	local scheduled = nil
 	local function sporeWarn(spellName)
-		mod:TargetMessage(69279, sporeTargets, "Urgent", "Alert")
+		if onMe then
+			mod:OpenProximity(8, 69279, nil, true)
+		else
+			mod:OpenProximity(8, 69279, proxTargets, true)
+		end
+		mod:TargetMessage(69279, msgTargets, "Urgent", "Alert")
 		scheduled = nil
+		onMe = false
 	end
 	local function sporeNext()
 		mod:Bar(69279, L["spore_bar"], 28, 69279)
+		self:OpenProximity(9,71218)
 	end
 	function mod:Spores(player, spellId, _, _, spellName)
-		sporeTargets[#sporeTargets + 1] = player
+		msgTargets[#msgTargets + 1] = player
+		proxTargets[#proxTargets + 1] = player
 		if UnitIsUnit(player, "player") then
 			self:FlashShake(69279)
+			onMe = true
 		end
 		if not scheduled then
 			scheduled = true

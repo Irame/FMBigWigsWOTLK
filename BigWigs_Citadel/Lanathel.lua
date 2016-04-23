@@ -5,7 +5,7 @@
 local mod = BigWigs:NewBoss("Blood-Queen Lana'thel", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(37955)
-mod.toggleOptions = {{71340, "FLASHSHAKE"}, {71265, "FLASHSHAKE"}, {70877, "WHISPER"}, 71772, 71623, "proximity", "berserk", "bosskill"}
+mod.toggleOptions = {{71340, "FLASHSHAKE"}, {71265, "FLASHSHAKE"}, {70877, "WHISPER"}, {71772, "PROXIMITY"}, 71623, "berserk", "bosskill"}
 mod.order = 32
 
 --------------------------------------------------------------------------------
