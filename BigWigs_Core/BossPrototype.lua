@@ -9,6 +9,7 @@ local function dbg(self, msg) print(dbgStr:format(self.displayName, msg)) end
 local AL = LibStub("AceLocale-3.0")
 local core = BigWigs
 local C = core.C
+local pName = UnitName("player")
 local UpdateZoneData, UpdateRoleData, UpdateInstanceDifficulty, UpdateDispelStatus, UpdateInterruptStatus
 local updateData = function()
 	UpdateZoneData()
