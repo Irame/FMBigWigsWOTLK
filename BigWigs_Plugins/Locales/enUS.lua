@@ -173,7 +173,7 @@ L["Default only"] = true
 
 L["|T%s:20:20:-5|tAbility name"] = true
 L["Custom range indicator"] = true
-L["%d yards"] = true
+L["%d yd / %d |4player:players;"] = true
 L["Proximity"] = true
 L["Sound"] = true
 L["Disabled"] = true

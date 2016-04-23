@@ -125,6 +125,7 @@ L["Default only"] = "Solo por defecto"
 L["Use only the default sound."] = "Usar solo el sonido por defecto"
 -- Proximity.lua
 
+L["%d yd / %d |4player:players;"] = "%d m / %d |4jugador:jugadores;"
 L["Proximity"] = "Proximidad"
 
 L["Options for the Proximity Display."] = "Opciones para la ventana de proximidad"

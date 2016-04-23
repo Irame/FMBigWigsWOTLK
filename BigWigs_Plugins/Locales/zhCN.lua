@@ -138,7 +138,7 @@ L["Default only"] = "只用预设"
 -- Proximity.lua
 --
 
-L["%d yards"] = "%d码"
+L["%d yd / %d |4player:players;"] = "%d码/%d玩家"
 L["Proximity"] = "近距离"
 L["Sound"] = "音效"
 L["Disabled"] = "禁用"

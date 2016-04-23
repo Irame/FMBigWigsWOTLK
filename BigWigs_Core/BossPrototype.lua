@@ -422,14 +422,22 @@ local silencedOptions = {}
 end
 
 -- PROXIMITY
-function boss:OpenProximity(range, key)
-	if not checkFlag(self, "proximity", C.PROXIMITY) then return end
-	self:SendMessage("BigWigs_ShowProximity", self, range, key or "proximity")
+function boss:OpenProximity(range, key, player, isReverse)
+	if key and checkFlag(self, key, C.PROXIMITY) then
+		if type(key) == "number" then
+			self:SendMessage("BigWigs_ShowProximity", self, range, key, player, isReverse, spells[key], icons[key])
+		else
+			self:SendMessage("BigWigs_ShowProximity", self, range, key, player, isReverse)
+		end
+	elseif not key and checkFlag(self, "proximity", C.PROXIMITY) then
+		self:SendMessage("BigWigs_ShowProximity", self, range, "proximity", player, isReverse)
+	end
 end
 
 function boss:CloseProximity()
-	if not checkFlag(self, "proximity", C.PROXIMITY) then return end
-	self:SendMessage("BigWigs_HideProximity")
+	if (key and checkFlag(self, key, C.PROXIMITY)) or (not key and checkFlag(self, "proximity", C.PROXIMITY)) then
+		self:SendMessage("BigWigs_HideProximity", self)
+	end
 end
 
 -- MESSAGES

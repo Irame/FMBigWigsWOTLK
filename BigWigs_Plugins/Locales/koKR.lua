@@ -138,7 +138,7 @@ L["Default only"] = "기본음"
 -- Proximity.lua
 --
 
-L["%d yards"] = "%d 미터"
+L["%d yd / %d |4player:players;"] = "%d미터 / %d 플레이어"
 L["Proximity"] = "근접"
 L["Sound"] = "효과음"
 L["Disabled"] = "미사용"

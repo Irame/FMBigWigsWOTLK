@@ -33,19 +33,27 @@ plugin.defaultDB = {
 
 local AceGUI = nil
 local L = LibStub("AceLocale-3.0"):GetLocale("Big Wigs: Plugins")
+local L_proximityTitle = L["%d yd / %d |4player:players;"]
 
 local media = LibStub("LibSharedMedia-3.0")
 local mute = "Interface\\AddOns\\BigWigs\\Textures\\icons\\mute"
 local unmute = "Interface\\AddOns\\BigWigs\\Textures\\icons\\unmute"
 
 local inConfigMode = nil
-local activeProximityFunction = nil
-local activeRange = nil
+local activeProximityTextFunction, activeProximityRadarFunction = nil, nil
+local customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
+local activeRange, activeRangeRadius, activeRangeSquared, activeRangeSquaredTwoFive = nil, nil, nil, nil
 local activeSpellID = nil
+local proximityPlayer = nil
+local proximityPlayerTable = {}
 local activeMap = nil
 local maxPlayers = 0
-local classCache = nil
-local anchor = nil
+local myGUID = nil
+local unitList = nil
+local blipList = {}
+local hideDots, testDots = nil, nil
+local updateBlipColors, updateBlipIcons = nil, nil
+local proxAnchor, proxTitle, proxCircle, proxPulseOut, proxPulseIn = nil, nil, nil, nil, nil
 
 local OnOptionToggled = nil -- Function invoked when the proximity option is toggled on a module.
 
@@ -80,6 +88,7 @@ local UnitIsUnit = UnitIsUnit
 local GetTime = GetTime
 local min = math.min
 local pi = math.pi
+local piDoubled = pi * 2
 local cos = math.cos
 local sin = math.sin
 local tremove = table.remove
@@ -366,8 +375,8 @@ end
 --
 
 local function updateSoundButton()
-	if not anchor then return end
-	anchor.sound:SetNormalTexture(plugin.db.profile.sound and unmute or mute)
+	if not proxAnchor then return end
+	proxAnchor.sound:SetNormalTexture(plugin.db.profile.sound and unmute or mute)
 end
 local function toggleSound()
 	plugin.db.profile.sound = not plugin.db.profile.sound
@@ -393,18 +402,19 @@ local function onResize(self, width, height)
 	if inConfigMode then
 		if plugin.db.profile.graphical then
 			testDots()
-			anchor.text:Hide()
+			proxAnchor.text:Hide()
 		else
 			hideDots()
-			anchor.rangeCircle:Hide()
-			anchor.playerDot:Hide()
-			anchor.text:Show()
+			proxCircle:Hide()
+			proxAnchor.playerDot:Hide()
+			proxAnchor.text:Show()
 		end
 	else
-		local width, height = anchor:GetWidth(), anchor:GetHeight()
-		local range = activeRange and activeRange or 10
-		local pixperyard = min(width, height) / (range*3)
-		anchor.rangeCircle:SetSize(range*2*pixperyard, range*2*pixperyard)
+		local width, height = proxAnchor:GetWidth(), proxAnchor:GetHeight()
+		local circleSize = 2 * min(width, height) / 3
+		proxCircle:SetSize(circleSize, circleSize)
+		local pulseSize = circleSize * proxAnchor.rangePulse.sizeFactor
+		proxAnchor.rangePulse:SetSize(pulseSize, pulseSize)
 	end
 end
 
@@ -423,28 +433,28 @@ end
 local locked = nil
 local function lockDisplay()
 	if locked then return end
-	anchor:EnableMouse(false)
-	anchor:SetMovable(false)
-	anchor:SetResizable(false)
-	anchor:RegisterForDrag()
-	anchor:SetScript("OnSizeChanged", nil)
-	anchor:SetScript("OnDragStart", nil)
-	anchor:SetScript("OnDragStop", nil)
-	anchor:SetScript("OnMouseUp", nil)
-	anchor.drag:Hide()
+	proxAnchor:EnableMouse(false)
+	proxAnchor:SetMovable(false)
+	proxAnchor:SetResizable(false)
+	proxAnchor:RegisterForDrag()
+	proxAnchor:SetScript("OnSizeChanged", nil)
+	proxAnchor:SetScript("OnDragStart", nil)
+	proxAnchor:SetScript("OnDragStop", nil)
+	proxAnchor:SetScript("OnMouseUp", nil)
+	proxAnchor.drag:Hide()
 	locked = true
 end
 local function unlockDisplay()
 	if not locked then return end
-	anchor:EnableMouse(true)
-	anchor:SetMovable(true)
-	anchor:SetResizable(true)
-	anchor:RegisterForDrag("LeftButton")
-	anchor:SetScript("OnSizeChanged", onResize)
-	anchor:SetScript("OnDragStart", onDragStart)
-	anchor:SetScript("OnDragStop", onDragStop)
-	anchor:SetScript("OnMouseUp", setConfigureTarget)
-	anchor.drag:Show()
+	proxAnchor:EnableMouse(true)
+	proxAnchor:SetMovable(true)
+	proxAnchor:SetResizable(true)
+	proxAnchor:RegisterForDrag("LeftButton")
+	proxAnchor:SetScript("OnSizeChanged", onResize)
+	proxAnchor:SetScript("OnDragStart", onDragStart)
+	proxAnchor:SetScript("OnDragStop", onDragStop)
+	proxAnchor:SetScript("OnMouseUp", setConfigureTarget)
+	proxAnchor.drag:Show()
 	locked = nil
 end
 
@@ -461,29 +471,30 @@ local function onNormalClose()
 	if active then
 		BigWigs:Print(L["The proximity display will show next time. To disable it completely for this encounter, you need to toggle it off in the encounter options."])
 	end
+	customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
 	plugin:Close()
 end
 
 local function breakThings()
-	anchor.sound:SetScript("OnEnter", nil)
-	anchor.sound:SetScript("OnLeave", nil)
-	anchor.sound:SetScript("OnClick", nil)
-	anchor.close:SetScript("OnEnter", nil)
-	anchor.close:SetScript("OnLeave", nil)
-	anchor.close:SetScript("OnClick", nil)
+	proxAnchor.sound:SetScript("OnEnter", nil)
+	proxAnchor.sound:SetScript("OnLeave", nil)
+	proxAnchor.sound:SetScript("OnClick", nil)
+	proxAnchor.close:SetScript("OnEnter", nil)
+	proxAnchor.close:SetScript("OnLeave", nil)
+	proxAnchor.close:SetScript("OnClick", nil)
 end
 
 local function makeThingsWork()
-	anchor.sound:SetScript("OnEnter", onControlEnter)
-	anchor.sound:SetScript("OnLeave", onControlLeave)
-	anchor.sound:SetScript("OnClick", toggleSound)
-	anchor.close:SetScript("OnEnter", onControlEnter)
-	anchor.close:SetScript("OnLeave", onControlLeave)
-	anchor.close:SetScript("OnClick", onNormalClose)
+	proxAnchor.sound:SetScript("OnEnter", onControlEnter)
+	proxAnchor.sound:SetScript("OnLeave", onControlLeave)
+	proxAnchor.sound:SetScript("OnClick", toggleSound)
+	proxAnchor.close:SetScript("OnEnter", onControlEnter)
+	proxAnchor.close:SetScript("OnLeave", onControlLeave)
+	proxAnchor.close:SetScript("OnClick", onNormalClose)
 end
 
 local function ensureDisplay()
-	if anchor then return end
+	if proxAnchor then return end
 
 	local display = CreateFrame("Frame", "BigWigsProximityAnchor", UIParent)
 	display:SetWidth(plugin.db.profile.width)
@@ -517,9 +528,10 @@ local function ensureDisplay()
 	display.sound = sound
 
 	local header = display:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-	header:SetText(L["%d yards"]:format(0))
+	header:SetText(L_proximityTitle:format(0,0))
 	header:SetPoint("BOTTOM", display, "TOP", 0, 4)
 	display.title = header
+	proxTitle = header
 
 	local abilityName = display:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 	abilityName:SetText(L["|T%s:20:20:-5|tAbility name"]:format("Interface\\Icons\\spell_nature_chainlightning"))
@@ -543,6 +555,85 @@ local function ensureDisplay()
 	rangeCircle:SetTexture([[Interface\AddOns\BigWigs\Textures\alert_circle]])
 	rangeCircle:SetBlendMode("ADD")
 	display.rangeCircle = rangeCircle
+	proxCircle = rangeCircle
+
+	local rangePulse = display:CreateTexture(nil, "ARTWORK")
+	rangePulse:SetPoint("CENTER")
+	rangePulse:SetTexture([[Interface\AddOns\BigWigs\Textures\rangePulseCircleGlow]])
+	rangePulse:SetBlendMode("ADD")
+	rangePulse:Hide()
+	rangePulse.sizeFactor = 1
+	display.rangePulse = rangePulse
+
+	local function showAnimParent(frame, sizeFactor, alpha) 
+		frame:GetParent():Show() 
+		frame.playing = true 
+		local parent = frame:GetParent();
+		parent:SetAlpha(alpha);
+		parent:SetSize(proxCircle:GetWidth()*sizeFactor, proxCircle:GetHeight()*sizeFactor)
+		parent.sizeFactor = sizeFactor
+	end
+	local function hideAnimParent(frame) 
+		frame:GetParent():Hide() 
+		frame.playing = nil 
+		local parent = frame:GetParent();
+		parent:SetAlpha(1);
+		parent:SetSize(proxCircle:GetWidth(), proxCircle:GetHeight())
+		parent.sizeFactor = 1
+	end
+	
+	-- Push outwards
+	local animGroupOutbound = rangePulse:CreateAnimationGroup()
+	animGroupOutbound:SetLooping("REPEAT")
+	animGroupOutbound:SetScript("OnPlay", function(frame) showAnimParent(frame, 0.4, 1) end)
+	animGroupOutbound:SetScript("OnStop", hideAnimParent)
+	animGroupOutbound:SetScript("OnFinished", hideAnimParent)
+	local alpha0Out = animGroupOutbound:CreateAnimation("Alpha")
+	alpha0Out:SetOrder(1)
+	alpha0Out:SetDuration(0.01)
+	alpha0Out:SetChange(-1)
+	local alpha1Out = animGroupOutbound:CreateAnimation("Alpha")
+	alpha1Out:SetOrder(1)
+	alpha1Out:SetDuration(0.49)
+	alpha1Out:SetStartDelay(0.01)
+	alpha1Out:SetChange(1)
+	local alpha2Out = animGroupOutbound:CreateAnimation("Alpha")
+	alpha2Out:SetOrder(1)
+	alpha2Out:SetStartDelay(0.5)
+	alpha2Out:SetDuration(1)
+	alpha2Out:SetChange(-1)
+	local scaleOut = animGroupOutbound:CreateAnimation("Scale")
+	scaleOut:SetOrder(1)
+	scaleOut:SetScale(3.25,3.25)
+	scaleOut:SetDuration(1)
+	display.rangePulseAnimOut = animGroupOutbound
+	proxPulseOut = animGroupOutbound
+
+	-- Pull inwards
+	local animGroupInbound = rangePulse:CreateAnimationGroup()
+	animGroupInbound:SetLooping("REPEAT")
+	animGroupInbound:SetScript("OnPlay", function(frame) showAnimParent(frame, 1.5, 1) end)
+	animGroupInbound:SetScript("OnStop", hideAnimParent)
+	animGroupInbound:SetScript("OnFinished", hideAnimParent)
+	local alpha0In = animGroupInbound:CreateAnimation("Alpha")
+	alpha0In:SetOrder(1)
+	alpha0In:SetDuration(0.01)
+	alpha0In:SetChange(-1)
+	local alpha1In = animGroupInbound:CreateAnimation("Alpha")
+	alpha1In:SetOrder(1)
+	alpha1In:SetDuration(0.5)
+	alpha1In:SetChange(1)
+	local alpha2In = animGroupInbound:CreateAnimation("Alpha")
+	alpha2In:SetOrder(1)
+	alpha2In:SetStartDelay(0.5)
+	alpha2In:SetDuration(1)
+	alpha2In:SetChange(-1)
+	local scaleIn = animGroupInbound:CreateAnimation("Scale")
+	scaleIn:SetOrder(1)
+	scaleIn:SetScale(0.33,0.33)
+	scaleIn:SetDuration(1)
+	display.rangePulseAnimIn = animGroupInbound
+	proxPulseIn = animGroupInbound
 
 	local playerDot = display:CreateTexture(nil, "OVERLAY")
 	playerDot:SetSize(32, 32)
@@ -570,7 +661,7 @@ local function ensureDisplay()
 	tex:SetBlendMode("ADD")
 	tex:SetPoint("CENTER", drag)
 
-	anchor = display
+	proxAnchor = display
 
 	local x = plugin.db.profile.posx
 	local y = plugin.db.profile.posy
@@ -584,36 +675,59 @@ local function ensureDisplay()
 	end
 
 	plugin:RestyleWindow()
+	
+	local rList = plugin:GetRaidList()
+	for i = 1, 40 do
+		local blip = proxAnchor:CreateTexture(nil, "OVERLAY")
+		blip:SetSize(16, 16)
+		blip:SetTexture("Interface\\AddOns\\BigWigs\\Textures\\blip")
+		blipList[rList[i]] = blip
+	end
+	local pList = plugin:GetPartyList()
+	for i = 1, 5 do
+		local blip = proxAnchor:CreateTexture(nil, "OVERLAY")
+		blip:SetSize(16, 16)
+		blip:SetTexture("Interface\\AddOns\\BigWigs\\Textures\\blip")
+		blipList[pList[i]] = blip
+	end
+
+	proxAnchor:SetScript("OnEvent", function(_, event)
+		if event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" then
+			updateBlipColors()
+		elseif event == "RAID_TARGET_UPDATE" then
+			updateBlipIcons()
+		end
+	end)
 end
 
 function plugin:RestyleWindow()
 	updateSoundButton()
 	if self.db.profile.showAbility then
-		anchor.ability:Show()
+		proxAnchor.ability:Show()
 	else
-		anchor.ability:Hide()
+		proxAnchor.ability:Hide()
 	end
 	if self.db.profile.showTitle then
-		anchor.title:Show()
+		proxTitle:Show()
 	else
-		anchor.title:Hide()
+		proxTitle:Hide()
 	end
 	if self.db.profile.showBackground then
-		anchor.background:Show()
+		proxAnchor.background:Show()
 	else
-		anchor.background:Hide()
+		proxAnchor.background:Hide()
 	end
 	if self.db.profile.showSound then
-		anchor.sound:Show()
+		proxAnchor.sound:Show()
 	else
-		anchor.sound:Hide()
+		proxAnchor.sound:Hide()
 	end
 	if self.db.profile.showClose then
-		anchor.close:Show()
+		proxAnchor.close:Show()
 	else
-		anchor.close:Hide()
+		proxAnchor.close:Hide()
 	end
-	anchor.text:SetFont(media:Fetch("font", self.db.profile.font), self.db.profile.fontSize)
+	proxAnchor.text:SetFont(media:Fetch("font", self.db.profile.font), self.db.profile.fontSize)
 	if self.db.profile.lock then
 		locked = nil
 		lockDisplay()
@@ -623,72 +737,463 @@ function plugin:RestyleWindow()
 	end
 end
 
+function updateBlipIcons()
+	for i = 1, maxPlayers do
+		local n = unitList[i]
+		local blip = blipList[n]
+		local icon = GetRaidTargetIndex(n)
+		if icon and not blip.hasIcon then
+			blip:SetTexture(format("Interface\\TARGETINGFRAME\\UI-RaidTargetingIcon_%d.blp", icon))
+			blip:SetVertexColor(1,1,1) -- Remove color
+			blip.hasIcon = true
+		elseif not icon and blip.hasIcon then
+			blip.hasIcon = nil
+			blip:SetTexture("Interface\\AddOns\\BigWigs\\Textures\\blip")
+			local _, class = UnitClass(n)
+			if class then
+				local c = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+				blip:SetVertexColor(c.r, c.g, c.b)
+			else
+				blip:SetVertexColor(0.5, 0.5, 0.5) -- Gray if UnitClass returns nil
+			end
+		end
+	end
+end
+
+function updateBlipColors()
+	-- Firstly lets update some things from the GROUP_ROSTER_UPDATE event, or the proximity window opening
+	maxPlayers = plugin:GetNumGroupMembers()
+	unitList = plugin:IsInRaid() and plugin:GetRaidList() or plugin:GetPartyList()
+
+	-- Move onto updating blip colors
+	for i = 1, maxPlayers do
+		local n = unitList[i]
+		if not GetRaidTargetIndex(n) then
+			local blip = blipList[n]
+			blip:SetTexture("Interface\\AddOns\\BigWigs\\Textures\\blip")
+			local _, class = UnitClass(n)
+			if class then
+				local c = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+				blip:SetVertexColor(c.r, c.g, c.b)
+			else
+				blip:SetVertexColor(0.5, 0.5, 0.5) -- Gray if UnitClass returns nil
+			end
+		end
+	end
+end
+
 -------------------------------------------------------------------------------
 -- Proximity Updater
 --
 
+local normalProximity, reverseTargetProximity, targetProximity, multiTargetProximity, reverseMultiTargetProximity, reverseProximity
 local updater = nil
 local graphicalUpdater, textUpdater = nil, nil
 do
-	local proxDots = {}
-	local cacheDots = {}
+	--------------------------------------------------------------------------------
+	---- Graphical Proximity
+	--
+
 	local lastplayed = 0 -- When we last played an alarm sound for proximity.
 	-- dx and dy are in yards
 	-- class is player class
 	-- facing is radians with 0 being north, counting up clockwise
-	setDot = function(dx, dy, class)
-		local width, height = anchor:GetWidth(), anchor:GetHeight()
-		local range = activeRange and activeRange or 10
-		-- range * 3, so we have 3x radius space
-		local pixperyard = min(width, height) / (range * 3)
-
+	local setDot = function(dx, dy, dot, width, height, playerSine, playerCosine, pixperyard)
 		-- rotate relative to player facing
-		local rotangle = (2 * pi) - GetPlayerFacing()
-		local x = (dx * cos(rotangle)) - (-1 * dy * sin(rotangle))
-		local y = (dx * sin(rotangle)) + (-1 * dy * cos(rotangle))
+		local x = (dx * playerCosine) - (-1 * dy * playerSine)
+		local y = (dx * playerSine) + (-1 * dy * playerCosine)
 
 		x = x * pixperyard
 		y = y * pixperyard
 
-		local dot = nil
-		if #cacheDots > 0 then
-			dot = tremove(cacheDots)
-		else
-			dot = anchor:CreateTexture(nil, "OVERLAY")
-			dot:SetSize(16, 16)
-			dot:SetTexture([[Interface\AddOns\BigWigs\Textures\blip]])
-		end
-		proxDots[#proxDots + 1] = dot
-
 		dot:ClearAllPoints()
-		dot:SetPoint("CENTER", anchor, "CENTER", x, y)
-		dot:SetVertexColor(unpack(vertexColors[class]))
-		dot:Show()
+		-- Clamp to frame if out-of-bounds, mainly for reverse proximity
+		if x < -(width / 2) then
+			x = -(width / 2)
+		elseif x > (width / 2) then
+			x = (width / 2)
+		end
+		if y < -(height / 2) then
+			y = -(height / 2)
+		elseif y > (height / 2) then
+			y = (height / 2)
+		end
+		dot:SetPoint("CENTER", proxAnchor, "CENTER", x, y)
+		if not dot.isShown then
+			dot:Show()
+			dot.isShown = true
+		end
 	end
 
+	local function getDotPlaceInfo()
+		local width, height = proxAnchor:GetWidth(), proxAnchor:GetHeight()
+		local rotangle = piDoubled - GetPlayerFacing()
+		local sine = sin(rotangle)
+		local cosine = cos(rotangle)
+		local pixperyard = min(width, height) / activeRangeRadius
+		return width, height, sine, cosine, pixperyard
+	end
+	
 	hideDots = function()
-		-- shuffle existing dots into cacheDots
-		-- hide those cacheDots
-		while #proxDots > 0 do
-			proxDots[1]:Hide()
-			cacheDots[#cacheDots + 1] = tremove(proxDots, 1)
+		for _, blip in pairs(blipList) do
+			if blip.isShown then
+				blip:Hide()
+				blip.isShown = false
+			end
 		end
 	end
 
 	testDots = function()
 		hideDots()
-		setDot(10, 10, "WARLOCK", 0)
-		setDot(5, 0, "HUNTER", 0)
-		setDot(3, 10, "MAGE", 0)
-		setDot(-9, -7, "PRIEST", 0)
-		setDot(0, 10, "WARLOCK", 0)
-		local width, height = anchor:GetWidth(), anchor:GetHeight()
-		local pixperyard = min(width, height) / 30
-		anchor.rangeCircle:SetSize(pixperyard * 20,  pixperyard * 20)
-		anchor.rangeCircle:SetVertexColor(1,0,0)
-		anchor.rangeCircle:Show()
-		anchor.playerDot:Show()
+		activeRange = 10
+		activeRangeRadius = activeRange * 3
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+		setDot(10, 10, blipList["raid1"], width, height, sine, cosine, pixperyard)
+		setDot( 5,  0, blipList["raid2"], width, height, sine, cosine, pixperyard)
+		setDot( 3, 10, blipList["raid3"], width, height, sine, cosine, pixperyard)
+		setDot(-9, -7, blipList["raid4"], width, height, sine, cosine, pixperyard)
+		setDot( 0,  9, blipList["raid5"], width, height, sine, cosine, pixperyard)
+		setDot(10, 30, blipList["raid6"], width, height, sine, cosine, pixperyard)
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, 3)
+		local circleSize = pixperyard * 20
+		proxCircle:SetSize(circleSize, circleSize)
+		local pulseSize = circleSize * proxAnchor.rangePulse.sizeFactor
+		proxAnchor.rangePulse:SetSize(pulseSize, pulseSize)
+		proxCircle:SetVertexColor(1,0,0)
+		proxCircle:Show()
+		proxAnchor.playerDot:Show()
 	end
+	
+	local mapScale = nil
+	local function getPlayerMapInfo()
+		local srcX, srcY = GetPlayerMapPosition("player")
+		if srcX == 0 and srcY == 0 then
+			SetMapToCurrentZone()
+			srcX, srcY = GetPlayerMapPosition("player")
+		end
+		-- XXX This could probably be checked and set when the proximity
+		-- XXX display is opened? We won't change dungeon floors while
+		-- XXX it is open, surely.
+		if activeMap then
+			local currentFloor = GetCurrentMapDungeonLevel()
+			if currentFloor == 0 then currentFloor = 1 end
+			mapScale = activeMap[currentFloor]
+		end
+
+		-- Fall back to text
+		if not mapScale then
+			updater:SetScript("OnUpdate", textUpdater)
+			proxAnchor.text:Show()
+			proxCircle:Hide()
+			proxAnchor.playerDot:Hide()
+			updateProximityText()
+			return
+		end
+		
+		return srcX, srcY, mapScale
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Normal Proximity
+	--
+	
+	function normalProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local anyoneClose = 0
+		for i = 1, maxPlayers do
+			local n = unitList[i]
+			local unitX, unitY = GetPlayerMapPosition(n)
+			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
+				local dx = (unitX - srcX) * mapScale[1]
+				local dy = (unitY - srcY) * mapScale[2]
+				local rangeSquared = dx * dx + dy * dy
+				if rangeSquared < activeRangeSquaredTwoFive then
+					setDot(dx, dy, blipList[n], width, height, sine, cosine, pixperyard)
+					if rangeSquared <= activeRangeSquared then
+						anyoneClose = anyoneClose + 1
+					end
+				elseif blipList[n].isShown then
+					blipList[n]:Hide()
+					blipList[n].isShown = nil
+				end
+			elseif blipList[n].isShown then
+				blipList[n]:Hide()
+				blipList[n].isShown = nil
+			end
+		end
+
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, anyoneClose)
+		
+		if anyoneClose == 0 then
+			lastplayed = 0
+			proxCircle:SetVertexColor(0, 1, 0)
+		else
+			proxCircle:SetVertexColor(1, 0, 0)
+			if not plugin.db.profile.sound then return end
+			local t = GetTime()
+			if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+				lastplayed = t
+				plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+			end
+		end
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Target Proximity
+	--
+	
+	function targetProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local unitX, unitY = GetPlayerMapPosition(proximityPlayer)
+		local dx = (unitX - srcX) * mapScale[1]
+		local dy = (unitY - srcY) * mapScale[2]
+		local range = dx * dx + dy * dy
+		if (unitX ~= 0 or unitY~= 0) then
+			setDot(dx, dy, blipList[proximityPlayer], width, height, sine, cosine, pixperyard)
+			if range <= activeRangeSquared then
+				proxCircle:SetVertexColor(1, 0, 0)
+				proxTitle:SetFormattedText(L_proximityTitle, activeRange, 1)
+				if not proxPulseOut.playing then
+					proxPulseOut:Play()
+				end
+				if not plugin.db.profile.sound then return end
+				local t = GetTime()
+				if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+					lastplayed = t
+					plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+				end
+			else
+				proxCircle:SetVertexColor(0, 1, 0)
+				proxTitle:SetFormattedText(L_proximityTitle, activeRange, 0)
+				if proxPulseOut.playing then
+					proxPulseOut:Stop()
+				end
+			end
+		else
+			if blipList[proximityPlayer].isShown then
+				blipList[proximityPlayer]:Hide()
+				blipList[proximityPlayer].isShown = nil
+			end
+			proxCircle:SetVertexColor(0, 1, 0)
+			proxTitle:SetFormattedText(L_proximityTitle, activeRange, 0)
+			if proxPulseOut.playing then
+				proxPulseOut:Stop()
+			end
+		end
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Multi Target Proximity
+	--
+	
+	function multiTargetProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local anyoneClose = 0
+		for i = 1, proximityPlayerTable do
+			local n = proximityPlayerTable[i]
+			local unitX, unitY = GetPlayerMapPosition(n)
+			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
+				local dx = (unitX - srcX) * mapScale[1]
+				local dy = (unitY - srcY) * mapScale[2]
+				local rangeSquared = dx * dx + dy * dy
+				setDot(dx, dy, blipList[n], width, height, sine, cosine, pixperyard)
+				if rangeSquared <= activeRangeSquared then
+					anyoneClose = anyoneClose + 1
+				end
+			elseif blipList[n].isShown then
+				blipList[n]:Hide()
+				blipList[n].isShown = nil
+			end
+		end
+
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, anyoneClose)
+		
+		if anyoneClose == 0 then
+			lastplayed = 0
+			proxCircle:SetVertexColor(0, 1, 0)
+			if proxPulseOut.playing then
+				proxPulseOut:Stop()
+			end
+		else
+			proxCircle:SetVertexColor(1, 0, 0)
+			if not proxPulseOut.playing then
+				proxPulseOut:Play()
+			end
+			if not plugin.db.profile.sound then return end
+			local t = GetTime()
+			if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+				lastplayed = t
+				plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+			end
+		end
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Reverse Proximity
+	--
+	
+	function reverseProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local anyoneClose = 0
+		for i = 1, maxPlayers do
+			local n = unitList[i]
+			local unitX, unitY = GetPlayerMapPosition(n)
+			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
+				local dx = (unitX - srcX) * mapScale[1]
+				local dy = (unitY - srcY) * mapScale[2]
+				local rangeSquared = dx * dx + dy * dy
+				setDot(dx, dy, blipList[n], width, height, sine, cosine, pixperyard)
+				if rangeSquared <= activeRangeSquared then
+					anyoneClose = anyoneClose + 1
+				end
+			elseif blipList[n].isShown then
+				blipList[n]:Hide()
+				blipList[n].isShown = nil
+			end
+		end
+
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, anyoneClose)
+		
+		if anyoneClose > 0 then
+			lastplayed = 0
+			proxCircle:SetVertexColor(0, 1, 0)
+		else
+			proxCircle:SetVertexColor(1, 0, 0)
+			if not plugin.db.profile.sound then return end
+			local t = GetTime()
+			if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+				lastplayed = t
+				plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+			end
+		end
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Reverse Target Proximity
+	--
+	
+	function reverseTargetProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local unitX, unitY = GetPlayerMapPosition(proximityPlayer)
+		local dx = (unitX - srcX) * mapScale[1]
+		local dy = (unitY - srcY) * mapScale[2]
+		local range = dx * dx + dy * dy
+		if (unitX ~= 0 or unitY~= 0) then
+			setDot(dx, dy, blipList[proximityPlayer], width, height, sine, cosine, pixperyard)
+			if range > activeRangeSquared then
+				proxCircle:SetVertexColor(1, 0, 0)
+				proxTitle:SetFormattedText(L_proximityTitle, activeRange, 0)
+				if not proxPulseIn.playing then
+					proxPulseIn:Play()
+				end
+				if not plugin.db.profile.sound then return end
+				local t = GetTime()
+				if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+					lastplayed = t
+					plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+				end
+			else
+				proxCircle:SetVertexColor(0, 1, 0)
+				proxTitle:SetFormattedText(L_proximityTitle, activeRange, 1)
+				if proxPulseIn.playing then
+					proxPulseIn:Stop()
+				end
+			end
+		else
+			if blipList[proximityPlayer].isShown then
+				blipList[proximityPlayer]:Hide()
+				blipList[proximityPlayer].isShown = nil
+			end
+			proxCircle:SetVertexColor(0, 1, 0)
+			proxTitle:SetFormattedText(L_proximityTitle, activeRange, 0)
+			if proxPulseIn.playing then
+				proxPulseIn:Stop()
+			end
+		end
+	end
+	
+	--------------------------------------------------------------------------------
+	-- Reverse Multi Target Proximity
+	--
+	
+	function reverseMultiTargetProximity()
+		local srcX, srcY, mapScale = getPlayerMapInfo()
+		if not srcX or not srcY or not mapScale then return end
+		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
+
+		local anyoneClose = 0
+		for i = 1, proximityPlayerTable do
+			local n = proximityPlayerTable[i]
+			local unitX, unitY = GetPlayerMapPosition(n)
+			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
+				local dx = (unitX - srcX) * mapScale[1]
+				local dy = (unitY - srcY) * mapScale[2]
+				local rangeSquared = dx * dx + dy * dy
+				setDot(dx, dy, blipList[n], width, height, sine, cosine, pixperyard)
+				if rangeSquared <= activeRangeSquared then
+					anyoneClose = anyoneClose + 1
+				end
+			elseif blipList[n].isShown then
+				blipList[n]:Hide()
+				blipList[n].isShown = nil
+			end
+		end
+
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, anyoneClose)
+		
+		if anyoneClose > 0 then
+			lastplayed = 0
+			proxCircle:SetVertexColor(0, 1, 0)
+			if proxPulseIn.playing then
+				proxPulseIn:Stop()
+			end
+		else
+			proxCircle:SetVertexColor(1, 0, 0)
+			if not proxPulseIn.playing then
+				proxPulseIn:Play()
+			end
+			if not plugin.db.profile.sound then return end
+			local t = GetTime()
+			if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
+				lastplayed = t
+				plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
+			end
+		end
+	end
+	
+	updater = CreateFrame("Frame")
+	updater:Hide()
+	local total = 0
+
+	-- 20x per second for radar mode
+	function graphicalUpdater(self, elapsed)
+		total = total + elapsed
+		if total >= .05 then
+			total = 0
+			if activeProximityRadarFunction then activeProximityRadarFunction() end
+		end
+	end
+	
+	
+	
+	--------------------------------------------------------------------------------
+	---- Text Proximity
+	--
 
 	local tooClose = {} -- List of players who are too close.
 	local function updateProximityText()
@@ -698,19 +1203,21 @@ do
 			srcX, srcY = GetPlayerMapPosition("player")
 		end
 		for i = 1, maxPlayers do
-			local n = format("raid%d", i)
-			if UnitInRange(n) and not UnitIsDead(n) and not UnitIsUnit(n, "player") and activeProximityFunction(n, srcX, srcY) then
+			local n = unitList[i]
+			if UnitInRange(n) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) and activeProximityTextFunction(n, srcX, srcY) then
 				local nextIndex = #tooClose + 1
 				tooClose[nextIndex] = coloredNames[UnitName(n)]
 				if nextIndex > 4 then break end
 			end
 		end
 
+		proxTitle:SetFormattedText(L_proximityTitle, activeRange, #tooClose)
+		
 		if #tooClose == 0 then
-			anchor.text:SetText("|cff777777:-)|r")
+			proxAnchor.text:SetText("|cff777777:-)|r")
 			lastplayed = 0
 		else
-			anchor.text:SetText(table.concat(tooClose, "\n"))
+			proxAnchor.text:SetText(table.concat(tooClose, "\n"))
 			wipe(tooClose)
 			if not plugin.db.profile.sound then return end
 			local t = GetTime()
@@ -721,79 +1228,6 @@ do
 		end
 	end
 	
-	local function updateProximityRadar()
-		local srcX, srcY = GetPlayerMapPosition("player")
-		if srcX == 0 and srcY == 0 then
-			SetMapToCurrentZone()
-			srcX, srcY = GetPlayerMapPosition("player")
-		end
-
-		-- XXX This could probably be checked and set when the proximity
-		-- XXX display is opened? We won't change dungeon floors while
-		-- XXX it is open, surely.
-		local id = nil
-		if activeMap then
-			local currentFloor = GetCurrentMapDungeonLevel()
-			if currentFloor == 0 then currentFloor = 1 end
-			id = activeMap[currentFloor]
-		end
-
-		-- Fall back to text
-		if not id then
-			updater:SetScript("OnUpdate", textUpdater)
-			anchor.text:Show()
-			anchor.rangeCircle:Hide()
-			anchor.playerDot:Hide()
-			return updateProximityText()
-		end
-
-		local anyoneClose = nil
-
-		-- XXX We can't show/hide dots every update, that seems excessive.
-		hideDots()
-		for i = 1, maxPlayers do
-			local n = format("raid%d", i)
-			if UnitInRange(n) and not UnitIsDead(n) and not UnitIsUnit(n, "player") then
-				local unitX, unitY = GetPlayerMapPosition(n)
-				local dx = (unitX - srcX) * id[1]
-				local dy = (unitY - srcY) * id[2]
-				local range = (dx * dx + dy * dy) ^ 0.5
-				if range < (activeRange * 1.5) then
-					setDot(dx, dy, classCache[i])
-					if range <= activeRange then
-						anyoneClose = true
-					end
-				end
-			end
-		end
-
-		if not anyoneClose then
-			lastplayed = 0
-			anchor.rangeCircle:SetVertexColor(0, 1, 0)
-		else
-			anchor.rangeCircle:SetVertexColor(1, 0, 0)
-			if not plugin.db.profile.sound then return end
-			local t = GetTime()
-			if t > (lastplayed + plugin.db.profile.soundDelay) and not UnitIsDead("player") then
-
-
-				lastplayed = t
-				plugin:SendMessage("BigWigs_Sound", plugin.db.profile.soundName)
-			end
-		end
-	end
-	updater = CreateFrame("Frame")
-	updater:Hide()
-	local total = 0
-
-	-- 20x per second for radar mode
-	function graphicalUpdater(self, elapsed)
-		total = total + elapsed
-		if total >= .05 then
-			total = 0
-			updateProximityRadar()
-		end
-	end
 	-- 2 times per second for text mode
 	function textUpdater(self, elapsed)
 		total = total + elapsed
@@ -809,28 +1243,28 @@ do
 end
 
 local function updateProfile()
-	if not anchor then return end
+	if not proxAnchor then return end
 
-	anchor:SetWidth(plugin.db.profile.width)
-	anchor:SetHeight(plugin.db.profile.height)
+	proxAnchor:SetWidth(plugin.db.profile.width)
+	proxAnchor:SetHeight(plugin.db.profile.height)
 
 	local x = plugin.db.profile.posx
 	local y = plugin.db.profile.posy
 	if x and y then
-		local s = anchor:GetEffectiveScale()
-		anchor:ClearAllPoints()
-		anchor:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x / s, y / s)
+		local s = proxAnchor:GetEffectiveScale()
+		proxAnchor:ClearAllPoints()
+		proxAnchor:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x / s, y / s)
 	else
-		anchor:ClearAllPoints()
-		anchor:SetPoint("CENTER", UIParent)
+		proxAnchor:ClearAllPoints()
+		proxAnchor:SetPoint("CENTER", UIParent)
 	end
 end
 
 local function resetAnchor()
-	anchor:ClearAllPoints()
-	anchor:SetPoint("CENTER", UIParent)
-	anchor:SetWidth(plugin.defaultDB.width)
-	anchor:SetHeight(plugin.defaultDB.height)
+	proxAnchor:ClearAllPoints()
+	proxAnchor:SetPoint("CENTER", UIParent)
+	proxAnchor:SetWidth(plugin.defaultDB.width)
+	proxAnchor:SetHeight(plugin.defaultDB.height)
 	plugin.db.profile.posx = nil
 	plugin.db.profile.posy = nil
 	plugin.db.profile.width = nil
@@ -890,8 +1324,8 @@ end
 
 function plugin:OnPluginEnable()
 	self:RegisterMessage("BigWigs_ShowProximity")
-	self:RegisterMessage("BigWigs_HideProximity", "Close")
-	self:RegisterMessage("BigWigs_OnBossDisable")
+	self:RegisterMessage("BigWigs_HideProximity")
+	self:RegisterMessage("BigWigs_OnBossDisable", "BigWigs_HideProximity")
 
 	self:RegisterMessage("BigWigs_StartConfigureMode")
 	self:RegisterMessage("BigWigs_StopConfigureMode")
@@ -901,6 +1335,7 @@ function plugin:OnPluginEnable()
 end
 
 function plugin:OnPluginDisable()
+	customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
 	self:Close()
 end
 
@@ -915,15 +1350,15 @@ end
 
 function plugin:BigWigs_StopConfigureMode()
 	inConfigMode = nil
-	self:Close()
+	self:Close(true)
 end
 
 function plugin:BigWigs_SetConfigureTarget(event, module)
 	ensureDisplay()
 	if module == self then
-		anchor.background:SetTexture(0.2, 1, 0.2, 0.3)
+		proxAnchor.background:SetTexture(0.2, 1, 0.2, 0.3)
 	else
-		anchor.background:SetTexture(0, 0, 0, 0.3)
+		proxAnchor.background:SetTexture(0, 0, 0, 0.3)
 	end
 end
 
@@ -1124,15 +1559,20 @@ end
 
 do
 	local opener = nil
-	function plugin:BigWigs_ShowProximity(event, module, range, optionKey)
+	function plugin:BigWigs_ShowProximity(event, module, range, ...)
 		if plugin.db.profile.disabled or type(range) ~= "number" then return end
 		opener = module
-		self:Open(range, module, optionKey)
+		self:Open(range, module, ...)
 	end
 
-	function plugin:BigWigs_OnBossDisable(event, module)
+	function plugin:BigWigs_HideProximity(event, module)
 		if module ~= opener then return end
-		self:Close()
+		if event == "BigWigs_OnBossDisable" then -- Fully close on a boss win/disable
+			customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
+			self:Close()
+		else -- Reopen custom proximity when a spell ends or on a boss wipe
+			self:Close(true)
+		end
 	end
 end
 
@@ -1140,76 +1580,128 @@ end
 -- API
 --
 
-function plugin:Close()
-	activeProximityFunction = nil
-	activeRange = nil
-	activeSpellID = nil
-	activeMap = nil
-	if classCache then
-		wipe(classCache)
-		classCache = nil
-	end
-	if anchor then
-		anchor.title:SetText(L["%d yards"]:format(0))
-		anchor.ability:SetText(L["|T%s:20:20:-5|tAbility name"]:format("Interface\\Icons\\spell_nature_chainlightning"))
-		-- Just in case we were the last target of
-		-- configure mode, reset the background color.
-		anchor.background:SetTexture(0, 0, 0, 0.3)
-		anchor:Hide()
-	end
+function plugin:Close(reopen)
 	updater:SetScript("OnUpdate", nil)
 	updater:Hide()
+	activeProximityTextFunction, activeProximityRadarFunction = nil, nil
+	activeRange, activeRangeRadius, activeRangeSquared, activeRangeSquaredTwoFive = 0, 0, 0, 0
+	activeSpellID = nil
+	proximityPlayer = nil
+	wipe(proximityPlayerTable)
+	activeMap = nil
+	if proxAnchor then
+		proxAnchor:UnregisterEvent("PARTY_MEMBERS_CHANGED")
+		proxAnchor:UnregisterEvent("RAID_ROSTER_UPDATE")
+		proxAnchor:UnregisterEvent("RAID_TARGET_UPDATE")
+		proxTitle:SetText(L_proximityTitle:format(10,3))
+		proxAnchor.ability:SetText(L["|T%s:20:20:-5|tAbility name"]:format("Interface\\Icons\\spell_nature_chainlightning"))
+		-- Just in case we were the last target of
+		-- configure mode, reset the background color.
+		proxAnchor.background:SetTexture(0, 0, 0, 0.3)
+		proxPulseIn:Stop()
+		proxPulseOut:Stop()
+		hideDots()
+		proxAnchor:Hide()
+	end
+	if reopen and customProximityOpen then
+		self:Open(customProximityOpen, nil, nil, customProximityTarget, customProximityReverse)
+	end
 end
 
 local abilityNameFormat = "|T%s:20:20:-5|t%s"
-function plugin:Open(range, module, key)
+function plugin:Open(range, module, key, player, isReverse, spellName, spellIcon)
 	if type(range) ~= "number" then error("Range needs to be a number!") end
-	-- Make sure the anchor is there
+	-- Make sure the proxAnchor is there
 	ensureDisplay()
+	self:Close()
+	
+	-- Update the ability name display
+	if module and key then
+		if spellName then
+			proxAnchor.ability:SetFormattedText("|T%s:20:20:-5:0:64:64:4:60:4:60|t%s", spellIcon, spellName)
+		else
+			local _, name, _, icon = BigWigs:GetBossOptionDetails(module, key)
+			if type(icon) == "string" then
+				proxAnchor.ability:SetFormattedText("|T%s:20:20:-5:0:64:64:4:60:4:60|t%s", icon, name)
+			else
+				proxAnchor.ability:SetText(name)
+			end
+		end
+	else
+		proxAnchor.ability:SetText(L["Custom range indicator"])
+	end
+	
 	-- Get the best range function for the given range
 	local func, actualRange = getClosestRangeFunction(range)
-	activeProximityFunction = func
+	activeProximityTextFunction = func
+	
+	myGUID = UnitGUID("player")
 	activeRange = actualRange
-	maxPlayers = select(5, GetInstanceInfo())
-
-	if not classCache then classCache = {} end
-	for i=1, maxPlayers do
-		local _, class = UnitClass(format("raid%d", i))
-		classCache[i] = class
-	end
+	activeRangeRadius = actualRange * 3 -- activeRange * 3, so we have 3x radius space
+	activeRangeSquared = actualRange*actualRange
+	activeRangeSquaredTwoFive = activeRangeSquared * 2.5
 
 	SetMapToCurrentZone()
 	activeMap = mapData[(GetMapInfo())]
 	hideDots()
 	
-	if activeMap and plugin.db.profile.graphical then
-		local width, height = anchor:GetWidth(), anchor:GetHeight()
-		local ppy = min(width, height) / (actualRange * 3)
-		anchor.rangeCircle:SetSize(ppy * actualRange * 2, ppy * actualRange * 2)
-		anchor.playerDot:Show()
-		anchor.rangeCircle:Show()
-		anchor.text:Hide()
+	proxAnchor:RegisterEvent("PARTY_MEMBERS_CHANGED")
+	proxAnchor:RegisterEvent("RAID_ROSTER_UPDATE")
+	proxAnchor:RegisterEvent("RAID_TARGET_UPDATE")
+	updateBlipIcons()
+	updateBlipColors()
+	
+	if not player and not isReverse then
+		activeProximityRadarFunction = normalProximity
+	elseif player then
+		if type(player) == "table" then
+			for i = 1, #player do
+				for j = 1, plugin:GetNumGroupMembers() do
+					if UnitIsUnit(player[i], unitList[j]) then
+						proximityPlayerTable[#proximityPlayerTable+1] = unitList[j]
+						break
+					end
+				end
+			end
+			if isReverse then
+				activeProximityRadarFunction = reverseMultiTargetProximity
+			else
+				activeProximityRadarFunction = multiTargetProximity
+			end
+		else
+			for i = 1, plugin:GetNumGroupMembers() do
+				if UnitIsUnit(player, unitList[i]) then
+					proximityPlayer = unitList[i]
+					activeProximityRadarFunction = isReverse and reverseTargetProximity or targetProximity -- Only set the function if we found the unit
+					break
+				end
+			end
+		end
+	elseif isReverse then
+		activeProximityRadarFunction = reverseProximity
+	end
+	if activeMap and activeProximityRadarFunction and plugin.db.profile.graphical then
+		local width, height = proxAnchor:GetWidth(), proxAnchor:GetHeight()
+		local circleSize = 2 * min(width, height) / 3
+		proxCircle:SetSize(circleSize, circleSize)
+		local pulseSize = circleSize * proxAnchor.rangePulse.sizeFactor
+		proxAnchor.rangePulse:SetSize(pulseSize, pulseSize)
+		proxAnchor.playerDot:Show()
+		proxCircle:Show()
+		proxAnchor.text:Hide()
 		updater:SetScript("OnUpdate", graphicalUpdater)
-	else
-		anchor.rangeCircle:Hide()
-		anchor.playerDot:Hide()
-		anchor.text:Show()
+	elseif activeProximityTextFunction then
+		proxCircle:Hide()
+		proxAnchor.playerDot:Hide()
+		proxAnchor.text:Show()
 		updater:SetScript("OnUpdate", textUpdater)
+	else
+		self:Close(module and key) -- only reopen custom if its not a custom one
+		return
 	end
 	-- Update the header to reflect the actual range we're checking
-	anchor.title:SetText(L["%d yards"]:format(actualRange))
-	-- Update the ability name display
-	if module and key then
-		local dbKey, name, desc, icon = BigWigs:GetBossOptionDetails(module, key)
-		if icon then
-			anchor.ability:SetText(abilityNameFormat:format(icon, name))
-		else
-			anchor.ability:SetText(name)
-		end
-	else
-		anchor.ability:SetText(L["Custom range indicator"])
-	end
-	if type(key) == "number" then
+	proxTitle:SetText(L_proximityTitle:format(actualRange, 0))
+	if spellName then
 		activeSpellID = key
 	else
 		activeSpellID = nil
@@ -1217,12 +1709,12 @@ function plugin:Open(range, module, key)
 	-- Unbreak the sound+close buttons
 	makeThingsWork()
 	-- Start the show!
-	anchor:Show()
+	proxAnchor:Show()
 	updater:Show()
 end
 
 function plugin:Test()
-	-- Make sure the anchor is there
+	-- Make sure the proxAnchor is there
 	ensureDisplay()
 	-- Close ourselves in case we entered configure mode DURING a boss fight.
 	self:Close()
@@ -1230,14 +1722,14 @@ function plugin:Test()
 	breakThings()
 	if plugin.db.profile.graphical then
 		testDots()
-		anchor.text:Hide()
+		proxAnchor.text:Hide()
 	else
 		hideDots()
-		anchor.rangeCircle:Hide()
-		anchor.playerDot:Hide()
-		anchor.text:Show()
+		proxCircle:Hide()
+		proxAnchor.playerDot:Hide()
+		proxAnchor.text:Show()
 	end
-	anchor:Show()
+	proxAnchor:Show()
 end
 
 -------------------------------------------------------------------------------
@@ -1246,22 +1738,47 @@ end
 
 SlashCmdList.BigWigs_Proximity = function(input)
 	if not plugin:IsEnabled() then BigWigs:Enable() end
-	local range = tonumber(input)
+	input = input:lower()
+	local range, reverse = input:match("^(%d+)%s*(%S*)$")
+	range = tonumber(range)
 	if not range then
 		plugin:Close()
-		print("Usage: /proximity 1-100")
+		print("Usage: /proximity 1-100 [true]")
 	else
 		if range > 0 then
-			plugin:Open(range)
+			customProximityOpen = range
+			customProximityTarget = nil
+			customProximityReverse = reverse == "true"
+			plugin:Open(range, nil, nil, nil, customProximityReverse)
 		else
+			customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
 			plugin:Close()
 		end
 	end
 end
 SLASH_BigWigs_Proximity1 = "/proximity"
 SLASH_BigWigs_Proximity2 = "/bwproximity" -- In case some other addon already has /proximity
-
-
--- Apparently some users (idiots?) don't read through the interface options before using
--- a complicated addon such as BigWigs. Go figure.
 SLASH_BigWigs_Proximity3 = "/range"
+
+SlashCmdList.BigWigs_ProximityTarget = function(input)
+	if not plugin:IsEnabled() then BigWigs:Enable() end
+	input = input:lower()
+	local range, target, reverse = input:match("^(%d+)%s*(%S*)%s*(%S*)$")
+	range = tonumber(range)
+	if not range or not target or (not UnitInRaid(target) and not UnitInParty(target)) then
+		BigWigs:Print("Usage: /proximitytarget 1-100 player [true]") -- XXX translate
+	else
+		if range > 0 then
+			customProximityOpen = range
+			customProximityTarget = target
+			customProximityReverse = reverse == "true"
+			plugin:Open(range, nil, nil, customProximityTarget, customProximityReverse)
+		else
+			customProximityOpen, customProximityTarget, customProximityReverse = nil, nil, nil
+			plugin:Close()
+		end
+	end
+end
+SLASH_BigWigs_ProximityTarget1 = "/proximitytarget"
+SLASH_BigWigs_ProximityTarget2 = "/bwproximitytarget"
+SLASH_BigWigs_ProximityTarget3 = "/rangetarget"

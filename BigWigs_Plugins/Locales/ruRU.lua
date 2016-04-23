@@ -134,7 +134,7 @@ L["Default only"] = "Только стандартные"
 -- Proximity.lua
 --
 
-L["%d yards"] = "%d метров"
+L["%d yd / %d |4player:players;"] = "%d м / %d |4игрок:игрока:игроков;"
 L["Proximity"] = "Близость"
 L["Sound"] = "Звук"
 L["Disabled"] = "Отключить"
