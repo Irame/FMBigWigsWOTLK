@@ -435,7 +435,7 @@ end
 -- MESSAGES
 function boss:CancelDelayedMessage(text)
 	if self.scheduledMessages and self.scheduledMessages[text] then
-		self:CancelTimer(self.scheduledMessages[text])
+		self:CancelTimer(self.scheduledMessages[text], true)
 		self.scheduledMessages[text] = nil
 	end
 end
