@@ -554,7 +554,7 @@ do
 			else
 				self:SendMessage("BigWigs_Message", self, key, format(L.stack, stack or 1, textType == "string" and text or spells[text or key], coloredNames[player]), color, icon ~= false and icons[icon or textType == "number" and text or key])
 			end
-			if hasVoice and checkFlag(self, key, C.VOICE) then
+			if HasVoice() and checkFlag(self, key, C.VOICE) then
 				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
 			else
 				self:SendMessage("BigWigs_Sound", sound)
