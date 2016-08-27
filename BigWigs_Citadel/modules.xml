@@ -8,7 +8,7 @@
 <Script file="Dogs.lua"/>
 <Script file="Festergut.lua"/>
 <Script file="Gunship.lua"/>
-<Script file="HighkingBeemz.lua"/>
+<!--<Script file="HighkingBeemz.lua"/>-->
 <Script file="Lanathel.lua"/>
 <Script file="LichKing.lua"/>
 <Script file="Marrowgar.lua"/>
