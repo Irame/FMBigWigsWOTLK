@@ -34,6 +34,7 @@ if L then
 	L.dnd_message = "Death and Decay on YOU!"
 
 	L.adds = "Adds"
+	L.adds_icon = 70768
 	L.adds_desc = "Show timers for when the adds spawn."
 	L.adds_bar = "Next Adds"
 	L.adds_warning = "New adds in 5 sec!"
@@ -69,7 +70,7 @@ end
 
 local function adds(time)
 	mod:DelayedMessage("adds", time-5, "Attention", L["adds_warning"])
-	mod:Bar("adds", L["adds_bar"], time, 70768)
+	mod:Bar("adds", L["adds_bar"], time, L.adds_icon)
 	handle_Adds = mod:ScheduleTimer(adds, time, time)
 end
 
@@ -77,7 +78,7 @@ function mod:OnEngage(diff)
 	self:Berserk(600, true)
 	local time = 60
 	if diff > 2 then time = 45 end
-	self:Bar("adds", L["adds_bar"], 5, 70768)
+	self:Bar("adds", L["adds_bar"], 5, L.adds_icon)
 	if diff > 1 then
 		self:Bar(71289, L["dominate_bar"], 27, 71289)
 	end
@@ -102,7 +103,7 @@ function mod:Barrier(_, spellId)
 	self:CancelDelayedMessage(L["adds_warning"])
 	if self:IsDifficulty("hc") then
 		self:DelayedMessage("adds", 40, "Attention", L["adds_warning"])
-		self:Bar("adds", L["adds_bar"], 45, 70768)
+		self:Bar("adds", L["adds_bar"], 45, L.adds_icon)
 		handle_Adds = self:ScheduleTimer(adds, 45, 45)
 	end
 	self:Message(70842, "Positive", "Info", L["phase2_message"])

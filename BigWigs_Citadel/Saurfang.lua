@@ -24,6 +24,7 @@ local count = 1
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.adds = "Blood Beasts"
+	L.adds_icon = 72173
 	L.adds_desc = "Shows a timer and messages for when Blood Beasts spawn."
 	L.adds_warning = "Blood Beasts in 5 sec!"
 	L.adds_message = "Blood Beasts!"
@@ -69,7 +70,7 @@ function mod:OnEngage()
 		self:Berserk(480)
 	end
 	self:DelayedMessage("adds", 25, "Urgent", L["adds_warning"])
-	self:Bar("adds", L["adds_bar"], 40, 72173)
+	self:Bar("adds", L["adds_bar"], 40, L.adds_icon)
 	self:HealthBar(72293, 37813, 3, "achievement_boss_saurfang")
 	self:Bar(72378, L["nova_bar"], 17, 72378)
 	self:Bar(72410, L["rune_bar"], 20, 72410)

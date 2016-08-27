@@ -39,6 +39,7 @@ if L then
 	L.shock_bar = "~Next Shock"
 
 	L.iconprince = "Icon on active prince"
+	L.iconprince_icon = "achievement_boss_princetaldaram"
 	L.iconprince_desc = "Place the primary raid icon on the active prince (requires promoted or leader)."
 
 	L.prison_message = "Shadow Prison x%d!"

@@ -29,6 +29,7 @@ if L then
 	L.engage_trigger = "Intruders have breached the inner sanctum. Hasten the destruction of the green dragon!"
 
 	L.portal = "Nightmare Portals"
+	L.portal_icon = 72482
 	L.portal_desc = "Warns when Valithria opens portals."
 	L.portal_message = "Portals up!"
 	L.portal_bar = "Portals inc"
@@ -39,10 +40,12 @@ if L then
 	L.manavoid_message = "Mana Void on YOU!"
 
 	L.suppresser = "Suppressers spawn"
+	L.suppresser_icon = 70588
 	L.suppresser_desc = "Warns when a pack of Suppressers spawn."
 	L.suppresser_message = "~Suppressers"
 
 	L.blazing = "Blazing Skeleton"
+	L.blazing_icon = 71730
 	L.blazing_desc = "Blazing Skeleton |cffff0000estimated|r respawn timer. This timer may be inaccurate, use only as a rough guide."
 	L.blazing_warning = "Blazing Skeleton soon!"
 end
@@ -75,12 +78,12 @@ do
 		blazingRepeater = nil
 	end
 	local function suppresserSpawn(time)
-		mod:Bar("suppresser", L["suppresser_message"], time, 70588)
+		mod:Bar("suppresser", L["suppresser_message"], time, L.suppresser_icon)
 		mod:ScheduleTimer(suppresserSpawn, time, time)
 	end
 	local function blazingSpawn()
 		if not blazingTimers[blazingCount] then return end
-		mod:Bar("blazing", L["blazing"], blazingTimers[blazingCount], 71730)
+		mod:Bar("blazing", L["blazing"], blazingTimers[blazingCount], L.blazing_icon)
 		mod:ScheduleTimer(blazingSpawn, blazingTimers[blazingCount])
 		mod:DelayedMessage("blazing", blazingTimers[blazingCount] - 5, "Positive", L["blazing_warning"])
 		blazingCount = blazingCount + 1
@@ -92,17 +95,17 @@ do
 	function mod:OnEngage(diff)
 		portalCount = 1
 		if diff > 2 then
-			self:Bar("suppresser", L["suppresser_message"], 14, 70588)
-			self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, 72482)
+			self:Bar("suppresser", L["suppresser_message"], 14, L.suppresser_icon)
+			self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, L.portal_icon)
 			self:ScheduleTimer(suppresserSpawn, 14, 31)
 			self:Berserk(420)
 		else
-			self:Bar("suppresser", L["suppresser_message"], 29, 70588)
-			self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, 72482)
+			self:Bar("suppresser", L["suppresser_message"], 29, L.suppresser_icon)
+			self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, L.portal_icon)
 			self:ScheduleTimer(suppresserSpawn, 29, 58)
 		end
 		self:ScheduleTimer(blazingSpawn, 50)
-		self:Bar("blazing", L["blazing"], 50, 71730)
+		self:Bar("blazing", L["blazing"], 50, L.blazing_icon)
 		self:DelayedMessage("blazing", 45, "Positive", L["blazing_warning"])
 		blazingCount = 1
 	end
@@ -123,11 +126,11 @@ end
 
 function mod:Portal()
 	-- 46 sec cd until initial positioning, +14 sec until 'real' spawn.
-	self:Message("portal", "Important", nil, L["portalcd_message"]:format(portalCount), 72482)
-	self:Bar("portal", L["portal_bar"], 14, 72482)
+	self:Message("portal", "Important", nil, L["portalcd_message"]:format(portalCount), L.portal_icon)
+	self:Bar("portal", L["portal_bar"], 14, L.portal_icon)
 	self:DelayedMessage("portal", 14, "Important", L["portal_message"])
 	portalCount = portalCount + 1
-	self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, 72482)
+	self:Bar("portal", L["portalcd_bar"]:format(portalCount), 46, L.portal_icon)
 end
 
 do

@@ -31,6 +31,7 @@ if L then
 	L.infection_message = "Infection"
 
 	L.ooze = "Ooze Merge"
+	L.ooze_icon = 69558
 	L.ooze_desc = "Warn when an ooze merges."
 	L.ooze_message = "Ooze %dx"
 
@@ -103,7 +104,7 @@ end
 
 function mod:Ooze(_, spellId, _, _, _, stack)
 	if stack > 4 then return end
-	self:Message("ooze", "Attention", nil, L["ooze_message"]:format(stack), spellId)
+	self:Message("ooze", "Attention", nil, L["ooze_message"]:format(stack), L.ooze_icon)
 end
 
 function mod:VileGas(player, spellId, _, _, spellName)

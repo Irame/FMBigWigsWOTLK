@@ -32,11 +32,13 @@ if L then
 	L.engage_trigger = "You are fools to have come to this place."
 
 	L.phase2 = "Phase 2"
+	L.phase2_icon = ""
 	L.phase2_desc = "Warn when Sindragosa goes into phase 2, at 35%."
 	L.phase2_trigger = "Now feel my master's limitless power and despair!"
 	L.phase2_message = "Phase 2!"
 
 	L.airphase = "Air phase"
+	L.airphase_icon = 23684
 	L.airphase_desc = "Warn when Sindragosa will lift off."
 	L.airphase_trigger = "Your incursion ends here! None shall survive!"
 	L.airphase_message = "Air phase!"
@@ -87,7 +89,7 @@ end
 function mod:OnEngage()
 	phase = 1
 	self:Berserk(600)
-	self:Bar("airphase", L["airphase_bar"], 63, 23684)
+	self:Bar("airphase", L["airphase_bar"], 63, L.airphase_icon)
 	self:Bar(69762, L["unchained_bar"], 15, 69762)
 	self:Bar(71047, L["grip_bar"], 34, 70117)
 	playerHasUnchained = false
@@ -151,8 +153,8 @@ function mod:Grip()
 end
 
 function mod:AirPhase()
-	self:Message("airphase", "Positive", nil, L["airphase_message"], 23684)
-	self:Bar("airphase", L["airphase_bar"], 110, 23684)
+	self:Message("airphase", "Positive", nil, L["airphase_message"], L.airphase_icon)
+	self:Bar("airphase", L["airphase_bar"], 110, L.airphase_icon)
 	self:Bar(71047, L["grip_bar"], 80, 70117)
 	self:Bar(69762, L["unchained_bar"], 57, 69762)
 end

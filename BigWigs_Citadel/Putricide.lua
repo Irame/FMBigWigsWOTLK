@@ -32,6 +32,7 @@ local gasTargets = mod:NewTargetList()
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phases"
+	L.phase_icon = "achievement_boss_profputricide"
 	L.phase_desc = "Warn for phase changes."
 	L.phase_warning = "Phase %d soon!"
 	L.phase_bar = "Next Phase"
@@ -115,12 +116,12 @@ do
 		mod:Bar(71255, L["gasbomb_bar"], 14, 71255)
 		mod:Bar(72295, L["ball_bar"], 6, 72295)
 		if not first then
-			mod:Message("phase", "Positive", nil, CL.phase:format(2), "achievement_boss_profputricide")
+			mod:Message("phase", "Positive", nil, CL.phase:format(2), L.phase_icon)
 			mod:Bar(71966, L["experiment_bar"], 25, 71966)
 			first = true
 			p2 = true
 		else
-			mod:Message("phase", "Positive", nil, CL.phase:format(3), "achievement_boss_profputricide")
+			mod:Message("phase", "Positive", nil, CL.phase:format(3), L.phase_icon)
 			first = nil
 			p3 = true
 		end
@@ -131,10 +132,10 @@ do
 		stopOldStuff()
 		self:Message("phase", "Important", nil, L["experiment_heroic_message"], 71968)
 		if not first then
-			self:Bar("phase", L["phase_bar"], 45, "achievement_boss_profputricide")
+			self:Bar("phase", L["phase_bar"], 45, L.phase_icon)
 			self:ScheduleTimer(newPhase, 45)
 		else
-			self:Bar("phase", L["phase_bar"], 37, "achievement_boss_profputricide")
+			self:Bar("phase", L["phase_bar"], 37, L.phase_icon)
 			self:ScheduleTimer(newPhase, 37)
 		end
 	end
@@ -147,7 +148,7 @@ do
 	function mod:TearGasStart()
 		if stop then return end
 		stop = true
-		self:Bar("phase", L["phase_bar"], 11, "achievement_boss_profputricide")
+		self:Bar("phase", L["phase_bar"], 11, L.phase_icon)
 		self:ScheduleTimer(nextPhase, 3)
 		stopOldStuff()
 	end
@@ -210,10 +211,10 @@ function mod:UNIT_HEALTH(_, unit)
 	if UnitName(unit) == self.displayName then
 		local hp = UnitHealth(unit) / UnitHealthMax(unit) * 100
 		if hp <= 83 and not p2 then
-			self:Message("phase", "Positive", nil, L["phase_warning"]:format(2), "achievement_boss_profputricide")
+			self:Message("phase", "Positive", nil, L["phase_warning"]:format(2), L.phase_icon)
 			p2 = true
 		elseif hp <= 37 and not p3 then
-			self:Message("phase", "Positive", nil, L["phase_warning"]:format(3), "achievement_boss_profputricide")
+			self:Message("phase", "Positive", nil, L["phase_warning"]:format(3), L.phase_icon)
 			p3 = true
 		end
 	end

@@ -21,6 +21,7 @@ local killed = nil
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.adds = "Portals"
+	L.adds_icon = 53142
 	L.adds_desc = "Warn for Portals."
 	L.adds_trigger_alliance = "Reavers, Sergeants, attack!"
 	L.adds_trigger_horde = "Marines, Sergeants, attack!"
@@ -28,6 +29,7 @@ if L then
 	L.adds_bar = "Next Portals"
 
 	L.mage = "Mage"
+	L.mage_icon = 69705
 	L.mage_desc = "Warn when a mage spawns to freeze the gunship cannons."
 	L.mage_message = "Mage Spawned!"
 	L.mage_bar = "Next Mage"
@@ -76,8 +78,8 @@ end
 function mod:Warmup()
 	self:Bar("adds", COMBAT, 45, "achievement_dungeon_hordeairship")
 	--XXX Fix me, move to engage, need more logs for testing
-	self:Bar("adds", L["adds_bar"], 60, 53142)
-	self:Bar("mage", L["mage_bar"], 82, 69705)
+	self:Bar("adds", L["adds_bar"], 60, L.adds_icon)
+	self:Bar("mage", L["mage_bar"], 82, L.mage_icon)
 end
 
 function mod:VerifyEnable()
@@ -89,8 +91,8 @@ end
 --
 
 function mod:AddsPortal()
-	self:Message("adds", "Attention", nil, L["adds_message"], 53142)
-	self:Bar("adds", L["adds_bar"], 60, 53142) --Portal: Dalaran icon
+	self:Message("adds", "Attention", nil, L["adds_message"], L.adds_icon)
+	self:Bar("adds", L["adds_bar"], 60, L.adds_icon) --Portal: Dalaran icon
 end
 
 function mod:Frozen(_, spellId)
