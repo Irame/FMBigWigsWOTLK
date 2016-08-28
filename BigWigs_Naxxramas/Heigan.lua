@@ -18,10 +18,12 @@ if L then
 	L.starttrigger3 = "I see you..."
 
 	L.engage = "Engage"
+	L.engage_icon = ""
 	L.engage_desc = "Warn when Heigan is engaged."
 	L.engage_message = "Heigan the Unclean engaged! 90 sec to teleport!"
 
 	L.teleport = "Teleport"
+	L.teleport_icon = "Spell_Arcane_Blink"
 	L.teleport_desc = "Warn for Teleports."
 	L.teleport_trigger = "The end is upon you."
 	L.teleport_1min_message = "Teleport in 1 min"
@@ -50,7 +52,7 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Message("engage", "Important", nil, L["engage_message"], false)
+	self:Message("engage", "Important", nil, L["engage_message"], L.engage_icon)
 	self:Bar("teleport", L["teleport_bar"], 90, "Spell_Arcane_Blink")
 	self:DelayedMessage("teleport", 30, "Attention", L["teleport_1min_message"])
 	self:DelayedMessage("teleport", 60, "Urgent", L["teleport_30sec_message"])

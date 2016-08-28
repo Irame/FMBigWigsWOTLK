@@ -22,6 +22,7 @@ local marks = 1
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.mark = "Mark"
+	L.mark_icon = 28835
 	L.mark_desc = "Warn for marks."
 	L.markbar = "Mark %d"
 	L.markwarn1 = "Mark %d!"
@@ -52,7 +53,7 @@ function mod:OnEngage()
 	marks = 1
 	deaths = 0
 	self:Message("mark", "Attention", nil, L["startwarn"], false)
-	self:Bar("mark", L["markbar"]:format(marks), 17, 28835)
+	self:Bar("mark", L["markbar"]:format(marks), 17, L.mark_icon)
 	self:DelayedMessage("mark", 12, "Urgent", L["markwarn2"]:format(marks))
 end
 
@@ -89,9 +90,9 @@ function mod:Mark()
 	local time = GetTime()
 	if (time - last) > 5 then
 		last = time
-		self:Message("mark", "Important", nil, L["markwarn1"]:format(marks), 28835)
+		self:Message("mark", "Important", nil, L["markwarn1"]:format(marks), L.mark_icon)
 		marks = marks + 1
-		self:Bar("mark", L["markbar"]:format(marks), 12, 28835)
+		self:Bar("mark", L["markbar"]:format(marks), 12, L.mark_icon)
 		self:DelayedMessage("mark", 7, "Urgent", L["markwarn2"]:format(marks))
 	end
 end

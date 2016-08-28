@@ -27,6 +27,7 @@ if L then
 	L.start_bar = "Phase 2"
 
 	L.phase = "Phase"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phases."
 	L.phase2_trigger1 = "Pray for mercy!"
 	L.phase2_trigger2 = "Scream your dying breath!"
@@ -49,6 +50,7 @@ if L then
 	L.detonate_warning = "Next Detonate in 5 sec!"
 
 	L.guardians = "Guardian Spawns"
+	L.guardians_icon = 28866
 	L.guardians_desc = "Warn for incoming Icecrown Guardians in phase 3."
 	L.guardians_trigger = "Very well. Warriors of the frozen wastes, rise up! I command you to fight, kill and die for your master! Let none survive!"
 	L.guardians_warning = "Guardians incoming in ~10sec!"

@@ -25,9 +25,11 @@ local throwHandle = nil
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phase"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for Phase transitions"
 
 	L.throw = "Throw"
+	L.throw_icon = "Ability_Druid_Maul"
 	L.throw_desc = "Warn about tank platform swaps."
 
 	L.trigger_phase1_1 = "Stalagg crush you!"
@@ -129,7 +131,7 @@ function mod:Shift()
 end
 
 local function throw()
-	mod:Bar("throw", L["throw_bar"], 20, "Ability_Druid_Maul")
+	mod:Bar("throw", L["throw_bar"], 20, L.throw_icon)
 	mod:DelayedMessage("throw", 15, "Urgent", L["throw_warning"])
 	throwHandle = mod:ScheduleTimer(throw, 21)
 end

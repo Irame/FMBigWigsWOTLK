@@ -14,12 +14,15 @@ mod.toggleOptions = {"room", "add", "adddeath", "bosskill"}
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.room = "Room Arrival Warnings"
+	L.room_icon = "Spell_Magic_LesserInvisibilty"
 	L.room_desc = "Warn for Gothik's arrival"
 
 	L.add = "Add Warnings"
+	L.add_icon = ""
 	L.add_desc = "Warn for adds"
 
 	L.adddeath = "Add Death Alert"
+	L.adddeath_icon = ""
 	L.adddeath_desc = "Alerts when an add dies."
 
 	L.starttrigger1 = "Foolishly you have sought your own demise."
@@ -86,11 +89,11 @@ end
 --
 
 function mod:DKDead()
-	self:Message("adddeath", "Important", nil, L["dkdiewarn"], false)
+	self:Message("adddeath", "Important", nil, L["dkdiewarn"], L.adddeath_icon)
 end
 
 function mod:RiderDead()
-	self:Message("adddeath", "Important", nil, L["riderdiewarn"], false)
+	self:Message("adddeath", "Important", nil, L["riderdiewarn"], L.adddeath_icon)
 end
 
 local colors = {
@@ -101,7 +104,7 @@ local colors = {
 local function waveWarn(message)
 	wave = wave + 1
 	if wave < 24 then
-		mod:Message("add", colors[message], nil, L["wave"]:format(wave, message), false)
+		mod:Message("add", colors[message], nil, L["wave"]:format(wave, message), L.add_icon)
 	end
 	if wave == 23 then
 		mod:SendMessage("BigWigs_StopBar", mod, L["trabar"]:format(numTrainer - 1))
@@ -134,7 +137,7 @@ end
 
 function mod:OnEngage()
 	self:Message("room", "Important", nil, L["startwarn"], false)
-	self:Bar("room", L["inroombartext"], 270, "Spell_Magic_LesserInvisibilty")
+	self:Bar("room", L["inroombartext"], 270, L.room_icon)
 	self:DelayedMessage("room", 90, "Attention", L["warn1"])
 	self:DelayedMessage("room", 180, "Attention", L["warn2"])
 	self:DelayedMessage("room", 210, "Urgent", L["warn3"])

@@ -29,6 +29,7 @@ if L then
 	L.startwarn = "Noth the Plaguebringer engaged! 90 sec till teleport"
 
 	L.blink = "Blink"
+	L.blink_icon = 29208
 	L.blink_desc = "Warnings when Noth blinks."
 	L.blinktrigger = "%s blinks away!"
 	L.blinkwarn = "Blink!"
@@ -36,6 +37,7 @@ if L then
 	L.blinkbar = "Blink"
 
 	L.teleport = "Teleport"
+	L.teleport_icon = "Spell_Magic_LesserInvisibilty"
 	L.teleport_desc = "Warnings and bars for teleport."
 	L.teleportbar = "Teleport!"
 	L.backbar = "Back in room!"
@@ -50,6 +52,7 @@ if L then
 	L.cursebar = "Next Curse"
 
 	L.wave = "Waves"
+	L.wave_icon = "Spell_ChargePositive"
 	L.wave_desc = "Alerts for the different waves."
 	L.addtrigger = "Rise, my soldiers! Rise and fight once more!"
 	L.wave1bar = "Wave 1"
@@ -81,10 +84,10 @@ function mod:OnEngage()
 
 	self:Message("teleport", "Important", nil, L["startwarn"], false)
 	self:DelayedMessage("teleport", timeroom - 10, "Urgent", L["teleportwarn2"])
-	self:Bar("teleport", L["teleportbar"], timeroom, "Spell_Magic_LesserInvisibilty")
+	self:Bar("teleport", L["teleportbar"], timeroom, L.teleport_icon)
 	if GetRaidDifficulty() == 2 then
 		self:DelayedMessage("blink", 25, "Attention", L["blinkwarn2"])
-		self:Bar("blink", L["blinkbar"], 30, 29208)
+		self:Bar("blink", L["blinkbar"], 30, L.blink_icon)
 	end
 	self:ScheduleTimer("TeleportToBalcony", timeroom)
 end
@@ -101,9 +104,9 @@ function mod:Curse(_, spellId)
 end
 
 function mod:Blink()
-	self:Message("blink", "Important", nil, L["blinkwarn"], 29208)
+	self:Message("blink", "Important", nil, L["blinkwarn"], L.blink_icon)
 	self:DelayedMessage("blink", 34, "Attention", L["blinkwarn2"])
-	self:Bar("blink", L["blinkbar"], 39, 29208)
+	self:Bar("blink", L["blinkbar"], 39, L.blink_icon)
 end
 
 function mod:TeleportToBalcony()
@@ -117,11 +120,11 @@ function mod:TeleportToBalcony()
 	self:SendMessage("BigWigs_StopBar", self, L["cursebar"])
 
 	self:Message("teleport", "Important", nil, L["teleportwarn"], false)
-	self:Bar("teleport", L["backbar"], timebalcony, "Spell_Magic_LesserInvisibilty")
+	self:Bar("teleport", L["backbar"], timebalcony, L.teleport_icon)
 	self:DelayedMessage("teleport", timebalcony - 10, "Urgent", L["backwarn2"])
 
-	self:Bar("wave", L["wave1bar"], wave1time, "Spell_ChargePositive")
-	self:Bar("wave", L["wave2bar"], wave2time, "Spell_ChargePositive")
+	self:Bar("wave", L["wave1bar"], wave1time, L.wave_icon)
+	self:Bar("wave", L["wave2bar"], wave2time, L.wave_icon)
 	self:DelayedMessage("wave", wave2time - 10, "Urgent", L["wave2_message"])
 
 	self:ScheduleTimer("TeleportToRoom", timebalcony)
@@ -136,7 +139,7 @@ function mod:TeleportToRoom()
 	end
 
 	self:Message("teleport", "Important", nil, L["backwarn"]:format(timeroom), false)
-	self:Bar("teleport", L["teleportbar"], timeroom, "Spell_Magic_LesserInvisibilty")
+	self:Bar("teleport", L["teleportbar"], timeroom, L.teleport_icon)
 	self:DelayedMessage("teleport", timeroom - 10, "Urgent", L["teleportwarn2"])
 	self:ScheduleTimer("TeleportToBalcony", timeroom)
 end
