@@ -41,16 +41,20 @@ if L then
 
 	-- Gormok
 	L.snobold = "Snobold"
+	L.snobold_icon = 66406
 	L.snobold_desc = "Warn who gets a Snobold on their heads."
 	L.snobold_message = "Add"
 	L.firebomb_message = "Fire on YOU!"
 
 	-- Jormungars
 	L.submerge = "Submerge"
+	L.submerge_icon = "INV_Misc_MonsterScales_18"
 	L.submerge_desc = "Show a timer bar for the next time the worms will submerge."
 	L.spew = "Acidic/Molten Spew"
+	L.spew_icon = 66818
 	L.spew_desc = "Warn for Acidic/Molten Spew."
 	L.sprays = "Sprays"
+	L.sprays_icon = 5740
 	L.sprays_desc = "Show timers for the next Paralytic and Burning Sprays."
 	L.slime_message = "Slime on YOU!"
 	L.burn_spell = "Burn"
@@ -60,11 +64,13 @@ if L then
 	-- Icehowl
 	L.butt_bar = "~Butt Cooldown"
 	L.charge = "Furious Charge"
+	L.charge_icon = 52311
 	L.charge_desc = "Warn about Furious Charge on players."
 	L.charge_trigger = "glares at"
 	L.charge_say = "Charge on me!"
 
 	L.bosses = "Bosses"
+	L.bosses_icon = ""
 	L.bosses_desc = "Warn about bosses incoming"
 end
 L = mod:GetLocale()

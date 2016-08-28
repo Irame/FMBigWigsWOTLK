@@ -37,6 +37,7 @@ if L then
 	L.unburrow_trigger = "emerges from the ground"
 	L.burrow_trigger = "burrows into the ground"
 	L.burrow = "Burrow"
+	L.burrow_icon = 65919
 	L.burrow_desc = "Shows timers for emerges and submerges, and also add spawn timers."
 	L.burrow_cooldown = "Next Burrow"
 	L.burrow_soon = "Burrow soon"
@@ -97,7 +98,7 @@ end
 
 local function scheduleWave()
 	if isBurrowed then return end
-	mod:Message("burrow", "Urgent", nil, L["nerubian_message"], 65919)
+	mod:Message("burrow", "Urgent", nil, L["nerubian_message"], L.burrow_icon)
 	mod:Bar("burrow", L["nerubian_burrower"], 45, 66333)
 	handle_NextWave = mod:ScheduleTimer(scheduleWave, 45)
 end
@@ -105,8 +106,8 @@ end
 function mod:OnEngage(diff)
 	isBurrowed = nil
 	difficulty = diff
-	self:Message("burrow", "Attention", nil, L["engage_message"], 65919)
-	self:Bar("burrow", L["burrow_cooldown"], 80, 65919)
+	self:Message("burrow", "Attention", nil, L["engage_message"], L.burrow_icon)
+	self:Bar("burrow", L["burrow_cooldown"], 80, L.burrow_icon)
 	self:DelayedMessage("burrow", 65, "Attention", L["burrow_soon"])
 
 	self:Bar("burrow", L["nerubian_burrower"], 10, 66333)
@@ -183,12 +184,12 @@ function mod:Burrow()
 	self:SendMessage("BigWigs_StopBar", self, L["nerubian_burrower"])
 	self:CancelTimer(handle_NextWave, true)
 
-	self:Bar("burrow", L["burrow"], 65, 65919)
+	self:Bar("burrow", L["burrow"], 65, L.burrow_icon)
 end
 
 function mod:Surface()
 	isBurrowed = nil
-	self:Bar("burrow", L["burrow_cooldown"], 76, 65919)
+	self:Bar("burrow", L["burrow_cooldown"], 76, L.burrow_icon)
 	self:DelayedMessage("burrow", 61, L["burrow_soon"], "Attention")
 
 	self:Bar("burrow", L["nerubian_burrower"], 5, 66333)

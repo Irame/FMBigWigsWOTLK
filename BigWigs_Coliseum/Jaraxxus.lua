@@ -24,6 +24,7 @@ if L then
 	L.engage_trigger1 = "But I'm in charge here"
 
 	L.adds = "Portals and volcanos"
+	L.adds_icon = ""
 	L.adds_desc = "Show a timer and warn for when Jaraxxus summons portals and volcanos."
 
 	L.incinerate_message = "Incinerate"

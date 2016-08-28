@@ -37,17 +37,21 @@ if L then
 
 	L.vortex_or_shield_cd = "Next Vortex or Shield"
 	L.next = "Next Vortex or Shield"
+	L.next_icon = 39089
 	L.next_desc = "Warn for next Vortex or Shield"
 
 	L.vortex = "Vortex"
+	L.vortex_icon = 66058
 	L.vortex_desc = "Warn when the twins start casting vortexes."
 
 	L.shield = "Shield of Darkness/Light"
+	L.shield_icon = 65858
 	L.shield_desc = "Warn for Shield of Darkness/Light."
 	L.shield_half_message = "Shield at 50% strength!"
 	L.shield_left_message = "%d%% shield strength left"
 
 	L.touch = "Touch of Darkness/Light"
+	L.touch_icon = 67282
 	L.touch_desc = "Warn for Touch of Darkness/Light"
 end
 L = mod:GetLocale()
@@ -146,7 +150,7 @@ end
 
 function mod:DarkShield(_, spellId, _, _, spellName)
 	currentShieldStrength = shieldStrengthMap[spellId]
-	self:Bar("shield", L["vortex_or_shield_cd"], 45, 39089)
+	self:Bar("next", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceDark)
 	if d then
 		self:Message("shield", "Important", "Alert", spellId)
@@ -157,7 +161,7 @@ end
 
 function mod:LightShield(_, spellId, _, _, spellName)
 	currentShieldStrength = shieldStrengthMap[spellId]
-	self:Bar("shield", L["vortex_or_shield_cd"], 45, 39089)
+	self:Bar("next", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceLight)
 	if d then
 		self:Message("shield", "Important", "Alert", spellId)
@@ -167,7 +171,7 @@ function mod:LightShield(_, spellId, _, _, spellName)
 end
 
 function mod:LightVortex(_, spellId, _, _, spellName)
-	self:Bar("vortex", L["vortex_or_shield_cd"], 45, 39089)
+	self:Bar("next", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceLight)
 	if d then
 		self:Message("vortex", "Positive", nil, spellId)
@@ -178,7 +182,7 @@ function mod:LightVortex(_, spellId, _, _, spellName)
 end
 
 function mod:DarkVortex(_, spellId, _, _, spellName)
-	self:Bar("vortex", L["vortex_or_shield_cd"], 45, 39089)
+	self:Bar("next", L["vortex_or_shield_cd"], 45, 39089)
 	local d = UnitDebuff("player", essenceDark)
 	if d then
 		self:Message("vortex", "Positive", nil, spellId)
