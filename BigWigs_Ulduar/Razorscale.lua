@@ -31,6 +31,7 @@ local phase = nil
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn when Razorscale switches between phases."
 	L.ground_trigger = "Move quickly! She won't remain grounded for long!"
 	L.ground_message = "Razorscale Chained up!"
@@ -49,6 +50,7 @@ if L then
 	L.flame_message = "Flame on YOU!"
 
 	L.harpoon = "Harpoons"
+	L.harpoon_icon = "INV_Spear_06"
 	L.harpoon_desc = "Announce when the harpoons are ready for use."
 	L.harpoon_message = "Harpoon %d ready!"
 	L.harpoon_trigger = "Harpoon Turret is ready for use!"
@@ -122,9 +124,9 @@ end
 
 function mod:Harpoon()
 	count = count + 1
-	self:Message("harpoon", "Attention", nil, L["harpoon_message"]:format(count), "INV_Spear_06")
+	self:Message("harpoon", "Attention", nil, L["harpoon_message"]:format(count), L.harpoon_icon)
 	if count < totalHarpoons then
-		self:Bar("harpoon", L["harpoon_nextbar"]:format(count+1), 18, "INV_Spear_06")
+		self:Bar("harpoon", L["harpoon_nextbar"]:format(count+1), 18, L.harpoon_icon)
 	end
 end
 
@@ -137,7 +139,7 @@ end
 function mod:Airphase()
 	p2 = nil
 	count = 0
-	self:Bar("harpoon", L["harpoon_nextbar"]:format(1), 55, "INV_Spear_06")
+	self:Bar("harpoon", L["harpoon_nextbar"]:format(1), 55, L.harpoon_icon)
 	if not started then
 		self:Engage()
 		self:Berserk(900)
@@ -155,7 +157,7 @@ end
 function mod:Airphase10()
 	p2 = nil
 	count = 0
-	self:Bar("harpoon", L["harpoon_nextbar"]:format(1), 22, "INV_Spear_06")
+	self:Bar("harpoon", L["harpoon_nextbar"]:format(1), 22, L.harpoon_icon)
 	self:SendMessage("BigWigs_StopBar", self, L["stun_bar"])
 	--self:Message(L["air_message"], "Attention", nil, "Info")
 end

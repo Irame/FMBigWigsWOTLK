@@ -28,6 +28,7 @@ local phase = nil
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phases"
+	L.phase_icon = "INV_Gizmo_01"
 	L.phase_desc = "Warn for phase changes."
 	L.engage_warning = "Phase 1"
 	L.engage_trigger = "^We haven't much time, friends!"
@@ -58,6 +59,7 @@ if L then
 	L.fbomb_bar = "Next Frost Bomb"
 	
 	L.fire = "Fire trails"
+	L.fire_icon = "Spell_Fire_BurningSpeed"
 	L.fire_desc = "Warn for fire trails."
 	L.fire_bar = "~Fire trails"
 	L.fire_message = "Fire trails!"
@@ -152,8 +154,8 @@ end
 
 do
 	local function fireTrailsSpawn()
-		self:Message("fire", "Attention", nil, L["fire_message"], "Spell_Fire_BurningSpeed")
-		self:Bar("fire", L["fire_bar"], 30, "Interface\\Icons\\Spell_Fire_BurningSpeed")
+		self:Message("fire", "Attention", nil, L["fire_message"], L.fire_icon)
+		self:Bar("fire", L["fire_bar"], 30, L.fire_icon)
 		self:ScheduleTimer(fireTrailsSpawn, 30)
 	end
 	
@@ -169,10 +171,10 @@ do
 			mod:OpenProximity(5,64623)
 			
 			mod:ScheduleTimer(fireTrailsSpawn, 7)
-			mod:Bar("fire", L["fire_bar"], 7, "Interface\\Icons\\Spell_Fire_BurningSpeed")
+			mod:Bar("fire", L["fire_bar"], 7, L.fire_icon)
 			
 			mod:Message("phase", "Attention", nil, L["engage_warning"], false)
-			mod:Bar("phase", L["phase_bar"]:format(phase), 25, "INV_Gizmo_01")
+			mod:Bar("phase", L["phase_bar"]:format(phase), 25, L.phase_icon)
 
 			mod:Bar(63631, L["shock_next"], 44, 63631)
 			mod:Bar(62997, L["plasma_bar"], 35, 62997)
@@ -181,7 +183,7 @@ do
 			mod:Berserk(900, true)
 			
 			mod:Message("phase", "Attention", nil, L["engage_warning"], false)
-			mod:Bar("phase", L["phase_bar"]:format(phase), 8, "INV_Gizmo_01")
+			mod:Bar("phase", L["phase_bar"]:format(phase), 8, L.phase_icon)
 
 			mod:Bar(63631, L["shock_next"], 27, 63631)
 			mod:Bar(62997, L["plasma_bar"], 18, 62997)
@@ -200,7 +202,7 @@ do
 			self:SendMessage("BigWigs_StopBar", self, L["plasma_bar"])
 			self:SendMessage("BigWigs_StopBar", self, L["shock_next"])
 			self:Message("phase", "Attention", nil, L["phase2_warning"], false)
-			self:Bar("phase", L["phase_bar"]:format(phase), 40, "INV_Gizmo_01")
+			self:Bar("phase", L["phase_bar"]:format(phase), 40, L.phase_icon)
 			self:Bar(63274, L["laser_bar"], 64, 63274)
 			self:ScheduleTimer(function(...) mod:Spinning(nil,63274) end, 60)  --Simulate Spinning ^^
 			if ishardmode then
@@ -212,11 +214,11 @@ do
 			self:SendMessage("BigWigs_StopBar", self, L["laser_bar"])
 			self:SendMessage("BigWigs_StopBar", self, L["fbomb_bar"])
 			self:Message("phase", "Attention", nil, L["phase3_warning"], false)
-			self:Bar("phase", L["phase_bar"]:format(phase), 20, "INV_Gizmo_01")
+			self:Bar("phase", L["phase_bar"]:format(phase), 20, L.phase_icon)
 		elseif msg:find(L["phase4_trigger"]) then
 			phase = 4
 			self:Message("phase", "Attention", nil, L["phase4_warning"], false)
-			self:Bar("phase", L["phase_bar"]:format(phase), 20, "INV_Gizmo_01")
+			self:Bar("phase", L["phase_bar"]:format(phase), 20, L.phase_icon)
 			if ishardmode then
 				self:Bar(64623, L["fbomb_bar"], 30, 64623)
 			end

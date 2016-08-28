@@ -36,10 +36,12 @@ if L then
 	L.engage_trigger2 = "Elders, grant me your strength!"
 
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.phase2_message = "Phase 2!"
 
 	L.wave = "Waves"
+	L.wave_icon = 35594
 	L.wave_desc = "Warn for Waves."
 	L.wave_bar = "Next Wave"
 	L.conservator_trigger = "Eonar, your servant requires aid!"
@@ -51,6 +53,7 @@ if L then
 	L.elementals_message = "Elementals!"
 
 	L.tree = "Eonar's Gift"
+	L.tree_icon = 5420
 	L.tree_desc = "Alert when Freya spawns a Eonar's Gift."
 	L.tree_message = "Tree is up!"
 
@@ -90,7 +93,7 @@ end
 function mod:OnEngage()
 	phase = 1
 	self:Berserk(600)
-	self:Bar("wave", L["wave_bar"], 11, 35594)
+	self:Bar("wave", L["wave_bar"], 11, L.wave_icon)
 end
 
 function mod:VerifyEnable(unit)
@@ -224,7 +227,7 @@ do
 end
 
 function mod:Tree()
-	self:Message("tree", "Urgent", "Alarm", L["tree_message"], 5420)
+	self:Message("tree", "Urgent", "Alarm", L["tree_message"], L.tree_icon)
 end
 
 function mod:Yells(msg)
@@ -233,14 +236,14 @@ function mod:Yells(msg)
 		sheIsDead = true
 		self:Win()
 	elseif msg == L["conservator_trigger"] then
-		self:Message("wave", "Positive", nil, L["conservator_message"], 35594)
-		self:Bar("wave", L["wave_bar"], 60, 35594)
+		self:Message("wave", "Positive", nil, L["conservator_message"], L.wave_icon)
+		self:Bar("wave", L["wave_bar"], 60, L.wave_icon)
 	elseif msg == L["detonate_trigger"] then
-		self:Message("wave", "Positive", nil, L["detonate_message"], 35594)
-		self:Bar("wave", L["wave_bar"], 60, 35594)
+		self:Message("wave", "Positive", nil, L["detonate_message"], L.wave_icon)
+		self:Bar("wave", L["wave_bar"], 60, L.wave_icon)
 	elseif msg == L["elementals_trigger"] then
-		self:Message("wave", "Positive", nil, L["elementals_message"], 35594)
-		self:Bar("wave", L["wave_bar"], 60, 35594)
+		self:Message("wave", "Positive", nil, L["elementals_message"], L.wave_icon)
+		self:Bar("wave", L["wave_bar"], 60, L.wave_icon)
 	end
 end
 

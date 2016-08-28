@@ -32,17 +32,20 @@ if L then
 	L.surge_bar = "Surge %d"
 
 	L.animus = "Saronite Animus"
+	L.animus_icon = 63319
 	L.animus_desc = "Warn when the Saronite Animus spawns."
 	L.animus_trigger = "The saronite vapors mass and swirl violently, merging into a monstrous form!"
 	L.animus_message = "Animus spawns!"
 
 	L.vapor = "Saronite Vapors"
+	L.vapor_icon = 63323
 	L.vapor_desc = "Warn when Saronite Vapors spawn."
 	L.vapor_message = "Saronite Vapor %d!"
 	L.vapor_bar = "Vapor %d/6"
 	L.vapor_trigger = "A cloud of saronite vapors coalesces nearby!"
 
 	L.vaporstack = "Vapors Stack"
+	L.vaporstack_icon = 63322
 	L.vaporstack_desc = "Warn when you have 5 or more stacks of Saronite Vapors."
 	L.vaporstack_message = "Vapors x%d!"
 
@@ -95,15 +98,15 @@ end
 --
 
 function mod:Vapor()
-	self:Message("vapor", "Positive", nil, L["vapor_message"]:format(vaporCount), 63323)
+	self:Message("vapor", "Positive", nil, L["vapor_message"]:format(vaporCount), L.vapor_icon)
 	vaporCount = vaporCount + 1
 	if vaporCount < 7 then
-		self:Bar("vapor", L["vapor_bar"]:format(vaporCount), 30, 63323)
+		self:Bar("vapor", L["vapor_bar"]:format(vaporCount), 30, L.vapor_icon)
 	end
 end
 
 function mod:Animus()
-	self:Message("animus", "Important", nil, L["animus_message"], 63319)
+	self:Message("animus", "Important", nil, L["animus_message"], L.animus_icon)
 end
 
 function mod:UNIT_AURA(event, unit)

@@ -15,11 +15,13 @@ mod.order = 1
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.engage = "Engage warning"
+	L.engage_icon = ""
 	L.engage_desc = "Warn when Flame Leviathan is engaged."
 	L.engage_trigger = "^Hostile entities detected."
 	L.engage_message = "%s Engaged!"
 
 	L.pursue = "Pursuit"
+	L.pursue_icon = 62374
 	L.pursue_desc = "Warn when Flame Leviathan pursues a player."
 	L.pursue_trigger = "^%%s pursues"
 	L.pursue_other = "Leviathan pursues %s!"
@@ -77,8 +79,8 @@ function mod:Shutdown(unit, spellId, _, _, spellName)
 end
 
 function mod:Pursue(_, _, _, _, player)
-	self:TargetMessage("pursue", player, "Personal", "Alarm", L["pursue"], 62374)
+	self:TargetMessage("pursue", player, "Personal", "Alarm", L["pursue"], L.pursue_icon)
 	if UnitIsUnit(player, "player") then self:FlashShake("pursue") end
-	self:Bar("pursue", L["pursue_other"]:format(player), 30, 62374)
+	self:Bar("pursue", L["pursue_other"]:format(player), 30, L.pursue_icon)
 end
 

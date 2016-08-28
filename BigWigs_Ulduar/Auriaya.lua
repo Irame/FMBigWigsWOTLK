@@ -31,6 +31,7 @@ if L then
 	L.swarm_bar = "~Swarm"
 
 	L.defender = "Feral Defender"
+	L.defender_icon = 64455
 	L.defender_desc = "Warn for Feral Defender lives."
 	L.defender_message = "Defender up %d/9!"
 
@@ -57,7 +58,7 @@ end
 
 function mod:OnEngage()
 	count = 9
-	self:Bar("defender", L["defender_message"]:format(count), 60, 64455)
+	self:Bar("defender", L["defender_message"]:format(count), 60, L.defender_icon)
 	self:Bar(64386, L["fear_bar"], 32, 64386)
 	self:DelayedMessage(64386, 32, "Attention", L["fear_warning"])
 	self:Berserk(600)

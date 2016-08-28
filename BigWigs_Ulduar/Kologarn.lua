@@ -22,6 +22,7 @@ local pName = UnitName("player")
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.arm = "Arm dies"
+	L.arm_icon = ""
 	L.arm_desc = "Warn for Left & Right Arm dies."
 	L.left_dies = "Left Arm dies"
 	L.right_dies = "Right Arm dies"
@@ -29,10 +30,12 @@ if L then
 	L.right_wipe_bar = "Respawn Right Arm"
 
 	L.shockwave = "Shockwave"
+	L.shockwave_icon = 63982
 	L.shockwave_desc = "Warn when the next Shockwave is coming."
 	L.shockwave_trigger = "Oblivion!"
 
 	L.eyebeam = "Focused Eyebeam"
+	L.eyebeam_icon = 63976
 	L.eyebeam_desc = "Warn who gets Focused Eyebeam."
 	L.eyebeam_trigger = "his eyes on you"
 	L.eyebeam_message = "Eyebeam: %s"
@@ -90,7 +93,7 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_WHISPER(event, msg)
 	if msg:find(L["eyebeam_trigger"]) then
-		self:LocalMessage("eyebeam", "Personal", "Long", L["eyebeam_you"], 63976)
+		self:LocalMessage("eyebeam", "Personal", "Long", L["eyebeam_you"], L.eyebeam_icon)
 		self:FlashShake("eyebeam")
 		self:Say("eyebeam", L["eyebeam_say"])
 	end
@@ -111,16 +114,16 @@ end
 
 function mod:CHAT_MSG_MONSTER_YELL(event, msg)
 	if msg == L["shockwave_trigger"] then
-		self:Message("shockwave", "Attention", nil, L["shockwave"], 63982)
-		self:Bar("shockwave", L["shockwave"], 21, 63982)
+		self:Message("shockwave", "Attention", nil, L["shockwave"], L.shockwave_icon)
+		self:Bar("shockwave", L["shockwave"], 21, L.shockwave_icon)
 	end
 end
 
 function mod:OnSync(sync, rest, nick)
 	if sync == "EyeBeamWarn" and rest then
-		self:TargetMessage("eyebeam", rest, "Positive", "Info", 40620, 63976) --40620 = "Eyebeam"
-		self:Bar("eyebeam", L["eyebeam_message"]:format(rest), 11, 63976)
-		self:Bar("eyebeam", L["eyebeam_bar"], 20, 63976)
+		self:TargetMessage("eyebeam", rest, "Positive", "Info", 40620, L.eyebeam_icon) --40620 = "Eyebeam"
+		self:Bar("eyebeam", L["eyebeam_message"]:format(rest), 11, L.eyebeam_icon)
+		self:Bar("eyebeam", L["eyebeam_bar"], 20, L.eyebeam_icon)
 		self:PrimaryIcon("eyebeam", rest)
 	end
 end

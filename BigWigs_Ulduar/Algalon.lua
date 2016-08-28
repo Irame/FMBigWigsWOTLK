@@ -23,6 +23,7 @@ local blackholes = 0
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.engage_warning = "Phase 1"
 	L.phase2_warning = "Phase 2 incoming"

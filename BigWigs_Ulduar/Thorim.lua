@@ -35,6 +35,7 @@ if L then
 	L["Runic Colossus"] = true -- For the runic barrier emote.
 
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.phase1_message = "Phase 1"
 	L.phase2_trigger = "Interlopers! You mortals who dare to interfere with my sport will pay.... Wait--you..."
@@ -43,6 +44,7 @@ if L then
 	L.phase3_message = "Phase 3 - Thorim engaged!"
 
 	L.hardmode = "Hard mode timer"
+	L.hardmode_icon = 6673
 	L.hardmode_desc = "Show timer for when you have to reach Thorim in order to enter hard mode in phase 3."
 	L.hardmode_warning = "Hard mode expires"
 
@@ -158,7 +160,7 @@ end
 function mod:PhaseTwo()
 	self:Message("phase", "Attention", nil, L["phase2_message"], false)
 	self:Bar("phase", CL["berserk"], 375, 20484)
-	self:Bar("hardmode", L["hardmode"], 173, 6673)
+	self:Bar("hardmode", L["hardmode"], 173, L.hardmode_icon)
 	self:DelayedMessage("hardmode", 173, "Attention", L["hardmode_warning"])
 end
 

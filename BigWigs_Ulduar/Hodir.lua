@@ -31,6 +31,7 @@ if L then
 	L.engage_trigger = "You will suffer for this trespass!"
 
 	L.cold = "Biting Cold"
+	L.cold_icon = 62039
 	L.cold_desc = "Warn when you have 2 or more stacks of Biting Cold."
 	L.cold_message = "Biting Cold x%d!"
 
@@ -38,6 +39,7 @@ if L then
 	L.flash_soon = "Freeze in 5sec!"
 
 	L.hardmode = "Hard mode"
+	L.hardmode_icon = 6673
 	L.hardmode_desc = "Show timer for hard mode."
 
 	L.end_trigger = "I... I am released from his grasp... at last."
@@ -63,7 +65,7 @@ function mod:OnEngage()
 	lastCold = nil
 	local name = GetSpellInfo(61968)
 	self:Bar(61968, name, 35, 61968)
-	self:Bar("hardmode", L["hardmode"], 180, 6673)
+	self:Bar("hardmode", L["hardmode"], 180, L.hardmode_icon)
 	self:Berserk(480)
 end
 

@@ -35,6 +35,7 @@ if L then
 	L["The Observation Ring"] = true
 
 	L.phase = "Phase"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.engage_warning = "Phase 1"
 	L.engage_trigger = "^The time to"
@@ -44,6 +45,7 @@ if L then
 	L.phase3_trigger = "^Look upon the true face"
 
 	L.portal = "Portal"
+	L.portal_icon = 35717
 	L.portal_desc = "Warn for Portals."
 	L.portal_trigger = "Portals open into %s's mind!"
 	L.portal_message = "Portals open!"
@@ -55,6 +57,7 @@ if L then
 	L.sanity_message = "You're going insane!"
 
 	L.weakened = "Stunned"
+	L.weakened_icon = 50661
 	L.weakened_desc = "Warn when Yogg-saron becomes stunned."
 	L.weakened_message = "%s is stunned!"
 	L.weakened_trigger = "The illusion shatters and a path to the central chamber opens!"
@@ -63,6 +66,7 @@ if L then
 	L.malady_message = "Malady: %s"
 
 	L.tentacle = "Crusher Tentacle"
+	L.tentacle_icon = 64139
 	L.tentacle_desc = "Warn for Crusher Tentacle spawn."
 	L.tentacle_message = "Crusher %d!"
 
@@ -179,9 +183,9 @@ function mod:Tentacle(_, spellId, source, _, spellName)
 	-- Corruptor Tentacle (33985) 25 sec
 	-- Constrictor Tentacle (33983) 20 sec
 	if source == L["Crusher Tentacle"] then
-		self:Message("tentacle", "Important", nil, L["tentacle_message"]:format(crusherCount), 64139)
+		self:Message("tentacle", "Important", nil, L["tentacle_message"]:format(crusherCount), L.tentacle_icon)
 		crusherCount = crusherCount + 1
-		self:Bar("tentacle", L["tentacle_message"]:format(crusherCount), 55, 64139)
+		self:Bar("tentacle", L["tentacle_message"]:format(crusherCount), 55, L.tentacle_icon)
 	end
 end
 
@@ -251,19 +255,19 @@ do
 end
 
 function mod:Portal()
-	self:Message("portal", "Positive", nil, L["portal_message"], 35717)
-	self:Bar("portal", L["portal_bar"], 90, 35717)
+	self:Message("portal", "Positive", nil, L["portal_message"], L.portal_icon)
+	self:Bar("portal", L["portal_bar"], 90, L.portal_icon)
 end
 
 function mod:Weakened(_, unit)
-	self:Message("weakened", "Positive", nil, L["weakened_message"]:format(unit), 50661)
+	self:Message("weakened", "Positive", nil, L["weakened_message"]:format(unit), L.weakened_icon)
 end
 
 function mod:Yells(msg)
 	if msg:find(L["phase2_trigger"]) then
 		crusherCount = 1
 		self:Message("phase", "Attention", nil, L["phase2_warning"], false)
-		self:Bar("portal", L["portal_bar"], 78, 35717)
+		self:Bar("portal", L["portal_bar"], 78, L.portal_icon)
 	elseif msg:find(L["phase3_trigger"]) then
 		self:CancelDelayedMessage(L["madness_warning"])
 
