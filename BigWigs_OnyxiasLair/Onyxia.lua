@@ -14,6 +14,7 @@ mod.toggleOptions = {"phase", {17086, "FLASHSHAKE"}, 18431, "bosskill"}
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.phase2_message = "Phase 2 incoming!"
 	L.phase3_message = "Phase 3 incoming!"
