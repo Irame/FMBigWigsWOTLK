@@ -21,31 +21,37 @@ local phase = nil
 local L = mod:NewLocale("enUS", true)
 if L then
 	L.sparks = "Spark Spawns"
+	L.sparks_icon = 56152
 	L.sparks_desc = "Warns on Power Spark spawns."
 	L.sparks_message = "Power Spark spawns!"
 	L.sparks_warning = "Power Spark in ~5sec!"
 
 	L.sparkbuff = "Power Spark on Malygos"
+	L.sparkbuff_icon = ""
 	L.sparkbuff_desc = "Warns when Malygos gets a Power Spark."
 	L.sparkbuff_message = "Malygos gains Power Spark!"
 
 	L.vortex = "Vortex"
+	L.vortex_icon = 56105
 	L.vortex_desc = "Warn for Vortex in phase 1."
 	L.vortex_message = "Vortex!"
 	L.vortex_warning = "Possible Vortex in ~5sec!"
 	L.vortex_next = "Vortex Cooldown"
 
 	L.breath = "Deep Breath"
+	L.breath_icon = 43810
 	L.breath_desc = "Warn when Malygos is using Deep Breath in phase 2."
 	L.breath_message = "Deep Breath!"
 	L.breath_warning = "Deep Breath in ~5sec!"
 
 	L.surge = "Surge of Power"
+	L.surge_icon = 60936
 	L.surge_desc = "Warn when Malygos uses Surge of Power on you in phase 3."
 	L.surge_you = "Surge of Power on YOU!"
 	L.surge_trigger = "%s fixes his eyes on you!"
 
 	L.phase = "Phases"
+	L.phase_icon = ""
 	L.phase_desc = "Warn for phase changes."
 	L.phase2_warning = "Phase 2 soon!"
 	L.phase2_trigger = "I had hoped to end your lives quickly"
@@ -82,9 +88,9 @@ end
 
 function mod:OnEngage()
 	phase = 1
-	self:Bar("vortex", L["vortex_next"], 29, 56105)
+	self:Bar("vortex", L["vortex_next"], 29, L.vortex_icon)
 	self:DelayedMessage("vortex", 24, "Attention", L["vortex_warning"])
-	self:Bar("sparks", L["sparks"], 25, 56152)
+	self:Bar("sparks", L["sparks"], 25, L.sparks_icon)
 	self:DelayedMessage("sparks", 20, "Attention", L["sparks_warning"])
 	self:Berserk(600)
 end
@@ -106,32 +112,32 @@ function mod:Static(target, spellId, _, _, spellName)
 end
 
 function mod:Vortex(_, spellId)
-	self:Bar("vortex", L["vortex"], 10, 56105)
+	self:Bar("vortex", L["vortex"], 10, L.vortex_icon)
 	self:Message("vortex", "Attention", nil, L["vortex_message"], spellId)
-	self:Bar("vortex", L["vortex_next"], 59, 56105)
+	self:Bar("vortex", L["vortex_next"], 59, L.vortex_icon)
 	self:DelayedMessage("vortex", 54, "Attention", L["vortex_warning"])
 
-	self:Bar("sparks", L["sparks"], 17, 56152)
+	self:Bar("sparks", L["sparks"], 17, L.sparks_icon)
 	self:DelayedMessage("sparks", 12, "Attention", L["sparks_warning"])
 end
 
 function mod:CHAT_MSG_RAID_BOSS_WHISPER(event, msg, mob)
 	if phase == 3 and msg == L["surge_trigger"] then
-		self:LocalMessage("surge", "Personal", "Alarm", L["surge_you"], 60936) -- 60936 for phase 3, not 56505
+		self:LocalMessage("surge", "Personal", "Alarm", L["surge_you"], L.surge_icon) -- 60936 for phase 3, not 56505
 		self:FlashShake("surge")
 	end
 end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(event, msg)
 	if phase == 1 then
-		self:Message("sparks", "Important", "Alert", L["sparks_message"], 56152)
-		self:Bar("sparks", L["sparks"], 30, 56152)
+		self:Message("sparks", "Important", "Alert", L["sparks_message"], L.sparks_icon)
+		self:Bar("sparks", L["sparks"], 30, L.sparks_icon)
 		self:DelayedMessage("sparks", 25, "Attention", L["sparks_warning"])
 	elseif phase == 2 then
 		-- 43810 Frost Wyrm, looks like a dragon breathing 'deep breath' :)
 		-- Correct spellId for 'breath" in phase 2 is 56505
-		self:Message("breath", "Important", "Alert", L["breath_message"], 43810)
-		self:Bar("breath", L["breath"], 59, 43810)
+		self:Message("breath", "Important", "Alert", L["breath_message"], L.breath_icon)
+		self:Bar("breath", L["breath"], 59, L.breath_icon)
 		self:DelayedMessage("breath", 54, "Attention", L["breath_warning"])
 	end
 end
@@ -143,7 +149,7 @@ function mod:Phase2()
 	self:SendMessage("BigWigs_StopBar", self, L["sparks"])
 	self:SendMessage("BigWigs_StopBar", self, L["vortex_next"])
 	self:Message("phase", "Attention", nil, L["phase2_message"], false)
-	self:Bar("breath", L["breath"], 92, 43810)
+	self:Bar("breath", L["breath"], 92, L.breath_icon)
 	self:DelayedMessage("breath", 87, "Attention", L["breath_warning"])
 end
 

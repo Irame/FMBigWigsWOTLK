@@ -46,6 +46,7 @@ if L then
 	L.fbreath_cooldown = "Next Fire Breath"
 	
 	L.add_enrage = "Add Enrage"
+	L.add_enrage_icon = 26662
 	L.add_enrage_desc = "Show timers for when the adds goes enrage."
 	L.add_enrage_bar = "Add Enrage"
 	
@@ -146,7 +147,7 @@ end
 function mod:MeteorInc()
 	if mod:IsDifficulty("25hc") then
 		addsDeaths = 0
-		self:Bar("add_enrage", L["add_enrage_bar"], 26, 26662)
+		self:Bar("add_enrage", L["add_enrage_bar"], 26, L.add_enrage_icon)
 	end
 	self:Message(75879, "Urgent", "Long", L["meteor_warning_message"])
 	self:FlashShake(75879)
@@ -156,7 +157,7 @@ end
 function mod:MeteorStrike(_, spellId, _, _, spellName)
 	if mod:IsDifficulty("25hc") then
 		addsDeaths = 0
-		self:Bar("add_enrage", L["add_enrage_bar"], 18, 26662)
+		self:Bar("add_enrage", L["add_enrage_bar"], 18, L.add_enrage_icon)
 	end
 	self:Message(75879, "Important")
 	self:FlashShake(75879)

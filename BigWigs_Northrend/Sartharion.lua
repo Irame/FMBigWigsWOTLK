@@ -31,6 +31,7 @@ if L then
 	L.engage_trigger = "It is my charge to watch over these eggs. I will see you burn before any harm comes to them!"
 
 	L.tsunami = "Flame Wave"
+	L.tsunami_icon = 57491
 	L.tsunami_desc = "Warn for churning lava and show a bar."
 	L.tsunami_warning = "Wave in ~5sec!"
 	L.tsunami_message = "Flame Wave!"
@@ -40,10 +41,12 @@ if L then
 	L.breath_cooldown = "~Breath Cooldown"
 
 	L.drakes = "Drake Adds"
+	L.drakes_icon = 61248
 	L.drakes_desc = "Warn when each drake add will join the fight."
 	L.drakes_incomingsoon = "%s landing in ~5sec!"
 
 	L.twilight = "Twilight Events"
+	L.twilight_icon = "spell_shadow_twilight"
 	L.twilight_desc = "Warn what happens in the Twilight."
 	L.twilight_trigger_tenebron = "Tenebron begins to hatch eggs in the Twilight!"
 	L.twilight_trigger_vesperon = "A Vesperon Disciple appears in the Twilight!"
@@ -80,7 +83,7 @@ function mod:OnBossEnable()
 end
 
 function mod:OnEngage()
-	self:Bar("tsunami", L["tsunami_cooldown"], 30, 57491)
+	self:Bar("tsunami", L["tsunami_cooldown"], 30, L.tsunami_icon)
 	self:DelayedMessage("tsunami", 25, "Attention", L["tsunami_warning"])
 	self:Berserk(900)
 end
@@ -114,8 +117,8 @@ function mod:Breath(_, spellId)
 end
 
 function mod:Tsunami()
-	self:Message("tsunami", "Important", "Alert", L["tsunami_message"], 57491)
-	self:Bar("tsunami", L["tsunami_cooldown"], 30, 57491)
+	self:Message("tsunami", "Important", "Alert", L["tsunami_message"], L.tsunami_icon)
+	self:Bar("tsunami", L["tsunami_cooldown"], 30, L.tsunami_icon)
 	self:DelayedMessage("tsunami", 25, "Attention", L["tsunami_warning"])
 end
 

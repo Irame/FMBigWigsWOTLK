@@ -21,6 +21,7 @@ if L then
 	L.cloud_message = "Choking Cloud on YOU!"
 
 	L.charge = "Charge"
+	L.charge_icon = 11578
 	L.charge_desc = "Warn about Charge on players."
 end
 L = mod:GetLocale()
@@ -87,7 +88,7 @@ end
 
 function mod:CHAT_MSG_RAID_BOSS_EMOTE(_, _, unit, _, _, player)
 	if unit == self.displayName then
-		self:TargetMessage("charge", player, "Attention", nil, L["charge"], 11578)
+		self:TargetMessage("charge", player, "Attention", nil, L["charge"], L.charge_icon)
 	end
 end
 
