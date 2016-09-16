@@ -435,7 +435,7 @@ function boss:OpenProximity(range, key, player, isReverse)
 	end
 end
 
-function boss:CloseProximity()
+function boss:CloseProximity(key)
 	if (key and checkFlag(self, key, C.PROXIMITY)) or (not key and checkFlag(self, "proximity", C.PROXIMITY)) then
 		self:SendMessage("BigWigs_HideProximity", self)
 	end
@@ -571,7 +571,7 @@ do
 		if not checkFlag(self, key, C.MESSAGE) then return end
 		if type(player) == "table" then
 			local list = table.concat(player, ", ")
-			local onMe = string:find(list, pName, nil, true)
+			local onMe = string.find(list, pName, nil, true)
 			if onMe and #player == 1 then
 				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), "Personal", texture)
 			else

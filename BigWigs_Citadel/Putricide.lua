@@ -309,7 +309,7 @@ do
 			self:OpenProximity(10, 72855)
 			self:FlashShake(72855)
 		else
-			self:CloseProximity()
+			self:CloseProximity(72855)
 		end
 		if unboundPlagueStart - GetTime() <= 0 then
 			self:ScheduleTimer(self.OpenProximity, 115, 10, 72855)

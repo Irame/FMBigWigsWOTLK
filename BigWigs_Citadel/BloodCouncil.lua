@@ -114,7 +114,7 @@ function mod:Switch(unit, spellId, _, _, spellName)
 			if self.GetMobIdByGUID[UnitGUID(bossId)] == 37970 then
 				self:OpenProximity(15,72039)
 			else
-				self:CloseProximity(self)
+				self:CloseProximity(72039)
 			end
 			self:PrimaryIcon("iconprince", bossId)
 			break
@@ -125,7 +125,7 @@ end
 function mod:EmpoweredShock(_, spellId)
 	self:Message(72039, "Important", "Alert", L["empowered_shock_message"])
 	--self:OpenProximity(15,72039)
-	--self:ScheduleTimer(self.CloseProximity, 5, self)
+	--self:ScheduleTimer(self.CloseProximity, 5, 72039)
 	self:Bar(72039, L["shock_bar"], 16, spellId)
 end
 

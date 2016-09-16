@@ -998,8 +998,7 @@ do
 		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
 
 		local anyoneClose = 0
-		for i = 1, proximityPlayerTable do
-			local n = proximityPlayerTable[i]
+		for i,n in pairs(proximityPlayerTable) do
 			local unitX, unitY = GetPlayerMapPosition(n)
 			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
 				local dx = (unitX - srcX) * mapScale[1]
@@ -1137,8 +1136,7 @@ do
 		local width, height, sine, cosine, pixperyard = getDotPlaceInfo()
 
 		local anyoneClose = 0
-		for i = 1, proximityPlayerTable do
-			local n = proximityPlayerTable[i]
+		for i,n in pairs(proximityPlayerTable) do
 			local unitX, unitY = GetPlayerMapPosition(n)
 			if (unitX ~= 0 or unitY~= 0) and not UnitIsDead(n) and myGUID ~= UnitGUID(n) then
 				local dx = (unitX - srcX) * mapScale[1]

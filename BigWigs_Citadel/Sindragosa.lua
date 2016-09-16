@@ -117,7 +117,7 @@ do
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
 				self:OpenProximity(10,70126)
-				self:ScheduleTimer(self.CloseProximity, 7, self)
+				self:ScheduleTimer(self.CloseProximity, 7, 70126)
 			end
 		end
 		if onMe then
@@ -222,7 +222,7 @@ do
 			local _,playerClass = UnitClass("player")
 			if playerClass == "MAGE" then
 				self:OpenProximity(20,69762)
-				self:ScheduleTimer(self.CloseProximity, 30, self)
+				self:ScheduleTimer(self.CloseProximity, 30, 69762)
 			end
 		end
 		mod:TargetMessage(69762, unchainedTargets, "Urgent")

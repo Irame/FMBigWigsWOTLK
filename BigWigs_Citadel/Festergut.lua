@@ -88,7 +88,7 @@ do
 	end
 	local function sporeNext()
 		mod:Bar(69279, L["spore_bar"], 28, 69279)
-		self:OpenProximity(9,71218)
+		mod:OpenProximity(9,71218)
 	end
 	function mod:Spores(player, spellId, _, _, spellName)
 		msgTargets[#msgTargets + 1] = player
