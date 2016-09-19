@@ -322,6 +322,7 @@ end
 --
 
 do
+	local curDiff
 	local difficultyMap
 	--XXX BIG ASS HACK BECAUSE BLIZZ SCREWED UP
 	--XXX GetRaidDifficulty() doesn't update when changing difficulty whilst inside the zone
@@ -335,7 +336,7 @@ do
 	
 	function UpdateInstanceDifficulty()
 		wipe(difficultyMap)
-		difficultyMap.diff = getInstanceDifficulty()
+		curDiff = getInstanceDifficulty()
 	end
 	
 	local diffStringTable = {
@@ -351,10 +352,11 @@ do
 	local diffTable_mt = {
 		__index = function(self, key)
 			local value = false
+			if not curDiff then UpdateInstanceDifficulty() end
 			if type(key) == "string" then
-				value = diffStringTable[key][self.diff]
+				value = diffStringTable[key][curDiff]
 			else
-				value = self.diff == key
+				value = curDiff == key
 			end
 			rawset(self, key, value)
 			return value
@@ -367,7 +369,7 @@ do
 	end
 	
 	function boss:GetDifficulty()
-		return difficultyMap.diff
+		return curDiff
 	end
 end
 
