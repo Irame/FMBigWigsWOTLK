@@ -99,11 +99,19 @@ end
 --------------------------------------------------------------------------------
 -- Event Handlers
 --
+local function openProxForInstabilityTargets()
+	if mod:IsDifficulty("hc") then
+		local proxTargets = {}
+		for p, _ in pairs(proxInstabilityTargetTable) do
+			proxTargets[#proxTargets + 1] = p
+		end
+		mod:OpenProximity(20, 69766, proxTargets)
+	end
+end
 
 function mod:Tombed(player)
-	if UnitIsUnit(player, "player") then
-		self:CloseProximity()
-	end
+	self:CloseProximity(70126)
+	openProxForInstabilityTargets()
 end
 
 do
@@ -112,18 +120,10 @@ do
 	local onMe = false
 	local scheduled = nil
 	local function baconWarn(spellName)
-		if phase == 1 and ((#msgTargets < 2 and mod:IsDifficulty("10")) or (#msgTargets < 5 and mod:IsDifficulty("25nh")) or (#msgTargets < 6 and mod:IsDifficulty("25hc"))) then
-			mod:Message(70126, "Important", "Alarm", L["mage_bug_message"]:format(spellName))
-			local _,playerClass = UnitClass("player")
-			if playerClass == "MAGE" then
-				self:OpenProximity(10,70126)
-				self:ScheduleTimer(self.CloseProximity, 7, 70126)
-			end
-		end
 		if onMe then
-			self:OpenProximity(10, 70126)
+			mod:OpenProximity(10, 70126)
 		else
-			self:OpenProximity(10, 70126, proxTargets)
+			mod:OpenProximity(10, 70126, proxTargets)
 		end
 		mod:TargetMessage(70126, msgTargets, "Urgent")
 		mod:Bar(70126, spellName, 7, 70126)
@@ -185,11 +185,7 @@ do
 		if not proxInstabilityTargetTable[player] then
 			proxInstabilityTargetTable[player] = true
 			if not playerHasUnchained then
-				local proxTargets = {}
-				for p, _ in pairs(proxInstabilityTargetTable) do
-					proxTargets[#proxTargets + 1] = p
-				end
-				mod:OpenProximity(20, 69766, proxTargets)
+				openProxForInstabilityTargets()
 			end
 		end
 	end
@@ -197,11 +193,7 @@ do
 		if proxInstabilityTargetTable[player] then
 			proxInstabilityTargetTable[player] = nil
 			if not playerHasUnchained then
-				local proxTargets = {}
-				for p, _ in pairs(proxInstabilityTargetTable) do
-					proxTargets[#proxTargets + 1] = p
-				end
-				mod:OpenProximity(20, 69766, proxTargets)
+				openProxForInstabilityTargets()
 			end
 		end
 	end
@@ -217,14 +209,6 @@ do
 	local unchainedTargets = mod:NewTargetList()
 	local scheduledUnchained = nil
 	local function unchainedTargetWarning(spellName)
-		if ((#unchainedTargets < 6 and mod:IsDifficulty("25")) or (#unchainedTargets < 2 and mod:IsDifficulty("10"))) then
-			mod:Message(69762, "Important", "Alarm", L["mage_bug_message"]:format(spellName))
-			local _,playerClass = UnitClass("player")
-			if playerClass == "MAGE" then
-				self:OpenProximity(20,69762)
-				self:ScheduleTimer(self.CloseProximity, 30, 69762)
-			end
-		end
 		mod:TargetMessage(69762, unchainedTargets, "Urgent")
 		scheduledUnchained = nil
 	end
@@ -253,11 +237,7 @@ function mod:UnchainedRemoved(player, spellId)
 	if UnitIsUnit(player, "player") then
 		playerHasUnchained = false
 		self:CloseProximity(69762)
-		local proxTargets = {}
-		for p, _ in pairs(proxInstabilityTargetTable) do
-			proxTargets[#proxTargets + 1] = p
-		end
-		mod:OpenProximity(20, 69766, proxTargets)
+		openProxForInstabilityTargets()
 	end
 end
 
