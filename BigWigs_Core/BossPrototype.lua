@@ -443,6 +443,21 @@ function boss:CloseProximity(key)
 	end
 end
 
+-- SOUND AND VOICE
+local function playVoiceOrSound(self, key, sound, onMe, nearMe, custom)
+	if checkFlag(self, key, C.VOICE) then
+		self:SendMessage("BigWigs_Voice", self, key, onMe, nearMe, custom)
+	elseif sound then
+		self:SendMessage("BigWigs_Sound", sound)
+	end
+end
+
+function boss:PlayVoiceOrSound(key, voice, sound)
+	local onMe = voice:upper() == "ONME"
+	local nearMe = voice:upper() == "NEARME"
+	playVoiceOrSound(self, key, sound, onMe, nearMe, voice)
+end
+
 -- MESSAGES
 function boss:CancelDelayedMessage(text)
 	if self.scheduledMessages and self.scheduledMessages[text] then
@@ -462,12 +477,6 @@ function boss:DelayedMessage(key, delay, color, text, icon, sound)
 	end
 end
 
-local hasVoice = nil
-function HasVoice()
-	if hasVoice ~= nil then return hasVoice end
-	hasVoice = core:GetPlugin("Voice") ~= nil
-end
-
 -- old order: key, text, color, icon, sound
 function boss:Message(key, color, sound, text, icon)
 	if not checkFlag(self, key, C.MESSAGE) then return end
@@ -481,11 +490,7 @@ function boss:Message(key, color, sound, text, icon)
 	self:SendMessage("BigWigs_Message", self, key, textType == "string" and text or spells[text or key], color, icon ~= false and icons[icon or textType == "number" and text or key])
 	self:SendMessage("BigWigs_Broadcast", text)
 	
-	if HasVoice() and checkFlag(self, key, C.VOICE) then
-		self:SendMessage("BigWigs_Voice", self, key, sound)
-	else
-		self:SendMessage("BigWigs_Sound", sound)
-	end
+	playVoiceOrSound(self, key, sound)
 end
 
 -- Outputs a local message only, no raid warning.
@@ -501,11 +506,7 @@ function boss:LocalMessage(key, color, sound, text, icon)
 	
 	self:SendMessage("BigWigs_Message", self, key, text, color, icon)
 	
-	if HasVoice() and checkFlag(self, key, C.VOICE) then
-		self:SendMessage("BigWigs_Voice", self, key, sound)
-	else
-		self:SendMessage("BigWigs_Sound", sound)
-	end
+	playVoiceOrSound(self, key, sound)
 end
 
 function boss:RangeMessage(key, color, sound, text, icon)
@@ -513,11 +514,7 @@ function boss:RangeMessage(key, color, sound, text, icon)
 	local textType = type(text)
 	self:SendMessage("BigWigs_Message", self, key, format(L.near, textType == "string" and text or spells[text or key]), color == nil and "Personal" or color, icon ~= false and icons[icon or textType == "number" and text or key])
 	
-	if HasVoice() and checkFlag(self, key, C.VOICE) then
-		self:SendMessage("BigWigs_Voice", self, key, sound, nil, true)
-	else
-		self:SendMessage("BigWigs_Sound", sound == nil and "Alarm" or sound)
-	end
+	playVoiceOrSound(self, key, sound, nil, true)
 end
 
 do
@@ -556,11 +553,7 @@ do
 			else
 				self:SendMessage("BigWigs_Message", self, key, format(L.stack, stack or 1, textType == "string" and text or spells[text or key], coloredNames[player]), color, icon ~= false and icons[icon or textType == "number" and text or key])
 			end
-			if HasVoice() and checkFlag(self, key, C.VOICE) then
-				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
-			else
-				self:SendMessage("BigWigs_Sound", sound)
-			end
+			playVoiceOrSound(self, key, sound, onMe)
 		end
 	end
 
@@ -580,22 +573,14 @@ do
 				self:SendMessage("BigWigs_Message", self, key, fmt(L["other"], msg, list), color, texture)
 			end
 			self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, list))
-			if HasVoice() and checkFlag(self, key, C.VOICE) then
-				self:SendMessage("BigWigs_Voice", self, key, sound, onMe)
-			else
-				self:SendMessage("BigWigs_Sound", sound)
-			end
+			playVoiceOrSound(self, key, sound, onMe)
 			wipe(player)
 		else
 			if UnitIsUnit(player, "player") then
 				self:SendMessage("BigWigs_Message", self, key, fmt(L["you"], msg), color, texture)
 				self:SendMessage("BigWigs_Broadcast", fmt(L["other"], msg, coloredNames[player]))
 			
-				if HasVoice() and checkFlag(self, key, C.VOICE) then
-					self:SendMessage("BigWigs_Voice", self, key, sound, true)
-				else
-					self:SendMessage("BigWigs_Sound", sound)
-				end
+				playVoiceOrSound(self, key, sound, true)
 			else
 				-- Change color and remove sound when warning about effects on other players
 				if color == "Personal" then color = "Important" end
@@ -604,11 +589,7 @@ do
 				self:SendMessage("BigWigs_Message", self, key, fmtMsg, color, texture)
 				self:SendMessage("BigWigs_Broadcast", fmtMsg)
 			
-				if HasVoice() and checkFlag(self, key, C.VOICE) then
-					self:SendMessage("BigWigs_Voice", self, key, sound)
-				else
-					self:SendMessage("BigWigs_Sound", sound)
-				end
+				playVoiceOrSound(self, key, sound)
 			end
 		end
 	end

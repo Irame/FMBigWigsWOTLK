@@ -24,42 +24,29 @@ end
 -- Event Handlers
 --
 
--- variables for better readablility
-local personal = 1
-local nearby = 2
-local general = 3
+local filePath = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\"
 
-local paths = {
-	[general] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%s.mp3",
-	[personal] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sy.mp3",
-	[nearby] = "Interface\\AddOns\\BigWigs_Plugins\\Voices\\%sn.mp3",
-}
-function plugin:BigWigs_Voice(event, module, key, sound, onMe, near)
-	local success = false;
-	local modifier = (onMe and personal) or (near and nearby) or general
-	local fileExists = key and plugin.fileTable[key] and plugin.fileTable[key][modifier];
+local normalPattern = 	filePath.."%s.mp3"
+local onMePattern = 	filePath.."%s-y.mp3"
+local nearMePattern = 	filePath.."%s-n.mp3"
+local customPattern = 	filePath.."%%s_%s.mp3"
+
+function plugin:BigWigs_Voice(event, module, key, onMe, nearMe, custom)
+	local pattern = (onMe and onMePattern) or (nearMe and nearMePattern) or (custom and customPattern:format(custom)) or normalPattern
 	if BigWigs.db.profile.voice and fileExists then
-		success = PlaySoundFile(format(paths[modifier], tostring(key)))
-	end
-	if not success then
-		self:SendMessage("BigWigs_Sound", sound) 
+		PlaySoundFile(pattern:format(tostring(key)))
 	end
 end
 
+----------------------------------------
+----- TestFiles
+----------------------------------------
+---  testVoice1, testVoice2, testVoice3, testVoice4
 
-plugin.fileTable = {	-- on you            on other
-	----------------------------------------
-	--- Testing
-	["testVoice1"] = 	{ [personal] = false,	[nearby] = false,	[general] = true },
-	["testVoice2"] = 	{ [personal] = false,	[nearby] = false,	[general] = true },
-	["testVoice3"] = 	{ [personal] = false,	[nearby] = false,	[general] = true },
-	["testVoice4"] = 	{ [personal] = false,	[nearby] = false,	[general] = true },
-	
-	----------------------------------------
-	----- Icecrown Citadel
-	----------------------------------------
-	-- Lord Marrowgar
-	[69057] = 			{ [personal] = true,	[nearby] = false,	[general] = true },		-- Impale
-	[69138] = 			{ [personal] = false,	[nearby] = false,	[general] = true },		-- Coldflame
-	
-}
+----------------------------------------
+----- Icecrown Citadel
+----------------------------------------
+-- Lord Marrowgar
+
+--	Impale (69057): 		normal, onMe
+--	Coldflame (69138): 		normal
