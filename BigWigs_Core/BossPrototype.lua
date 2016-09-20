@@ -675,13 +675,14 @@ function boss:SecondaryIcon(key, player)
 	end
 end
 
-function boss:SetIcon(key, player)
+function boss:SetIcon(key, unit, icon)
 	if key and not checkFlag(self, key, C.ICON) then return end
-	if not player then
-		self:SendMessage("BigWigs_RemoveRaidIcon", icon)
-	else
-		self:SendMessage("BigWigs_SetRaidIcon", player, icon)
-	end
+	self:SendMessage("BigWigs_SetRaidIcon", key, player, icon)
+end
+
+function boss:RemoveIcon(key, input)
+	if key and not checkFlag(self, key, C.ICON) then return end
+	self:SendMessage("BigWigs_RemoveRaidIcon", key, input)
 end
 
 function boss:AddSyncListener(sync)
