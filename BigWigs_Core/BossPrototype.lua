@@ -446,7 +446,7 @@ end
 -- SOUND AND VOICE
 local function playVoiceOrSound(self, key, sound, onMe, nearMe, custom)
 	if checkFlag(self, key, C.VOICE) then
-		self:SendMessage("BigWigs_Voice", self, key, onMe, nearMe, custom)
+		self:SendMessage("BigWigs_Voice", self, key, sound, onMe, nearMe, custom)
 	elseif sound then
 		self:SendMessage("BigWigs_Sound", sound)
 	end

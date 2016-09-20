@@ -135,7 +135,7 @@ do
 			local formatted = messageFormat:format(color, key, sound and "("..sound..")" or "")
 			addon:SendMessage("BigWigs_Message", addon, key, formatted, color, messages[key])
 			if voice then
-				addon:SendMessage("BigWigs_Voice", addon, voice)
+				addon:SendMessage("BigWigs_Voice", addon, voice, sound)
 			elseif sound then
 				addon:SendMessage("BigWigs_Sound", sound)
 			end
