@@ -5,7 +5,7 @@
 local mod = BigWigs:NewBoss("Lord Marrowgar", "Icecrown Citadel")
 if not mod then return end
 mod:RegisterEnableMob(36612)
-mod.toggleOptions = {69076, {69057, "VOICE"}, 69055, {69138, "FLASHSHAKE", "VOICE"}, "bosskill"}
+mod.toggleOptions = {{69076, "VOICE"}, {69057, "VOICE"}, 69055, {69138, "FLASHSHAKE", "VOICE"}, "bosskill"}
 mod.order = 11
 
 --------------------------------------------------------------------------------
@@ -114,7 +114,8 @@ function mod:Bonestorm(_, spellId, _, _, spellName)
 end
 
 function mod:BonestormCast(_, spellId, _, _, spellName)
-	self:Message(69076, "Attention")
+	self:Message(69076)
+	self:PlayVoiceOrSound(69076, "incoming", "Attention")
 	self:SendMessage("BigWigs_StopBar", self, L["bonestorm_cd"])
 	if self:IsDifficulty("hc") then 
 		self:SendMessage("BigWigs_ReadjustBar", self, L["impale_cd"], 18)

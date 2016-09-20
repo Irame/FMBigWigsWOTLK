@@ -50,3 +50,4 @@ end
 
 --	Impale (69057): 		normal, onMe
 --	Coldflame (69138): 		normal
+--	Bonestorm (69076):		incoming
